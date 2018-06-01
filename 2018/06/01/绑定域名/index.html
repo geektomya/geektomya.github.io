@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="一个关于域名绑定的记录">
+<meta name="description" content="一个关于域名绑定的记录域名解析第一种（需要同时进行git设置）在腾讯云上筛选自己喜欢的域名，注册并实名认证。 然后就可以开始域名解析了。">
 <meta name="keywords" content="Trying">
 <meta property="og:type" content="article">
 <meta property="og:title" content="绑定域名">
 <meta property="og:url" content="http://yoursite.com/2018/06/01/绑定域名/index.html">
 <meta property="og:site_name" content="Yao 。">
-<meta property="og:description" content="一个关于域名绑定的记录">
+<meta property="og:description" content="一个关于域名绑定的记录域名解析第一种（需要同时进行git设置）在腾讯云上筛选自己喜欢的域名，注册并实名认证。 然后就可以开始域名解析了。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-05-31T17:18:58.760Z">
+<meta property="og:updated_time" content="2018-06-01T09:25:46.510Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="绑定域名">
-<meta name="twitter:description" content="一个关于域名绑定的记录">
+<meta name="twitter:description" content="一个关于域名绑定的记录域名解析第一种（需要同时进行git设置）在腾讯云上筛选自己喜欢的域名，注册并实名认证。 然后就可以开始域名解析了。">
 
 
 
@@ -330,10 +330,10 @@
       
 
       
-        <h3 id="一个关于域名绑定的记录"><a href="#一个关于域名绑定的记录" class="headerlink" title="一个关于域名绑定的记录"></a>一个关于域名绑定的记录</h3><a id="more"></a>
-<h4 id="域名解析"><a href="#域名解析" class="headerlink" title="域名解析"></a>域名解析</h4><p>在腾讯云上筛选自己喜欢的域名，注册并实名认证。</p>
+        <h3 id="一个关于域名绑定的记录"><a href="#一个关于域名绑定的记录" class="headerlink" title="一个关于域名绑定的记录"></a>一个关于域名绑定的记录</h3><h4 id="域名解析"><a href="#域名解析" class="headerlink" title="域名解析"></a>域名解析</h4><h5 id="第一种（需要同时进行git设置）"><a href="#第一种（需要同时进行git设置）" class="headerlink" title="第一种（需要同时进行git设置）"></a>第一种（需要同时进行git设置）</h5><p>在腾讯云上筛选自己喜欢的域名，注册并实名认证。</p>
 <p>然后就可以开始域名解析了。</p>
-<p>添加一条解析记录，然后在</p>
+<a id="more"></a>
+<p>添加两条条解析记录，分别填入</p>
 <table>
 <thead>
 <tr>
@@ -363,14 +363,50 @@
 </table>
 <p>主机记录为 WWW 解析后的域名为 www.你注册的域名</p>
 <p>主机记录为@解析后的域名就为 你的主域名（注册的域名）</p>
-<h4 id="git设置"><a href="#git设置" class="headerlink" title="git设置"></a>git设置</h4><p>首先在博客仓库建立一个 名为 CNAME 的文件夹然后写入你要绑定的域名</p>
-<p>例如绑定我的域名。</p>
+<h5 id="第二种"><a href="#第二种" class="headerlink" title="第二种"></a>第二种</h5><p>通过DOS命令 ping 你的github.io域名得到一个你的域名所对应的ip</p>
+<p>例如我ping我的域名</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">C:\Users\Hy&gt;ping yqh74110.github.io</span><br><span class="line"></span><br><span class="line">正在<span class="built_in"> Ping </span>sni.github.map.fastly.NET [185.199.111.153] 具有 32 字节的数据:</span><br></pre></td></tr></table></figure>
+<p>同第一种方法得到一个自己想要绑定的域名，然后添加两条解析记录，分别填入</p>
+<table>
+<thead>
+<tr>
+<th>主机记录</th>
+<th>记录类型</th>
+<th>线路类型</th>
+<th>记录值</th>
+<th>TTl</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>www</td>
+<td>A</td>
+<td>默认</td>
+<td>ping得到的IP</td>
+<td>默认600秒</td>
+</tr>
+<tr>
+<td>@</td>
+<td>A</td>
+<td>默认</td>
+<td>ping得到的IP</td>
+<td>默认600秒</td>
+</tr>
+</tbody>
+</table>
+<p>主机记录为 WWW 解析后的域名为 www.你注册的域名</p>
+<p>主机记录为@解析后的域名就为 你的主域名（注册的域名）</p>
+<p>通过此种方法不需要在进行其他的操作，就可以直接用绑定的域名访问你的博客网站了</p>
+<h4 id="git设置"><a href="#git设置" class="headerlink" title="git设置"></a>git设置</h4><h5 id="暂时性的方法"><a href="#暂时性的方法" class="headerlink" title="暂时性的方法"></a>暂时性的方法</h5><p>首先在 git 仓库建立一个 名为 CNAME 的文件（没有后缀）然后写入你要绑定的域名</p>
+<p>例如绑定我的域名。(只能单次的绑定，下次再本地 部署后会冲掉 CNAME 文件 ，从而导致失效，可以每次部署后就在 git 的仓库 建立 CNAME 文件写入内容，但是 麻烦。还有更简洁 的方法后面会讲到)</p>
 <figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">zhqy</span><span class="selector-class">.xyz</span></span><br></pre></td></tr></table></figure>
 <p>然后进入仓库的设置，在 github pages下看见</p>
 <p>Your site is published at http://你的域名时</p>
 <figure class="highlight delphi"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Your site <span class="keyword">is</span> <span class="keyword">published</span> at http:<span class="comment">//zhqy.xyz/</span></span><br></pre></td></tr></table></figure>
 <p>就表示成功了。</p>
 <p>接下来你就可以通过 域名直接来访问自己的博客了</p>
+<h5 id="永久的方法"><a href="#永久的方法" class="headerlink" title="永久的方法"></a>永久的方法</h5><p>在本地的  hexo 博客文件的source文件夹下创建一个CNAME文件，记住不要有文件后缀名。编辑CNAME文件，里面同样写上你申请的域名。剩余步骤同上面一样。</p>
+<p>这样设置后每次部署的时候会自动把这个文件也推送到git仓库，从而实现绑定。</p>
 
       
     </div>
@@ -552,7 +588,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#一个关于域名绑定的记录"><span class="nav-number">1.</span> <span class="nav-text">一个关于域名绑定的记录</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#域名解析"><span class="nav-number">1.1.</span> <span class="nav-text">域名解析</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#git设置"><span class="nav-number">1.2.</span> <span class="nav-text">git设置</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#一个关于域名绑定的记录"><span class="nav-number">1.</span> <span class="nav-text">一个关于域名绑定的记录</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#域名解析"><span class="nav-number">1.1.</span> <span class="nav-text">域名解析</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#第一种（需要同时进行git设置）"><span class="nav-number">1.1.1.</span> <span class="nav-text">第一种（需要同时进行git设置）</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#第二种"><span class="nav-number">1.1.2.</span> <span class="nav-text">第二种</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#git设置"><span class="nav-number">1.2.</span> <span class="nav-text">git设置</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#暂时性的方法"><span class="nav-number">1.2.1.</span> <span class="nav-text">暂时性的方法</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#永久的方法"><span class="nav-number">1.2.2.</span> <span class="nav-text">永久的方法</span></a></li></ol></li></ol></li></ol></div>
             
 
           </div>
