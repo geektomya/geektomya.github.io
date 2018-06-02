@@ -1935,7 +1935,7 @@ img:hover {
   width: 4px;
   height: 4px;
   border-radius: 50%;
-  background: #60b6a1;
+  background: #bd247d;
 }
 .links-of-blogroll {
   font-size: 13px;
@@ -3111,7 +3111,7 @@ img:hover {
   -moz-box-shadow: 0 0 5px rgba(202,203,204,0.5);
 }
 body {
-  background: url("https://images.unsplash.com/photo-1502602898657-3e91760cbb34?ixlib=rb-0.3.5&s=823a3bd3fff363880a4f276ea1807673&auto=format&fit=crop&w=1952&q=80");
+  background: url("/images/1.jpg");
   background-repeat: no-repeat;
   background-attachment: fixed;
   background-position: 50% 50%;
