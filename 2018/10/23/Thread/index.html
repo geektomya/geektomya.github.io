@@ -1,0 +1,899 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+<script>
+    (function(){
+        if(''){
+            if (prompt('请输入文章密码') !== ''){
+                alert('密码错误！');
+                history.back();
+            }
+        }
+    })();
+</script>
+</script>
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.ico?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.ico?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="java,Thread," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="多线程概念进程和线程进程：运行中的应用程序称为进程，拥有系统资源（cpu、内存） 线程：进程中的一段代码，一个进程中可以有多段代码。本身不拥有资源（共享所在进程的资源）；">
+<meta name="keywords" content="java,Thread">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Thread">
+<meta property="og:url" content="http://yoursite.com/2018/10/23/Thread/index.html">
+<meta property="og:site_name" content="YAO">
+<meta property="og:description" content="多线程概念进程和线程进程：运行中的应用程序称为进程，拥有系统资源（cpu、内存） 线程：进程中的一段代码，一个进程中可以有多段代码。本身不拥有资源（共享所在进程的资源）；">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://static.oschina.net/uploads/space/2013/0621/174442_0BNr_182175.jpg">
+<meta property="og:updated_time" content="2018-10-23T11:59:37.451Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Thread">
+<meta name="twitter:description" content="多线程概念进程和线程进程：运行中的应用程序称为进程，拥有系统资源（cpu、内存） 线程：进程中的一段代码，一个进程中可以有多段代码。本身不拥有资源（共享所在进程的资源）；">
+<meta name="twitter:image" content="http://static.oschina.net/uploads/space/2013/0621/174442_0BNr_182175.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/10/23/Thread/"/>
+
+
+
+
+
+  <title>Thread | YAO</title>
+  
+
+
+
+
+
+
+
+
+  
+  
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">YAO</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Something I Like .</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/10/23/Thread/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="HY">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="YAO">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Thread</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-10-23T19:56:51+08:00">
+                2018-10-23
+              </time>
+            
+
+            
+
+            
+          </span>
+		  
+		  
+		  
+  <span class="post-updated">
+    &nbsp; | &nbsp; 更新于
+    <time itemprop="dateUpdated" datetime="2018-10-23T19:59:37+08:00" content="2018-10-23">
+      2018-10-23
+    </time>
+  </span>
+
+
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/后台，学习/" itemprop="url" rel="index">
+                    <span itemprop="name">后台，学习</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  2,462
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  9
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="多线程"><a href="#多线程" class="headerlink" title="多线程"></a>多线程</h2><h3 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h3><h4 id="进程和线程"><a href="#进程和线程" class="headerlink" title="进程和线程"></a>进程和线程</h4><h5 id="进程："><a href="#进程：" class="headerlink" title="进程："></a>进程：</h5><p>运行中的应用程序称为进程，拥有系统资源（cpu、内存）</p>
+<h5 id="线程："><a href="#线程：" class="headerlink" title="线程："></a>线程：</h5><p>进程中的一段代码，一个进程中可以有多段代码。本身不拥有资源（共享所在进程的资源）；</p>
+<a id="more"></a>
+<p>在java中，程序入口被自动创建为主线程，在主线程中可以创建多个子线程。</p>
+<h5 id="区别："><a href="#区别：" class="headerlink" title="区别："></a>区别：</h5><p> 1、是否占有资源问题</p>
+<p> 2、创建或撤销一个进程所需要的开销比创建或撤销一个线程所需要的开销大。</p>
+<p> 3、进程为重量级组件，线程为轻量级组件</p>
+<h4 id="同步和异步"><a href="#同步和异步" class="headerlink" title="同步和异步"></a>同步和异步</h4><p>同步：必须等待某一方执行完才能继续下去；</p>
+<p>异步：发布命令后，就会得到一个回复，不影响下一个命令的调用。</p>
+<h4 id="并发和并行"><a href="#并发和并行" class="headerlink" title="并发和并行"></a>并发和并行</h4><p>并发：侧重于多个任务交替运行，而多个任务中有可能还是串行的。(并发具有可论证的确定性，但是实际上具有不可确定性)</p>
+<p>事实上，从性能的角度看，如果没有任务会堵塞，那么在单处理器机器上使用并发就没有任何意义。</p>
+<p>并行：是多个任务之间真正的同时运行。</p>
+<h4 id="临界区"><a href="#临界区" class="headerlink" title="临界区"></a>临界区</h4><p>用来表示一种公共资源和共享资源，可以被多个线程使用，但是每一次，只有一个线程能使用。一旦临界区志愿被占用，其他线程要想要使用这个资源，就必须等待。</p>
+<h4 id="阻塞与非阻塞"><a href="#阻塞与非阻塞" class="headerlink" title="阻塞与非阻塞"></a><strong>阻塞与非阻塞</strong></h4><p>一个线程占用了临界区资源，其他所有需要这个资源的线程就必须在这个临界区进行等待，等待会导致线程挂起，这种情况就是阻塞。非阻塞与这个相反，他强调没有一个线程可以妨碍其他线程的执行，所有的线程都会尝试不断地向前执行。</p>
+<h4 id="死锁活锁和饥饿"><a href="#死锁活锁和饥饿" class="headerlink" title="死锁活锁和饥饿"></a><strong>死锁活锁和饥饿</strong></h4><h5 id="死锁：A-gt-B-gt-C-gt-D-gt-A（线程抢占了资源而不释放）"><a href="#死锁：A-gt-B-gt-C-gt-D-gt-A（线程抢占了资源而不释放）" class="headerlink" title="死锁：A-&gt;B-&gt;C-&gt;D-&gt;A（线程抢占了资源而不释放）"></a><strong>死锁</strong>：A-&gt;B-&gt;C-&gt;D-&gt;A（线程抢占了资源而不释放）</h5><p> 线程抢占了资源而发现拿不到另一个资源，会因为自己拿不到所有的资源，他会释放掉以拿到的资源，来确保系统不发生死锁。</p>
+<h5 id="饥饿：一个或多个线程因为种种原因无法拿到所需要的资源，导致一直无法运行"><a href="#饥饿：一个或多个线程因为种种原因无法拿到所需要的资源，导致一直无法运行" class="headerlink" title="饥饿：一个或多个线程因为种种原因无法拿到所需要的资源，导致一直无法运行"></a><strong>饥饿</strong>：一个或多个线程因为种种原因无法拿到所需要的资源，导致一直无法运行</h5><p>线程的优先级太低导致一直调度不到</p>
+<h5 id="活锁：电梯遇人，两人避让时。a左b左，a右b右。如此反复。（动态问题，比较难查）"><a href="#活锁：电梯遇人，两人避让时。a左b左，a右b右。如此反复。（动态问题，比较难查）" class="headerlink" title="活锁：电梯遇人，两人避让时。a左b左，a右b右。如此反复。（动态问题，比较难查）"></a><strong>活锁：电梯遇人，两人避让时。a左b左，a右b右。如此反复。（动态问题，比较难查）</strong></h5><p>两个线程需要相同的资源（A，B），A拿了A资源，B拿了B资源，然后两个线程发现自己都不能工作，于是就将自己的资源同时释放掉，这时他们看见资源AB出来了，然后又各自来了一个，然后依次反复</p>
+<h4 id="并发级别"><a href="#并发级别" class="headerlink" title="并发级别"></a>并发级别</h4><h5 id="阻塞-（悲观策略）"><a href="#阻塞-（悲观策略）" class="headerlink" title="阻塞  （悲观策略）"></a>阻塞  （悲观策略）</h5><p>​        一个线程进入临界区后，其他的线程必须等待</p>
+<h5 id="非阻塞（乐观策略，但是宽进严出）"><a href="#非阻塞（乐观策略，但是宽进严出）" class="headerlink" title="非阻塞（乐观策略，但是宽进严出）"></a>非阻塞（乐观策略，但是宽进严出）</h5><p>​    无障碍  （Obstruction-Free）</p>
+<p>​          1： 无障碍是一种最弱的非阻塞调度</p>
+<p>​          2： 自由进入临界区</p>
+<p>​          3： 无竞争时，有限步内完成操作（所有的线程都相当于在拿取一个系统当前的快照）</p>
+<p>​          4： 有竞争时回滚数据 （比如读取一个坐标x,y当它先读x再读y的时候发现x被修改了，他就不会读y了，会    从新读x）</p>
+<p>  无锁（Lock-Free）</p>
+<p>​           1：  是无障碍的</p>
+<p>​           2：  保证有一个线程可以胜出（每次出去一个，所以系统是能顺利运行下去的）</p>
+<p>  无等待</p>
+<p>​           1： 无锁的</p>
+<p>​           2： 要求 所有的线程都必须在有限步内完成</p>
+<p>​           3： 无饥饿的 </p>
+<p>​         例子：所有的线程都读一个文件。</p>
+<h4 id="线程的状态"><a href="#线程的状态" class="headerlink" title="线程的状态"></a>线程的状态</h4><p><img src="http://static.oschina.net/uploads/space/2013/0621/174442_0BNr_182175.jpg" alt=""></p>
+<h3 id="基本操作"><a href="#基本操作" class="headerlink" title="基本操作"></a>基本操作</h3><h4 id="线程的实现方式"><a href="#线程的实现方式" class="headerlink" title="线程的实现方式"></a><strong>线程的实现方式</strong></h4><p>继承Thread类，实现Runnable接口； </p>
+<p>建议实现Runnable接口 ，其主要原因有以下两点：</p>
+<p>首先，java只能单继承，因此如果是采用继承Thread的方法，那么在以后进行代码重构的时候可能会遇到问题，因为你无法继承别的类了。</p>
+<p> 其次，如果一个类继承Thread，则不适合资源共享。但是如果实现了Runable接口的话，则很容易的实现资源共享。 </p>
+<h4 id="Start和Run的区别"><a href="#Start和Run的区别" class="headerlink" title="Start和Run的区别"></a><strong>Start和Run的区别</strong></h4><p>Start启动新创建的线程，start内部调用run方法，而直接调用run方法，只会在原来的线程中调用，没有新的线程启动，start方法会启动新线程。</p>
+<h4 id="终止线程"><a href="#终止线程" class="headerlink" title="终止线程"></a>终止线程</h4><p>不推荐使用Stop()，它会释放所有的monitor</p>
+<h4 id="中断线程"><a href="#中断线程" class="headerlink" title="中断线程"></a>中断线程</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> Thread.interrupt()<span class="comment">//中断线程</span></span><br><span class="line"><span class="keyword">public</span> Boolean Thread.IsInterrupt()<span class="comment">//判断是否被中断</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> Boolean Thread.interrupt()<span class="comment">//判断是否被中断，并清楚当前状态</span></span><br></pre></td></tr></table></figure>
+<h4 id="等待线程结束（join）和谦让-yield"><a href="#等待线程结束（join）和谦让-yield" class="headerlink" title="等待线程结束（join）和谦让(yield)"></a>等待线程结束（join）和谦让(yield)</h4><p>yield: 静态方法，当前的线程的优先级不高或者让其他线程有机会来争夺CPu时间的时候，会让出cpu时间，让其他的线程有更多的机会来争夺cpu时间。但是让出cpu时间不代表放弃了自己执行的机会，当前cpu放弃cpu后还是会和其他线程争夺cpu时间。</p>
+<p>join：当我们不知道我们开启的线程什么时候执行完毕的时候，而我们又非常想知道某个线程是否结束，就可以使用join，等到这个线程结束再进行下一步。</p>
+<h4 id="守护线程"><a href="#守护线程" class="headerlink" title="守护线程"></a>守护线程</h4><p>在Java中有两类线程：User Thread(用户线程)、Daemon Thread(守护线程) </p>
+<p>用个比较通俗的比如，任何一个守护线程都是整个JVM中所有非守护线程的保姆：</p>
+<p>只要当前JVM实例中尚存在任何一个非守护线程没有结束，守护线程就全部工作；只有当最后一个非守护线程结束时，守护线程随着JVM一同结束工作。<br>Daemon的作用是为其他线程的运行提供便利服务，守护线程最典型的应用就是 GC (垃圾回收器)，它就是一个很称职的守护者。</p>
+<p>User和Daemon两者几乎没有区别，唯一的不同之处就在于虚拟机的离开：如果 User Thread已经全部退出运行了，只剩下Daemon Thread存在了，虚拟机也就退出了。 因为没有了被守护者，Daemon也就没有工作可做了，也就没有继续运行程序的必要了。</p>
+<p>PS</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Thread daemonTread = <span class="keyword">new</span> Thread();</span><br><span class="line"> </span><br><span class="line">  <span class="comment">// 设定 daemonThread 为 守护线程，default false(非守护线程)</span></span><br><span class="line"> daemonThread.setDaemon(<span class="keyword">true</span>);</span><br><span class="line"> </span><br><span class="line"> <span class="comment">// 验证当前线程是否为守护线程，返回 true 则为守护线程</span></span><br><span class="line"> daemonThread.isDaemon();</span><br></pre></td></tr></table></figure>
+<p>(1) thread.setDaemon(true)必须在thread.start()之前设置，否则会跑出一个IllegalThreadStateException异常。你不能把正在运行的常规线程设置为守护线程。<br>(2) 在Daemon线程中产生的新线程也是Daemon的。<br>(3) 不要认为所有的应用都可以分配给Daemon来进行服务，比如读写操作或者计算逻辑。</p>
+<h4 id="基本的线程同步操作"><a href="#基本的线程同步操作" class="headerlink" title="基本的线程同步操作"></a>基本的线程同步操作</h4><p>synchronized</p>
+<p>​      —指定加锁对象 ：对给定对象加锁，进入同步代码块前要获得给对象的锁</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> SynchronizedTest;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SynchronizedTest1</span> <span class="keyword">implements</span> <span class="title">Runnable</span> </span>&#123;</span><br><span class="line">    <span class="keyword">static</span> SynchronizedTest1 instance=<span class="keyword">new</span> SynchronizedTest1();</span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">int</span> i=<span class="number">0</span>;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>;j&lt;<span class="number">10000000</span>;j++)&#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (instance)&#123;</span><br><span class="line">                i++;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span><span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line">        Thread t1=<span class="keyword">new</span> Thread(instance);</span><br><span class="line">        Thread t2=<span class="keyword">new</span> Thread(instance);</span><br><span class="line">        t1.start();</span><br><span class="line">        t2.start();</span><br><span class="line">        t1.join();</span><br><span class="line">        t2.join();</span><br><span class="line">        System.out.println(i);</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>​      —直接作用于实例方法：相当于对当前实例加锁，进入同步代码块前要获得当前实例的锁</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> SynchronizedTest;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SynchronizedTest2</span>  <span class="keyword">implements</span> <span class="title">Runnable</span></span>&#123;</span><br><span class="line">    <span class="keyword">static</span> SynchronizedTest2 instance = <span class="keyword">new</span> SynchronizedTest2();</span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">int</span> i = <span class="number">0</span>;</span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">    *  给当前实例加锁</span></span><br><span class="line"><span class="comment">    * */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">increase</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        i++;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; <span class="number">10000000</span>; j++) &#123;</span><br><span class="line">            increase();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="comment">/*</span></span><br><span class="line"><span class="comment">        * 注意t1 t2是给同一个对象加锁</span></span><br><span class="line"><span class="comment">        * */</span></span><br><span class="line">        Thread t1 = <span class="keyword">new</span> Thread(instance);</span><br><span class="line">        Thread t2 = <span class="keyword">new</span> Thread(instance);</span><br><span class="line"></span><br><span class="line">        t1.start();</span><br><span class="line">        t2.start();</span><br><span class="line">        t1.join();</span><br><span class="line">        t2.join();</span><br><span class="line">        System.out.println(i);</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>​      —直接作用于静态方法：相当于对当前类加锁，进入同步代码块前要获得当前类的锁</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> SynchronizedTest;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SynchronizedTest3</span>  <span class="keyword">implements</span> <span class="title">Runnable</span> </span>&#123;</span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">int</span> i = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">increase</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        i++;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; <span class="number">10000000</span>; j++) &#123;</span><br><span class="line">            increase();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="comment">/*</span></span><br><span class="line"><span class="comment">         * 注意t1 t2是给相同类加锁</span></span><br><span class="line"><span class="comment">         * */</span></span><br><span class="line">        Thread t1 = <span class="keyword">new</span> Thread(<span class="keyword">new</span> SynchronizedTest3());</span><br><span class="line">        Thread t2 = <span class="keyword">new</span> Thread(<span class="keyword">new</span> SynchronizedTest3());</span><br><span class="line"></span><br><span class="line">        t1.start();</span><br><span class="line">        t2.start();</span><br><span class="line">        t1.join();</span><br><span class="line">        t2.join();</span><br><span class="line">        System.out.println(i);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="Object-wait-Object-notify"><a href="#Object-wait-Object-notify" class="headerlink" title="Object.wait()  Object.notify()"></a>Object.wait()  Object.notify()</h4><h5 id="Object-wait-："><a href="#Object-wait-：" class="headerlink" title="Object.wait() ："></a>Object.wait() ：</h5><p>必须的同步代码块里面调用，调用前必须拿到Object这个锁，且调用这个方法后就会释放这个锁（不释放的话，它又在等待，就使得其他线程没有办法获得Object对象的监视器的所有权），并且等待其他线程通知这个线程执行。</p>
+<h5 id="Object-notify-："><a href="#Object-notify-：" class="headerlink" title="Object.notify()："></a>Object.notify()：</h5><p>随机唤醒一个等待在object上的线程，调用前必须拿到Object这个锁，且必须的同步代码块里面调用。notify()后会使之前受到wait()的线程往下走，但是不会马上执行wait()之后的方法，因为此时调用notify（）的线程还没有释放Object这个锁，只有等当前线程释放锁后，之前调用wait（）的方法拿回Object这个锁后才会执行之后的代码。</p>
+<h5 id="Object-notifyAll-："><a href="#Object-notifyAll-：" class="headerlink" title="Object.notifyAll()："></a>Object.notifyAll()：</h5><p>通知所有等待当前对象上的线程，唤醒后的所有线程来竞争这个Object的锁，然后其余的与Object.notify()：差不多。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/java/" rel="tag"><i class="fa fa-tag"></i> java</a>
+          
+            <a href="/tags/Thread/" rel="tag"><i class="fa fa-tag"></i> Thread</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/10/23/index/" rel="next" title="哇咔咔">
+                <i class="fa fa-chevron-left"></i> 哇咔咔
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  <div class="post-spread">
+      
+        
+                                <div class="-mob-share-ui-button -mob-share-open">分享</div>
+                                <div class="-mob-share-ui" style="display: none">
+                                    <ul class="-mob-share-list">
+                                        <li class="-mob-share-weibo"><p>新浪微博</p></li>
+                                        <li class="-mob-share-tencentweibo"><p>腾讯微博</p></li>
+                                        <li class="-mob-share-qzone"><p>QQ空间</p></li>
+                                        <li class="-mob-share-qq"><p>QQ好友</p></li>
+                                        <li class="-mob-share-weixin"><p>微信</p></li>
+                                        <li class="-mob-share-douban"><p>豆瓣</p></li>
+                                    </ul>
+                                    <div class="-mob-share-close">取消</div>
+                                </div>
+                                <div class="-mob-share-ui-bg"></div>
+                                <script id="-mob-share" src="http://f1.webshare.mob.com/code/mob-share.js?appkey=262488aa81530"></script>
+
+								
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.png"
+                alt="HY" />
+            
+              <p class="site-author-name" itemprop="name">HY</p>
+              <p class="site-description motion-element" itemprop="description">A man is only as good as what he loves.</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/yqh74110" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:yaoqiuhong@outlook.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#多线程"><span class="nav-number">1.</span> <span class="nav-text">多线程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#概念"><span class="nav-number">1.1.</span> <span class="nav-text">概念</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#进程和线程"><span class="nav-number">1.1.1.</span> <span class="nav-text">进程和线程</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#进程："><span class="nav-number">1.1.1.1.</span> <span class="nav-text">进程：</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#线程："><span class="nav-number">1.1.1.2.</span> <span class="nav-text">线程：</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#区别："><span class="nav-number">1.1.1.3.</span> <span class="nav-text">区别：</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#同步和异步"><span class="nav-number">1.1.2.</span> <span class="nav-text">同步和异步</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#并发和并行"><span class="nav-number">1.1.3.</span> <span class="nav-text">并发和并行</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#临界区"><span class="nav-number">1.1.4.</span> <span class="nav-text">临界区</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#阻塞与非阻塞"><span class="nav-number">1.1.5.</span> <span class="nav-text">阻塞与非阻塞</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#死锁活锁和饥饿"><span class="nav-number">1.1.6.</span> <span class="nav-text">死锁活锁和饥饿</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#死锁：A-gt-B-gt-C-gt-D-gt-A（线程抢占了资源而不释放）"><span class="nav-number">1.1.6.1.</span> <span class="nav-text">死锁：A-&gt;B-&gt;C-&gt;D-&gt;A（线程抢占了资源而不释放）</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#饥饿：一个或多个线程因为种种原因无法拿到所需要的资源，导致一直无法运行"><span class="nav-number">1.1.6.2.</span> <span class="nav-text">饥饿：一个或多个线程因为种种原因无法拿到所需要的资源，导致一直无法运行</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#活锁：电梯遇人，两人避让时。a左b左，a右b右。如此反复。（动态问题，比较难查）"><span class="nav-number">1.1.6.3.</span> <span class="nav-text">活锁：电梯遇人，两人避让时。a左b左，a右b右。如此反复。（动态问题，比较难查）</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#并发级别"><span class="nav-number">1.1.7.</span> <span class="nav-text">并发级别</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#阻塞-（悲观策略）"><span class="nav-number">1.1.7.1.</span> <span class="nav-text">阻塞  （悲观策略）</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#非阻塞（乐观策略，但是宽进严出）"><span class="nav-number">1.1.7.2.</span> <span class="nav-text">非阻塞（乐观策略，但是宽进严出）</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#线程的状态"><span class="nav-number">1.1.8.</span> <span class="nav-text">线程的状态</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#基本操作"><span class="nav-number">1.2.</span> <span class="nav-text">基本操作</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#线程的实现方式"><span class="nav-number">1.2.1.</span> <span class="nav-text">线程的实现方式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Start和Run的区别"><span class="nav-number">1.2.2.</span> <span class="nav-text">Start和Run的区别</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#终止线程"><span class="nav-number">1.2.3.</span> <span class="nav-text">终止线程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#中断线程"><span class="nav-number">1.2.4.</span> <span class="nav-text">中断线程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#等待线程结束（join）和谦让-yield"><span class="nav-number">1.2.5.</span> <span class="nav-text">等待线程结束（join）和谦让(yield)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#守护线程"><span class="nav-number">1.2.6.</span> <span class="nav-text">守护线程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#基本的线程同步操作"><span class="nav-number">1.2.7.</span> <span class="nav-text">基本的线程同步操作</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Object-wait-Object-notify"><span class="nav-number">1.2.8.</span> <span class="nav-text">Object.wait()  Object.notify()</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Object-wait-："><span class="nav-number">1.2.8.1.</span> <span class="nav-text">Object.wait() ：</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Object-notify-："><span class="nav-number">1.2.8.2.</span> <span class="nav-text">Object.notify()：</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Object-notifyAll-："><span class="nav-number">1.2.8.3.</span> <span class="nav-text">Object.notifyAll()：</span></a></li></ol></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">HY</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+      <span class="post-meta-item-text">Site words total count&#58;</span>
+    
+    <span title="Site words total count">11.2k</span>
+  
+</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  <!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/src/love.js"></script>
+</body>
+</html>
