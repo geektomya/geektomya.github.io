@@ -414,7 +414,7 @@
 <a id="more"></a>
 <p>首先如果jdk在安装的时候没有改变位置，默认装在 C:\Program Files\Java下面 。在这个文件夹下面应该是有 jdk-版本号， jre-版本号，这两个文件夹的。</p>
 <p>然后如图</p>
-<p><img src="1.png" alt=""></p>
+<p><img src="/2018/06/04/java环境变量配置/1.png" alt=""></p>
 <p>鼠标右键单击如（1），选择属性，然后单击高级系统设置，如（2），在弹出来的对话框选择环境配置如（3），进入环境变量设置页面。</p>
 <p>到这一步的时候就可以开始环境变量的配置，首先介绍一下关于系统变量和用户变量的区别，每次启动pc的时候我们都是经历了登录过程，当你进入系统过后，这个电脑就有你的账户，然后你可以对你的账户啊进行设置，也可以对整个电脑设置，当你注销后，下一个用户登录时，你账户的设置全部失效，只会有别人的设置，和系统设置生效。当然你再次登录过后你的设置依然是在的。也就是说，用户变量是我们自己使用的时候生效的，而系统变量是整台电脑生效的。（对于一台公用的电脑的话，最好设置为用户变量，自己电脑的话都无差别）这里我就全配成系统变量。</p>
 <h5 id="开始配置"><a href="#开始配置" class="headerlink" title="开始配置"></a>开始配置</h5><p>首先在系统变量板块中 新建变量 名字为 <strong>JAVA_HOME</strong> 然后它指向 的是你jdk的安装路径（可以浏览文件夹直接定位到安装路径），例如</p>
@@ -423,7 +423,7 @@
 <p>两个路径即可（还是可以浏览文件夹直接定位到安装路径），例如</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">第一个  C:\Program Files\Java\jdk-版本号\bin(注意是jdk)</span><br><span class="line">第二个  C:\Program Files\Java\jre-版本号\bin（注意是jre）</span><br></pre></td></tr></table></figure>
 <p>如果你看网上的教程你会发祥很多是配的<strong>%JAVA_HOME%\bin ; %JAVA_HOME%\jre\bin;</strong> 这两个，首先解释一下<strong>%%</strong>里面的就是一个变量，将变量放到里面，就会将那个变量的路径代替到这儿来。也就是说，<strong>path</strong> 需要配的就是  jdk，jre下面的 bin 目录。</p>
-<h6 id="图解"><a href="#图解" class="headerlink" title="图解"></a>图解</h6><p><img src="2.png" alt=""></p>
+<h6 id="图解"><a href="#图解" class="headerlink" title="图解"></a>图解</h6><p><img src="/2018/06/04/java环境变量配置/2.png" alt=""></p>
 <p>做完这些过后就可以开始测试自己的Jdk是否安装好了。</p>
 <h5 id="测试jdk是否安装好"><a href="#测试jdk是否安装好" class="headerlink" title="测试jdk是否安装好"></a>测试jdk是否安装好</h5><p>打开自己的Dos（win键+r，然后弹出的窗口输入cmd确定就可以了）输入 java -version 回车 如果能输出自己的jdk版本号就说明成功了。</p>
 
@@ -630,6 +630,7 @@
           
 
         </div>
+		
       </section>
 
       
