@@ -103,7 +103,8 @@
 <meta property="og:image" content="http://yoursite.com/2019/03/18/初探MVC/5.png">
 <meta property="og:image" content="http://yoursite.com/2019/03/18/初探MVC/6.png">
 <meta property="og:image" content="http://yoursite.com/2019/03/18/初探MVC/7.png">
-<meta property="og:updated_time" content="2019-03-23T09:41:53.065Z">
+<meta property="og:image" content="http://yoursite.com/2019/03/18/初探MVC/8.png">
+<meta property="og:updated_time" content="2019-03-23T10:08:02.234Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="初探MVC">
 <meta name="twitter:description" content="前言：我为什么要去学这些东西呢？ 以前你问我MVC是什么，相信我肯定可以回答出（Model—View—Controller）然后,然后我就什么就不知道了….这其中涉及到哪些思想，哪些具体的东西，我是一概不知的。">
@@ -327,7 +328,7 @@
 		  
   <span class="post-updated">
     &nbsp; | &nbsp; 更新于
-    <time itemprop="dateUpdated" datetime="2019-03-23T17:41:53+08:00" content="2019-03-23">
+    <time itemprop="dateUpdated" datetime="2019-03-23T18:08:02+08:00" content="2019-03-23">
       2019-03-23
     </time>
   </span>
@@ -378,7 +379,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  10,483
+                  10,891
                 </span>
               
 
@@ -394,7 +395,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  42
+                  44
                 </span>
               
             </div>
@@ -675,6 +676,34 @@
 </tr>
 </tbody>
 </table>
+<p>使用RequestDispatcher接口的forward()方法即可完成跳转功能的实现，但是如果要使用此接口还需要使用HttpRequest接口提供的如下表的方法进行初始化。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">No.</th>
+<th style="text-align:center">方法</th>
+<th style="text-align:center">类型</th>
+<th style="text-align:center">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">1</td>
+<td style="text-align:center">public RequestDispatcher getRequestDispatcher(String path)</td>
+<td style="text-align:center">普通</td>
+<td style="text-align:center">取得RequestDispatcher接口的实列</td>
+</tr>
+</tbody>
+</table>
+<p>下面通过具体的代码来看以下这个的实现</p>
+<p>ServerRedirectServlet.java</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> javax.servlet.RequestDispatcher;</span><br><span class="line"><span class="keyword">import</span> javax.servlet.ServletException;</span><br><span class="line"><span class="keyword">import</span> javax.servlet.annotation.WebServlet;</span><br><span class="line"><span class="keyword">import</span> javax.servlet.http.HttpServlet;</span><br><span class="line"><span class="keyword">import</span> javax.servlet.http.HttpServletRequest;</span><br><span class="line"><span class="keyword">import</span> javax.servlet.http.HttpServletResponse;</span><br><span class="line"><span class="keyword">import</span> java.io.IOException;</span><br><span class="line"></span><br><span class="line"><span class="meta">@WebServlet</span>(name = <span class="string">"ServerRedircetServlet"</span>,value = <span class="string">"/foward"</span>)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ServerRedircetServlet</span> <span class="keyword">extends</span> <span class="title">HttpServlet</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span>  <span class="keyword">void</span>    <span class="title">doGet</span><span class="params">(HttpServletRequest request, HttpServletResponse response)</span></span></span><br><span class="line"><span class="function">            <span class="keyword">throws</span> ServletException, IOException </span>&#123;</span><br><span class="line">        request.getSession().setAttribute(<span class="string">"session"</span>,<span class="string">"这是一个服务器跳转呀传递的session"</span>);</span><br><span class="line">        request.setAttribute(<span class="string">"request"</span>,<span class="string">"这是一个服务器跳转呀传递的request"</span>);</span><br><span class="line">        getServletContext().setAttribute(<span class="string">"application"</span>,<span class="string">"这是一个服务器跳转呀传递的application"</span>);</span><br><span class="line">        RequestDispatcher rq=request.getRequestDispatcher(<span class="string">"Foward_info.jsp"</span>);</span><br><span class="line">        rq.forward(request,response);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Foward_info.jsp</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">&lt;%--</span><br><span class="line">  Created by IntelliJ IDEA.</span><br><span class="line">  User: yqh</span><br><span class="line">  Date: <span class="number">2019</span>/<span class="number">3</span>/<span class="number">23</span></span><br><span class="line">  Time: <span class="number">17</span>:<span class="number">51</span></span><br><span class="line">  To change <span class="keyword">this</span> template use File | Settings | File Templates.</span><br><span class="line">--%&gt;</span><br><span class="line">&lt;%@ page contentType=<span class="string">"text/html;charset=UTF-8"</span> language=<span class="string">"java"</span> %&gt;</span><br><span class="line">&lt;html&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">    &lt;title&gt;接收服务器端跳转的内容&lt;/title&gt;</span><br><span class="line">    &lt;% request.setCharacterEncoding(<span class="string">"GBK"</span>);%&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">&lt;h2&gt;session属性：&lt;%=session.getAttribute("session")%&gt;&lt;/h2&gt;</span><br><span class="line">&lt;h2&gt;request属性：&lt;%=request.getAttribute("request")%&gt;&lt;/h2&gt;</span><br><span class="line">&lt;h2&gt;application属性：&lt;%=application.getAttribute("application")%&gt;&lt;/h2&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
+<p>启动web容器后，我们在浏览器输入localhost:8080/foward后的结果如下。</p>
+<p><img src="/2019/03/18/初探MVC/8.png" alt=""></p>
+<p>通过运行结果可以看到URL并没有变化，但是输出的内容变成了JSP页面的内容，与此同时接收到了request属性的内容。</p>
+<p>以上就是通过Servlet实现跳转的两种方式。</p>
 
       
     </div>
@@ -922,7 +951,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">16.0k</span>
+    <span title="Site words total count">16.4k</span>
   
 </div>
 
