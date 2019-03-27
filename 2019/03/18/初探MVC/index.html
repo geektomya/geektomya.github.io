@@ -108,7 +108,7 @@
 <meta property="og:image" content="http://yoursite.com/2019/03/18/初探MVC/10.png">
 <meta property="og:image" content="http://yoursite.com/2019/03/18/初探MVC/11.png">
 <meta property="og:image" content="http://yoursite.com/2019/03/18/初探MVC/12.png">
-<meta property="og:updated_time" content="2019-03-27T11:03:40.613Z">
+<meta property="og:updated_time" content="2019-03-27T11:14:12.839Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="初探MVC">
 <meta name="twitter:description" content="前言：我为什么要去学这些东西呢？ 以前你问我MVC是什么，相信我肯定可以回答出（Model—View—Controller）然后,然后我就什么就不知道了….这其中涉及到哪些思想，哪些具体的东西，我是一概不知的。">
@@ -332,7 +332,7 @@
 		  
   <span class="post-updated">
     &nbsp; | &nbsp; 更新于
-    <time itemprop="dateUpdated" datetime="2019-03-27T19:03:40+08:00" content="2019-03-27">
+    <time itemprop="dateUpdated" datetime="2019-03-27T19:14:12+08:00" content="2019-03-27">
       2019-03-27
     </time>
   </span>
@@ -383,7 +383,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  14,349
+                  14,374
                 </span>
               
 
@@ -766,7 +766,7 @@
 <p>在配置时,配置Filter的顺序就是该过滤链的执行顺序，这里需要注意的是两个Filter的<code>&lt;url-pattern&gt;</code>的标签内必须是同一个URL，这样这两个Filter才算组成了一个Filter链，否则他们将没多大关系。</p>
 <p>通过如此配置之后，运行结果如下。</p>
 <p><img src="/2019/03/18/初探MVC/11.png" alt=""></p>
-<h5 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h5><p> 从上面可以看出过滤链的初始化顺序<font color="red">不是按照web.xml文件对应的声明顺序进行的。这里的初始化顺序是根据<code>&lt;filter-name&gt;</code>的长度来决定的，谁的<code>&lt;filter-name&gt;</code>长，谁就先初始化。然后一样长的时候就开始比较<code>&lt;filter-name&gt;</code>的字母顺序，字母越靠前越先执行，有相同的就延后比较下一个字母。</font>这个需要特别的注意一下，网上的博客现在大多数说的都是根据注册顺序来声明的。</p>
+<h5 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h5><p> 从上面可以看出过滤链的初始化顺序<font color="red">不是按照web.xml文件对应的声明顺序进行的。这里的初始化顺序是根据<code>&lt;filter-name&gt;</code>的长度来决定的，谁的<code>&lt;filter-name&gt;</code>长，谁就先初始化。然后一样长的时候就开始比较<code>&lt;filter-name&gt;</code>的字母顺序，字母越靠前越先执行，有相同的就延后比较下一个字母。</font>（我也不是很明白为什么要这样设计来决定他的初始化顺序）这个需要特别的注意一下，网上的博客现在大多数说的都是根据注册顺序来声明的。</p>
 <p>然后虽然初始化顺序与声明顺序无关，但是他的执行顺序却是跟初始化顺序一样的，即先初始化先执行。但是需要注意的是由于他是一个链式，所以可以看到 它的doFilter的执行，先会把所有的到达服务器前的请求依次过滤，然后再将服务器返回客户端的响应依次过滤返回。整个过程就很像一个函数的递归调用一样，详情如下图：</p>
 <p><img src="/2019/03/18/初探MVC/12.png" alt=""></p>
 <h4 id="Filter的生命周期"><a href="#Filter的生命周期" class="headerlink" title="Filter的生命周期"></a>Filter的生命周期</h4><p>Filter与Servlet一样也具有自己的生命周期，之前看Filter的源码的时候知道他有三个方法。</p>
