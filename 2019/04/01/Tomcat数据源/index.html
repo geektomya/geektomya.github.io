@@ -88,19 +88,19 @@
 
 
 
-<meta name="description" content="前言在我们进行动态Web开发的时候，要经常对数据库进行操作，而传统的JDBC操作由于步骤的重复性会导致性能的程序性能的下降（在使用JDBC连接数据库时，程序会进行多个Socket连接操作，所以这种传统的数据库操作性能是很低的），此时我们就可以通过数据库源提升与数据库的操作性能。 JDBC操作原理：  加载数据库驱动程序，数据库驱动程序通过classpath配置（放到相应位置，使得能够找到） 通过D">
+<meta name="description" content="前言在我们进行动态Web开发的时候，要经常对数据库进行操作，而传统的JDBC操作由于步骤的重复性会导致性能的程序性能的下降（在使用JDBC连接数据库时，程序会进行多个Socket连接操作，所以这种传统的数据库操作性能是很低的），此时我们就可以通过数据库源提升与数据库的操作性能。">
 <meta name="keywords" content="MVC,Connecton Pool">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Tomcat数据源">
 <meta property="og:url" content="http://yoursite.com/2019/04/01/Tomcat数据源/index.html">
 <meta property="og:site_name" content="YAO">
-<meta property="og:description" content="前言在我们进行动态Web开发的时候，要经常对数据库进行操作，而传统的JDBC操作由于步骤的重复性会导致性能的程序性能的下降（在使用JDBC连接数据库时，程序会进行多个Socket连接操作，所以这种传统的数据库操作性能是很低的），此时我们就可以通过数据库源提升与数据库的操作性能。 JDBC操作原理：  加载数据库驱动程序，数据库驱动程序通过classpath配置（放到相应位置，使得能够找到） 通过D">
+<meta property="og:description" content="前言在我们进行动态Web开发的时候，要经常对数据库进行操作，而传统的JDBC操作由于步骤的重复性会导致性能的程序性能的下降（在使用JDBC连接数据库时，程序会进行多个Socket连接操作，所以这种传统的数据库操作性能是很低的），此时我们就可以通过数据库源提升与数据库的操作性能。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://yoursite.com/2019/04/01/Tomcat数据源/15.png">
-<meta property="og:updated_time" content="2019-04-02T15:49:49.615Z">
+<meta property="og:updated_time" content="2019-04-02T15:52:59.311Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Tomcat数据源">
-<meta name="twitter:description" content="前言在我们进行动态Web开发的时候，要经常对数据库进行操作，而传统的JDBC操作由于步骤的重复性会导致性能的程序性能的下降（在使用JDBC连接数据库时，程序会进行多个Socket连接操作，所以这种传统的数据库操作性能是很低的），此时我们就可以通过数据库源提升与数据库的操作性能。 JDBC操作原理：  加载数据库驱动程序，数据库驱动程序通过classpath配置（放到相应位置，使得能够找到） 通过D">
+<meta name="twitter:description" content="前言在我们进行动态Web开发的时候，要经常对数据库进行操作，而传统的JDBC操作由于步骤的重复性会导致性能的程序性能的下降（在使用JDBC连接数据库时，程序会进行多个Socket连接操作，所以这种传统的数据库操作性能是很低的），此时我们就可以通过数据库源提升与数据库的操作性能。">
 <meta name="twitter:image" content="http://yoursite.com/2019/04/01/Tomcat数据源/15.png">
 
 
@@ -321,7 +321,7 @@
 		  
   <span class="post-updated">
     &nbsp; | &nbsp; 更新于
-    <time itemprop="dateUpdated" datetime="2019-04-02T23:49:49+08:00" content="2019-04-02">
+    <time itemprop="dateUpdated" datetime="2019-04-02T23:52:59+08:00" content="2019-04-02">
       2019-04-02
     </time>
   </span>
@@ -410,6 +410,7 @@
 
       
         <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在我们进行动态Web开发的时候，要经常对数据库进行操作，而传统的JDBC操作由于步骤的重复性会导致性能的程序性能的下降（在使用JDBC连接数据库时，程序会进行多个Socket连接操作，所以这种传统的数据库操作性能是很低的），此时我们就可以通过数据库源提升与数据库的操作性能。</p>
+<a id="more"></a>
 <p>JDBC操作原理：</p>
 <ol>
 <li>加载数据库驱动程序，数据库驱动程序通过classpath配置（放到相应位置，使得能够找到）</li>
