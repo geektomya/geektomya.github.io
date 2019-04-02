@@ -320,8 +320,8 @@
 		  
   <span class="post-updated">
     &nbsp; | &nbsp; 更新于
-    <time itemprop="dateUpdated" datetime="2019-04-01T22:16:01+08:00" content="2019-04-01">
-      2019-04-01
+    <time itemprop="dateUpdated" datetime="2019-04-02T23:49:49+08:00" content="2019-04-02">
+      2019-04-02
     </time>
   </span>
 
@@ -371,7 +371,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  118
+                  1,198
                 </span>
               
 
@@ -387,7 +387,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  1
+                  4
                 </span>
               
             </div>
@@ -410,7 +410,36 @@
       
         
           
-            <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>在我们进行动态Web开发的时候，要经常对数据库进行操作，而传统的JDBC操作由于步骤的重复性会导致性能的程序性能的下降（在使用JDBC连接数据库时，程序会进行多个Socket连接操作，所以这种传统的数据库操作性能是很低的），此时我们就可以通过数据库源提升与数据库的操作性能。</p>
+            <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在我们进行动态Web开发的时候，要经常对数据库进行操作，而传统的JDBC操作由于步骤的重复性会导致性能的程序性能的下降（在使用JDBC连接数据库时，程序会进行多个Socket连接操作，所以这种传统的数据库操作性能是很低的），此时我们就可以通过数据库源提升与数据库的操作性能。</p>
+<p>JDBC操作原理：</p>
+<ol>
+<li>加载数据库驱动程序，数据库驱动程序通过classpath配置（放到相应位置，使得能够找到）</li>
+<li>通过DriverManager类取得数据库的连接对象</li>
+<li>通过Connection实例化XXXXStatement对象，编写SQL语句操作数据库。</li>
+<li>数据库属于资源操作，操作完成后要关闭数据库。</li>
+</ol>
+<p>可以发现大多时候对数据库的操作中都要经过相同的步骤（以上 1，2，4），而只是步骤3不同，所以在进行数据库操作的时候，可以将重复的3个步骤去掉，而只保留步骤3，那么性能肯定会有所提高，这实际上就是数据源产生的原因。</p>
+<h2 id="数据源"><a href="#数据源" class="headerlink" title="数据源"></a>数据源</h2><p>数据源的操作核心原理就是,在一个对象池中保存多个数据库的连接（也称为数据库连接池 ，Connection Pool），这样以后再进行数据库的操作时，直接从连接池中取出一个数据库连接，当数据库操作完成后，再将此连接放回到数据库连接池中，然后等待其他用户继续去使用。</p>
+<p>通过数据源操作，可以很好的解决传统JDBC的问题，但是再使用的时候也要注意几个问题</p>
+<ol>
+<li>最小连接数，如果一个程序在使用时没有一个用户连接，则数据库最小应该维持的数据库连接数</li>
+<li>最大连接数，一个程序中一个数据库最多可以打开的数据库连接数</li>
+<li>最大等待时间，当一个数据库连接池中已经没有更多的数据库连接提供给用户使用时，其他用户等待的最大时间，如果在等待时间内有连接放回，则可以继续使用，如果超过了最大等待时间，则用户无法取得数据库连接。</li>
+</ol>
+<p>如果要自己来通过Java程序实现这些的话，还是有一些困难的，所幸的是在Tomcat4.1x版本之后已经支持了此操作，所以在Web开发中可以直接通过Tomcat即可实现数据库连接池的功能。（如果不使用Tomcat实现数据库连接池，也可以使用其他的，如C3P0，还有使用框架来实现）</p>
+<h2 id="在Tomcat中使用数据库连接池"><a href="#在Tomcat中使用数据库连接池" class="headerlink" title="在Tomcat中使用数据库连接池"></a>在Tomcat中使用数据库连接池</h2><p>在Web容器中，数据库的连接池都是通过数据源（javax.sql.DataSource）访问的，既可以通过javax.sql.DataSource类取得一个Connection对象，但是要想得到一个DataSource对象，需要使用JNDI进行查找。如下图所示：</p>
+<p><img src="/2019/04/01/Tomcat数据源/15.png" alt=""></p>
+<p>从上图可以看见客户端通过查询JNDI上所绑定的名称取得一个DataSource对象，并且通过DataSource取得Connection Pool中保存的一个数据库连接对象。</p>
+<p><code>JNDI（Java Naming and Directory Interface，Java命名及目录接口）是JavaEE提供的一个服务，其主要功能是通过一个名称为 key 查找到对应的一个对象 value</code></p>
+<h2 id="在Tomcat配置数据库连接池"><a href="#在Tomcat配置数据库连接池" class="headerlink" title="在Tomcat配置数据库连接池"></a>在Tomcat配置数据库连接池</h2><h5 id="准备工作："><a href="#准备工作：" class="headerlink" title="准备工作："></a>准备工作：</h5><p>在tomcat的lib文件夹下导入数据库的数据库的驱动程序</p>
+<h5 id="配置server-xml"><a href="#配置server-xml" class="headerlink" title="配置server.xml"></a>配置server.xml</h5><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">Context</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">Resource</span> <span class="attr">name</span>=<span class="string">"jdbc/XXX"</span>     配置一个连接池资源，名字为<span class="attr">jdbc</span>/<span class="attr">XXX</span></span></span><br><span class="line"><span class="tag">              <span class="attr">auth</span>=<span class="string">"Container"</span>    容器负责资源的连接</span></span><br><span class="line"><span class="tag">              <span class="attr">type</span>=<span class="string">"javax.sql.DataSource"</span> 此数据源对应的类型是<span class="attr">DateSource</span></span></span><br><span class="line"><span class="tag">              <span class="attr">maxActive</span>=<span class="string">"100"</span>   可以打开的最大连接数</span></span><br><span class="line"><span class="tag">              <span class="attr">maxldle</span>=<span class="string">"30"</span>      维持的最小连接数</span></span><br><span class="line"><span class="tag">              <span class="attr">maxWait</span>=<span class="string">"10000"</span>   用户等待的最大时间</span></span><br><span class="line"><span class="tag">              <span class="attr">username</span>=<span class="string">"root"</span>   数据库用户名</span></span><br><span class="line"><span class="tag">              <span class="attr">password</span>=<span class="string">"root"</span>   数据库密码</span></span><br><span class="line"><span class="tag">              <span class="attr">driverClassName</span>=<span class="string">"com.mysql.jdbc.Driver"</span> 数据库驱动程序</span></span><br><span class="line"><span class="tag">              <span class="attr">url</span>=<span class="string">"jdbc:mysql://localhost:3306/mydb"</span>  数据库名称</span></span><br><span class="line">&lt;/Context&gt;</span><br></pre></td></tr></table></figure>
+<h5 id="配置web-xml"><a href="#配置web-xml" class="headerlink" title="配置web.xml"></a>配置web.xml</h5><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">resource-ref</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">description</span>&gt;</span>DB Connection<span class="tag">&lt;/<span class="name">description</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">res-ref-name</span>&gt;</span>jdbc/XXX<span class="tag">&lt;/<span class="name">res-ref-name</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">res-type</span>&gt;</span>javax.sql.DataSource<span class="tag">&lt;/<span class="name">res-type</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">res-auth</span>&gt;</span>Container<span class="tag">&lt;/<span class="name">res-auth</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">resource-ref</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h5 id="查找数据源"><a href="#查找数据源" class="headerlink" title="查找数据源"></a>查找数据源</h5><p>数据源的查找是按照JNDI方式进行查找的，所以如果使用数据源取得数据库连接，则必须按照以下步骤进行</p>
+<ol>
+<li>初始化名称查找下上文：Context ctx = new InitialContext();</li>
+<li>通过名称查找DataSource对象：DataSource ds = (DataSource)ctx.lookup(“jdbc:comp/env/“JNDI名称); </li>
+<li>通过DataSource取得一个数据库连接：Connection conn = ds.getConnection();</li>
+</ol>
 
           
         
@@ -1160,7 +1189,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">22.9k</span>
+    <span title="Site words total count">24.0k</span>
   
 </div>
 
