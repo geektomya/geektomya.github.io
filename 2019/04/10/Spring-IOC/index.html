@@ -77,7 +77,7 @@
 
 
 
-  <meta name="keywords" content="Spring," />
+  <meta name="keywords" content="IOC," />
 
 
 
@@ -88,18 +88,20 @@
 
 
 
-<meta name="description" content="Spring_IOC">
-<meta name="keywords" content="Spring">
+<meta name="description" content="Spring_IOC在学习Spring的过程中，最核心的就是的理念就是IOC(控制反转)以及AOP(面向切面编程),其中IOC是Spring的基础，而AOP则是其重要的应用。这篇文章记录了我对学习IOC之中的一些总结。">
+<meta name="keywords" content="IOC">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Spring_IOC">
 <meta property="og:url" content="http://yoursite.com/2019/04/10/Spring-IOC/index.html">
 <meta property="og:site_name" content="YAO">
-<meta property="og:description" content="Spring_IOC">
+<meta property="og:description" content="Spring_IOC在学习Spring的过程中，最核心的就是的理念就是IOC(控制反转)以及AOP(面向切面编程),其中IOC是Spring的基础，而AOP则是其重要的应用。这篇文章记录了我对学习IOC之中的一些总结。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-04-10T10:44:26.260Z">
+<meta property="og:image" content="http://yoursite.com/2019/04/10/Spring-IOC/1.png">
+<meta property="og:updated_time" content="2019-04-10T12:53:20.616Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Spring_IOC">
-<meta name="twitter:description" content="Spring_IOC">
+<meta name="twitter:description" content="Spring_IOC在学习Spring的过程中，最核心的就是的理念就是IOC(控制反转)以及AOP(面向切面编程),其中IOC是Spring的基础，而AOP则是其重要的应用。这篇文章记录了我对学习IOC之中的一些总结。">
+<meta name="twitter:image" content="http://yoursite.com/2019/04/10/Spring-IOC/1.png">
 
 
 
@@ -319,7 +321,7 @@
 		  
   <span class="post-updated">
     &nbsp; | &nbsp; 更新于
-    <time itemprop="dateUpdated" datetime="2019-04-10T18:44:26+08:00" content="2019-04-10">
+    <time itemprop="dateUpdated" datetime="2019-04-10T20:53:20+08:00" content="2019-04-10">
       2019-04-10
     </time>
   </span>
@@ -339,8 +341,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/IOC/" itemprop="url" rel="index">
-                    <span itemprop="name">IOC</span>
+                  <a href="/categories/Spring/" itemprop="url" rel="index">
+                    <span itemprop="name">Spring</span>
                   </a>
                 </span>
 
@@ -370,7 +372,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  1
+                  1,272
                 </span>
               
 
@@ -386,7 +388,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  1
+                  5
                 </span>
               
             </div>
@@ -407,7 +409,39 @@
       
 
       
-        <h1 id="Spring-IOC"><a href="#Spring-IOC" class="headerlink" title="Spring_IOC"></a>Spring_IOC</h1>
+        <h1 id="Spring-IOC"><a href="#Spring-IOC" class="headerlink" title="Spring_IOC"></a>Spring_IOC</h1><p>在学习Spring的过程中，最核心的就是的理念就是IOC(控制反转)以及AOP(面向切面编程),其中IOC是Spring的基础，而AOP则是其重要的应用。这篇文章记录了我对学习IOC之中的一些总结。</p>
+<a id="more"></a>
+<h2 id="为什么要用IOC？"><a href="#为什么要用IOC？" class="headerlink" title="为什么要用IOC？"></a>为什么要用IOC？</h2><p>IOC（Inverse Of Control）正如它的名字一样，用它可以将原本需要自己主动去做的事交给别人去做，然后我们在需要的时候告诉他一声就可以。在程序应用中，通过描述(在Java种可以实XML或者注解)并通过第三方去产生或获取特定对象的方式。举个简单的例子：如果你现在想要喝杯橙汁，在没有饮品店的日子，最直观的做法是自己准备果汁机，橙子，水等等来做，这个过程是一个自己 <strong>“主动”</strong>创造的过程。然而到了今日，你想和橙汁，只需要去饮品店下单就可以了，这样你就不用自己去创造了，但是也达到了你的要求。也就是说通过IOC我们可以更加专注于自己的需求，而不用去解决一些额外的问题。</p>
+<h2 id="如何实现控制反转"><a href="#如何实现控制反转" class="headerlink" title="如何实现控制反转"></a>如何实现控制反转</h2><p>在Spring中实现控制反转的是IOC容器，其实方法是依赖注入(Dependency Injection,DI)。Spring会提供IOC容器来管理对应的资源，正如上面例子中的橙汁一样，我们把做好的橙汁放到饮品店里面，让他进行管理，需要的时候直接告诉饮品店我们的需求，就给你相应的橙汁。在这个例子中，饮品店就当与一个IOC容器，我们需要的时候就直接去要就好了，而不需要知道它的具体实现。</p>
+<h2 id="Spring-IOC容器"><a href="#Spring-IOC容器" class="headerlink" title="Spring IOC容器"></a>Spring IOC容器</h2><p>从上面可以知道Spring IOC容器的作用，它可以容纳我们所开发的各种Bean,并且我们可以从中获取各种发布在Spring IOC容器里的Bean，并且可以通过描述得到它。</p>
+<h3 id="Spring-IOC容器的设计"><a href="#Spring-IOC容器的设计" class="headerlink" title="Spring IOC容器的设计"></a>Spring IOC容器的设计</h3><p>Spring IOC容器的主要设计是基于BeanFactory和ApplicaionContext两个接口，其中后者是前者的子接口之一。<img src="/2019/04/10/Spring-IOC/1.png" alt=""></p>
+<p>由上图可以看出BeanFactory是Spring IOC容器所定义的最底层的接口，BeanFactory提供了基础的容器功能。</p>
+<p>而ApplicationContext则是基于BeanFactory建立的一套更加丰富的容器体系。所以绝大数情况下使用ApplicationContext作为Spring IOC容器。由于BeanFactory提供了Spring IOC 容器最底层的设计，所以我们来看一下它的源码。</p>
+<p>BeanFactory.java</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">BeanFactory</span> </span>&#123;</span><br><span class="line">String FACTORY_BEAN_PREFIX = <span class="string">"&amp;"</span>;</span><br><span class="line"></span><br><span class="line">	<span class="function">Object <span class="title">getBean</span><span class="params">(String name)</span> <span class="keyword">throws</span> BeansException</span>;</span><br><span class="line"></span><br><span class="line">	&lt;T&gt; <span class="function">T <span class="title">getBean</span><span class="params">(String name, Class&lt;T&gt; requiredType)</span> <span class="keyword">throws</span> BeansException</span>;</span><br><span class="line"></span><br><span class="line">	<span class="function">Object <span class="title">getBean</span><span class="params">(String name, Object... args)</span> <span class="keyword">throws</span> BeansException</span>;</span><br><span class="line"></span><br><span class="line">	&lt;T&gt; <span class="function">T <span class="title">getBean</span><span class="params">(Class&lt;T&gt; requiredType)</span> <span class="keyword">throws</span> BeansException</span>;</span><br><span class="line"></span><br><span class="line">	&lt;T&gt; <span class="function">T <span class="title">getBean</span><span class="params">(Class&lt;T&gt; requiredType, Object... args)</span> <span class="keyword">throws</span> BeansException</span>;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">boolean</span> <span class="title">containsBean</span><span class="params">(String name)</span></span>;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">boolean</span> <span class="title">isSingleton</span><span class="params">(String name)</span> <span class="keyword">throws</span> NoSuchBeanDefinitionException</span>;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">boolean</span> <span class="title">isPrototype</span><span class="params">(String name)</span> <span class="keyword">throws</span> NoSuchBeanDefinitionException</span>;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">boolean</span> <span class="title">isTypeMatch</span><span class="params">(String name, ResolvableType typeToMatch)</span> <span class="keyword">throws</span> NoSuchBeanDefinitionException</span>;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">boolean</span> <span class="title">isTypeMatch</span><span class="params">(String name, Class&lt;?&gt; typeToMatch)</span> <span class="keyword">throws</span> NoSuchBeanDefinitionException</span>;</span><br><span class="line">	</span><br><span class="line">	Class&lt;?&gt; getType(String name) <span class="keyword">throws</span> NoSuchBeanDefinitionException;</span><br><span class="line">	</span><br><span class="line">	String[] getAliases(String name);</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>getBean的多个方法用于配置获取给Spring IOC容器的Bean。</li>
+<li>isSingleton用于判断是否为单例，如果判断为真，说明该Bean在容器中是作为一个唯一单例存在的。</li>
+<li>isPrototype则与isSingleton相反。</li>
+</ul>
+<h3 id="Spring-IOC容器的初始化"><a href="#Spring-IOC容器的初始化" class="headerlink" title="Spring IOC容器的初始化"></a>Spring IOC容器的初始化</h3><p>上面说过大多数情况下，我们通过ApplicationContext作为IOC容器，所以我们一般通过ApplicationContext的实现类来创造Spring IOC容器的初始化。</p>
+<p>Spring IOC大体的初始化过程入下：</p>
+<p>当需要通过XML的名字来初始化一个Spring IOC容器的就使用：ClassPathXmlApplicationContext</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ApplicationContext ctx = <span class="keyword">new</span> ClassPathXmlApplicationContext(<span class="string">"Spring.xml"</span>);</span><br></pre></td></tr></table></figure>
+<p>当我们通过XML的路径来初始化一个Spring IOC容器的就使用：FileSystemXmlApplicationContext</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ApplicationContext ctx = <span class="keyword">new</span> FileSystemXmlApplicationContext(<span class="string">"src//Spring.xml"</span>);</span><br></pre></td></tr></table></figure>
+<p>当我们是通过注解配置的时候要初始化Spring IOC容器就使用：AnnotationConfigApplicationContext</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ApplicationContext ctx=<span class="keyword">new</span> AnnotationConfigApplicationContext(UserConfig.class);</span><br></pre></td></tr></table></figure>
+<p>通过这样的操作就可以得到一个Spring IOC的容器了，然后我们就可以用改容器调用getBean()，来获取我们需要的Bean。</p>
+<h3 id="Bean"><a href="#Bean" class="headerlink" title="Bean"></a>Bean</h3><p>Bean的定义和初始化在Spring IOC容器中是两大步骤，他是先定义，然后初始化和依赖注入。</p>
+<p>Bean的定义分为三步：</p>
+<ol>
+<li>Resourse定位：这步是Spring IOC容器根据开发者的配置，进行资源定位，在Spring的开发中。通过XML或者注解都是十分常见的方式，定位的内容是由开发者提供的。</li>
+<li>BeanDefinition的载入，这个时候只是将Resourse定位到的信息，保存到Bean定义中（BeanDefinition）中，此时并不会创建Bean的示例。</li>
+<li>BeanDefinition的注册：这个过程就是将BeanDefinition的信息发布到Spring IOC容器中，注意，此时依旧没有对应的Bean的示例创建。</li>
+</ol>
+<p>做完了这三步，Bean就在Spring容器中被定义了，而没有被初始化，更没有完成依赖注入，也就是没有注入其配置的资源给Bean，那么Bean它还不能完全使用。</p>
+
       
     </div>
     
@@ -424,7 +458,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/Spring/" rel="tag"><i class="fa fa-tag"></i> Spring</a>
+            <a href="/tags/IOC/" rel="tag"><i class="fa fa-tag"></i> IOC</a>
           
         </div>
       
@@ -618,7 +652,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Spring-IOC"><span class="nav-number">1.</span> <span class="nav-text">Spring_IOC</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Spring-IOC"><span class="nav-number">1.</span> <span class="nav-text">Spring_IOC</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#为什么要用IOC？"><span class="nav-number">1.1.</span> <span class="nav-text">为什么要用IOC？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如何实现控制反转"><span class="nav-number">1.2.</span> <span class="nav-text">如何实现控制反转</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Spring-IOC容器"><span class="nav-number">1.3.</span> <span class="nav-text">Spring IOC容器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Spring-IOC容器的设计"><span class="nav-number">1.3.1.</span> <span class="nav-text">Spring IOC容器的设计</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Spring-IOC容器的初始化"><span class="nav-number">1.3.2.</span> <span class="nav-text">Spring IOC容器的初始化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Bean"><span class="nav-number">1.3.3.</span> <span class="nav-text">Bean</span></a></li></ol></li></ol></li></ol></div>
             
 
           </div>
@@ -652,7 +686,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">24.0k</span>
+    <span title="Site words total count">25.2k</span>
   
 </div>
 
