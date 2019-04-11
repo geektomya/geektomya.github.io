@@ -275,7 +275,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/04/10/Spring-IOC/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/04/11/Spring-Bean/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="HY">
@@ -294,7 +294,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2019/04/10/Spring-IOC/" itemprop="url">Spring_IOC</a></h1>
+                <a class="post-title-link" href="/2019/04/11/Spring-Bean/" itemprop="url">Spring-Bean</a></h1>
         
 
         <div class="post-meta">
@@ -306,8 +306,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-04-10T18:41:52+08:00">
-                2019-04-10
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-04-11T11:47:12+08:00">
+                2019-04-11
               </time>
             
 
@@ -320,8 +320,8 @@
 		  
   <span class="post-updated">
     &nbsp; | &nbsp; 更新于
-    <time itemprop="dateUpdated" datetime="2019-04-10T21:37:34+08:00" content="2019-04-10">
-      2019-04-10
+    <time itemprop="dateUpdated" datetime="2019-04-11T11:56:28+08:00" content="2019-04-11">
+      2019-04-11
     </time>
   </span>
 
@@ -371,7 +371,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  1,510
+                  1,737
                 </span>
               
 
@@ -387,7 +387,281 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  6
+                  7
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="Bean"><a href="#Bean" class="headerlink" title="Bean"></a>Bean</h2><h3 id="Bean的常用配置"><a href="#Bean的常用配置" class="headerlink" title="Bean的常用配置"></a>Bean的常用配置</h3><h4 id="id和name"><a href="#id和name" class="headerlink" title="id和name"></a>id和name</h4><ul>
+<li>一般情况下，装配一个Bean时，通过指定一个id属性作为Bean的名称</li>
+<li>id属性在IOC容器中是唯一的</li>
+<li>name其实也要是唯一的，同id的区别是可以存在特殊字符。</li>
+</ul>
+<h4 id="class"><a href="#class" class="headerlink" title="class"></a>class</h4><ul>
+<li>设置一个类的全路径的名称，主要作用是IOC容器生成类的实例</li>
+</ul>
+<h4 id="scope"><a href="#scope" class="headerlink" title="scope"></a>scope</h4><table>
+<thead>
+<tr>
+<th>类别</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>singleton(默认)</td>
+<td>在SpringIOC容器中仅存在一个Bean实例，Bean以单实例的方式存在</td>
+</tr>
+<tr>
+<td>prototype</td>
+<td>每次调用getBean()时都会返回一个新的实例</td>
+</tr>
+<tr>
+<td>request</td>
+<td>每个HTTP请求都会创建一个新的Bean，该作用域仅适用于WebApplicationContext环境</td>
+</tr>
+<tr>
+<td>session</td>
+<td>同一个HTTP session共享一个Bean，不同的HTTP session使用不同的Bean。该作用域仅适用于WebApplicationContext环境</td>
+</tr>
+</tbody>
+</table>
+<p>这里需要注意的是一般情况下使用singleton。但是当Spring整合Struts时候，由于Action是多例的，这时就需要使用Prototype了</p>
+<h3 id="Bean的定义和初始化"><a href="#Bean的定义和初始化" class="headerlink" title="Bean的定义和初始化"></a>Bean的定义和初始化</h3><p>Bean的定义和初始化在Spring IOC容器中是两大步骤，他是先定义，然后初始化和依赖注入。</p>
+<p>Bean的定义分为三步：</p>
+<ol>
+<li>Resourse定位：这步是Spring IOC容器根据开发者的配置，进行资源定位，在Spring的开发中。通过XML或者注解都是十分常见的方式，定位的内容是由开发者提供的。</li>
+<li>BeanDefinition的载入，这个时候只是将Resourse定位到的信息，保存到Bean定义中（BeanDefinition）中，此时并不会创建Bean的示例。</li>
+<li>BeanDefinition的注册：这个过程就是将BeanDefinition的信息发布到Spring IOC容器中，注意，此时依旧没有对应的Bean的示例创建。</li>
+</ol>
+<p>做完了这三步，Bean就在Spring容器中被定义了，而没有被初始化，更没有完成依赖注入，也就是没有注入其配置的资源给Bean，那么Bean它还不能完全使用。对于初始化和依赖注入，Spring Bean还有一个配置选项———-</p>
+<p>lazy-init，其含义就是是否延时初始化Spring Bean。在没有任何配置的情况下，它的默认值为dafault，实际值为false，也就是Spring IOC默认会自动初始化Bean。如果将其设置为true，那么只有当我们使用Spring IOC容器的getBean方法获取它时，他才会进行Bean的初始化，完成依赖注入。</p>
+<p>例如：</p>
+<p>会自动实列化</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"testBean"</span> <span class="attr">class</span>=<span class="string">"cn.itcast.test.TestBean"</span> /&gt;</span></span><br></pre></td></tr></table></figure>
+<p>获取的时候才实例化</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"testBean"</span> <span class="attr">calss</span>=<span class="string">"cn.itcast.test.TestBean"</span> <span class="attr">lazy-init</span>=<span class="string">"true"</span> /&gt;</span></span><br></pre></td></tr></table></figure>
+<p>这里需要注意的是，只有被设置为singleton的bean才会被自动初始化（没有配置延迟初始化），如果bean的作用域不是singleton的话，就不会被自动初始化。</p>
+<p>例如：</p>
+<p>即使没有配置延迟加载也不会自动初始化</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"testBean"</span> <span class="attr">class</span>=<span class="string">"cn.itcast.test.TestBean"</span> <span class="attr">scope</span>=<span class="string">"pototype"</span> /&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="Bean的生命周期"><a href="#Bean的生命周期" class="headerlink" title="Bean的生命周期"></a>Bean的生命周期</h3><p>Spring IOC容器的本质目的就是为了管理Bean，对于Bean而言，在容器中存在其生命周期，他的初始化和销毁也需要一个过程，在一些需要自定义的过程中，我们可以插入代码去改变他们的一些行为，以满足特别的需求，这就需要使用Spring Bean生命周期的知识了。下图展示了Spring IOC容器初始化和销毁Bean的过程。</p>
+<p><img src="/2019/04/11/Spring-Bean/Spring-IOC/2.png" alt=""></p>
+<p>由上图可以看到，Spring IOC容器对Bean的管理还是比较复杂的，Spring IOC容器在执行了初始化和依赖注入后，会执行一定的步骤来完成初始化，通过这些步骤我们就能自定义初始化，而在Spring IOC容器正常关闭的时候，他也会执行一定的步骤来关闭容器，释放资源。</p>
+<p>下面对这些步骤进行详细的介绍。</p>
+<ol>
+<li><h4 id="instantiate-bean对象实例化"><a href="#instantiate-bean对象实例化" class="headerlink" title="instantiate bean对象实例化"></a>instantiate bean对象实例化</h4><p>  即调用类的构造方法。</p>
+</li>
+<li><h4 id="populate-properties封装属性"><a href="#populate-properties封装属性" class="headerlink" title="populate properties封装属性"></a>populate properties封装属性</h4><p>即调用类的属性设置方法。</p>
+</li>
+<li><h4 id="如果Bean实现BeanNameAware，则执行setBeanName"><a href="#如果Bean实现BeanNameAware，则执行setBeanName" class="headerlink" title="如果Bean实现BeanNameAware，则执行setBeanName"></a>如果Bean实现BeanNameAware，则执行setBeanName</h4><p>即为该bean设置name的时候调用，可以想象为容器为map，name就是那个key。</p>
+</li>
+<li><h4 id="如果Bean实现BeanFactoryAware或者ApplicationContextAware设置工厂，则执行setBeanFactory或者上下文对象setApplicationContext"><a href="#如果Bean实现BeanFactoryAware或者ApplicationContextAware设置工厂，则执行setBeanFactory或者上下文对象setApplicationContext" class="headerlink" title="如果Bean实现BeanFactoryAware或者ApplicationContextAware设置工厂，则执行setBeanFactory或者上下文对象setApplicationContext"></a>如果Bean实现BeanFactoryAware或者ApplicationContextAware设置工厂，则执行setBeanFactory或者上下文对象setApplicationContext</h4><p>即为该bean设置容器的时候调用。</p>
+</li>
+<li><h4 id="如果存在类实现BeanPostProcessor（前处理Bean），执行postProcessBeforeInitialization"><a href="#如果存在类实现BeanPostProcessor（前处理Bean），执行postProcessBeforeInitialization" class="headerlink" title="如果存在类实现BeanPostProcessor（前处理Bean），执行postProcessBeforeInitialization"></a>如果存在类实现BeanPostProcessor（前处理Bean），执行postProcessBeforeInitialization</h4><p>即在调用init-method之前调用。</p>
+</li>
+<li><h4 id="如果bean实现InitializingBean，则实行afterPropertiesSet"><a href="#如果bean实现InitializingBean，则实行afterPropertiesSet" class="headerlink" title="如果bean实现InitializingBean，则实行afterPropertiesSet"></a>如果bean实现InitializingBean，则实行afterPropertiesSet</h4><p>属性设置后调用。</p>
+</li>
+<li><h4 id="调用init-method-quot-setup-quot-指定的初始化方法"><a href="#调用init-method-quot-setup-quot-指定的初始化方法" class="headerlink" title="调用init-method=&quot;setup&quot;指定的初始化方法"></a>调用<code>init-method=&quot;setup&quot;</code>指定的初始化方法</h4><p>执行init方法。</p>
+</li>
+<li><h4 id="如果存在类实现BeanPostProcessor（后处理Bean），执行postProcessAfterInitialization"><a href="#如果存在类实现BeanPostProcessor（后处理Bean），执行postProcessAfterInitialization" class="headerlink" title="如果存在类实现BeanPostProcessor（后处理Bean），执行postProcessAfterInitialization"></a>如果存在类实现BeanPostProcessor（后处理Bean），执行postProcessAfterInitialization</h4><p>即在调用init-method之后调用。</p>
+</li>
+<li><h4 id="执行业务处理"><a href="#执行业务处理" class="headerlink" title="执行业务处理"></a>执行业务处理</h4><p>即调用bean中的业务方法。</p>
+</li>
+<li><h4 id="如果Bean实现DisposableBean，执行destory方法"><a href="#如果Bean实现DisposableBean，执行destory方法" class="headerlink" title="如果Bean实现DisposableBean，执行destory方法"></a>如果Bean实现DisposableBean，执行destory方法</h4><p>spring自身中的销毁方法。</p>
+</li>
+<li><h4 id="调用destroy-method-quot-teardown-quot-指定的销毁方法"><a href="#调用destroy-method-quot-teardown-quot-指定的销毁方法" class="headerlink" title="调用destroy-method=&quot;teardown&quot;指定的销毁方法"></a>调用<code>destroy-method=&quot;teardown&quot;</code>指定的销毁方法</h4><p>执行destory方法。</p>
+</li>
+</ol>
+<p><strong>需要注意的是：</strong>有些步骤是需要在一些条件下才会执行的。还有就是有些接口只是针对单个Bean而言的；BeanPostProcessor接口则是针对所有的Bean而言的。当一个Bean实现了BeanPostProcessor接口，我们只需要在Spring IOC容器中定义它就可以了，Spring IOC容器会自动识别并调用。</p>
+<p>一个BeanPostProcessor接口的实现</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> IOC;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.springframework.beans.BeansException;</span><br><span class="line"><span class="keyword">import</span> org.springframework.beans.factory.config.BeanPostProcessor;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">BeanPostProcessorImpl</span> <span class="keyword">implements</span> <span class="title">BeanPostProcessor</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Object <span class="title">postProcessBeforeInitialization</span><span class="params">(Object bean, String beanName)</span> <span class="keyword">throws</span> BeansException </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"第五步："</span>+bean.getClass().getSimpleName()+<span class="string">"对象"</span>+beanName+<span class="string">"开始实例化"</span>);</span><br><span class="line">        <span class="keyword">return</span> bean;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Object <span class="title">postProcessAfterInitialization</span><span class="params">(Object bean, String beanName)</span> <span class="keyword">throws</span> BeansException </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"第八步："</span>+bean.getClass().getSimpleName()+<span class="string">"对象"</span>+beanName+<span class="string">"实例化完成"</span>);</span><br><span class="line">        <span class="keyword">return</span> bean;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>一个展示生命周期的类</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> IOC;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.springframework.beans.BeansException;</span><br><span class="line"><span class="keyword">import</span> org.springframework.beans.factory.BeanNameAware;</span><br><span class="line"><span class="keyword">import</span> org.springframework.beans.factory.DisposableBean;</span><br><span class="line"><span class="keyword">import</span> org.springframework.beans.factory.InitializingBean;</span><br><span class="line"><span class="keyword">import</span> org.springframework.context.ApplicationContext;</span><br><span class="line"><span class="keyword">import</span> org.springframework.context.ApplicationContextAware;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Man</span> <span class="keyword">implements</span> <span class="title">BeanNameAware</span>,<span class="title">ApplicationContextAware</span>,<span class="title">InitializingBean</span>,<span class="title">DisposableBean</span></span>&#123;</span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setName</span><span class="params">(String name)</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"第二步：设置属性"</span>);</span><br><span class="line">        <span class="keyword">this</span>.name = name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Man</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"第一步：初始化..."</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setup</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"第七步：MAN被初始化了..."</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">teardown</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"第十一步：MAN被销毁了..."</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setBeanName</span><span class="params">(String name)</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"第三步：设置Bean的名称"</span>+name);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setApplicationContext</span><span class="params">(ApplicationContext applicationContext)</span> <span class="keyword">throws</span> BeansException </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"第四步：了解工厂信息"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">afterPropertiesSet</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"第六步：属性设置后"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"第九步：执行业务方法"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">destroy</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"第十步：执行Spring的销毁方法"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>XML配置如下</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"BeanPostProcessor"</span> <span class="attr">class</span>=<span class="string">"IOC.BeanPostProcessorImpl"</span>/&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"Man"</span> <span class="attr">class</span>=<span class="string">"IOC.Man"</span> <span class="attr">init-method</span>=<span class="string">"setup"</span> <span class="attr">destroy-method</span>=<span class="string">"teardown"</span>&gt;</span></span><br><span class="line">       <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"name"</span> <span class="attr">value</span>=<span class="string">"wakaka"</span>/&gt;</span></span><br><span class="line">   <span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>注意我们的BeanPostProcessor的实现类没有配置Id,因为我们也不需要它的Id，它是由IOC容器自动识别并调用的。</p>
+<p>输出如下</p>
+<p><img src="/2019/04/11/Spring-Bean/Spring-IOC/3.png" alt=""></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/04/10/Spring-IOC/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="HY">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="YAO">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/04/10/Spring-IOC/" itemprop="url">Spring_IOC</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-04-10T18:41:52+08:00">
+                2019-04-10
+              </time>
+            
+
+            
+
+            
+          </span>
+		  
+		  
+		  
+  <span class="post-updated">
+    &nbsp; | &nbsp; 更新于
+    <time itemprop="dateUpdated" datetime="2019-04-11T11:48:39+08:00" content="2019-04-11">
+      2019-04-11
+    </time>
+  </span>
+
+
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Spring/" itemprop="url" rel="index">
+                    <span itemprop="name">Spring</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  1,033
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  4
                 </span>
               
             </div>
@@ -827,200 +1101,11 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/10/设计模式/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="HY">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="YAO">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/12/10/设计模式/" itemprop="url">设计模式</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-10T22:51:32+08:00">
-                2018-12-10
-              </time>
-            
-
-            
-
-            
-          </span>
-		  
-		  
-		  
-  <span class="post-updated">
-    &nbsp; | &nbsp; 更新于
-    <time itemprop="dateUpdated" datetime="2019-04-10T18:46:56+08:00" content="2019-04-10">
-      2019-04-10
-    </time>
-  </span>
-
-
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/" itemprop="url" rel="index">
-                    <span itemprop="name">Java</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  2,009
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  8
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h1 id="设计模式（Design-Pattern）"><a href="#设计模式（Design-Pattern）" class="headerlink" title="设计模式（Design Pattern）"></a>设计模式（Design Pattern）</h1><h2 id="关于设计模式"><a href="#关于设计模式" class="headerlink" title="关于设计模式"></a>关于设计模式</h2><h3 id="什么是设计模式？"><a href="#什么是设计模式？" class="headerlink" title="什么是设计模式？"></a>什么是设计模式？</h3><p>官方的解释是：设计模式是一套被<strong>反复使用</strong> ,<strong>多数人知晓的</strong>、<strong>经过分类编目的</strong>、<strong>代码设计经验</strong>的<strong>总结</strong></p>
-<p>简单点就是：设计模式是软件开发人员在<strong>软件开发</strong>过程中面临的<strong>一般问题</strong>的<strong>解决方案</strong></p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2018/12/10/设计模式/" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -1070,7 +1155,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-count">9</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -1081,7 +1166,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-count">5</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -1092,7 +1177,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">11</span>
+                  <span class="site-state-item-count">9</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -1163,7 +1248,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">25.5k</span>
+    <span title="Site words total count">26.7k</span>
   
 </div>
 

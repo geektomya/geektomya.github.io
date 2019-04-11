@@ -97,7 +97,7 @@
 <meta property="og:description" content="Spring_IOC在学习Spring的过程中，最核心的就是的理念就是IOC(控制反转)以及AOP(面向切面编程),其中IOC是Spring的基础，而AOP则是其重要的应用。这篇文章记录了我对学习IOC之中的一些总结。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://yoursite.com/2019/04/10/Spring-IOC/1.png">
-<meta property="og:updated_time" content="2019-04-10T13:37:34.873Z">
+<meta property="og:updated_time" content="2019-04-11T03:48:39.399Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Spring_IOC">
 <meta name="twitter:description" content="Spring_IOC在学习Spring的过程中，最核心的就是的理念就是IOC(控制反转)以及AOP(面向切面编程),其中IOC是Spring的基础，而AOP则是其重要的应用。这篇文章记录了我对学习IOC之中的一些总结。">
@@ -321,8 +321,8 @@
 		  
   <span class="post-updated">
     &nbsp; | &nbsp; 更新于
-    <time itemprop="dateUpdated" datetime="2019-04-10T21:37:34+08:00" content="2019-04-10">
-      2019-04-10
+    <time itemprop="dateUpdated" datetime="2019-04-11T11:48:39+08:00" content="2019-04-11">
+      2019-04-11
     </time>
   </span>
 
@@ -372,7 +372,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  1,510
+                  1,033
                 </span>
               
 
@@ -388,7 +388,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  6
+                  4
                 </span>
               
             </div>
@@ -433,24 +433,6 @@
 <p>当我们是通过注解配置的时候要初始化Spring IOC容器就使用：AnnotationConfigApplicationContext</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ApplicationContext ctx=<span class="keyword">new</span> AnnotationConfigApplicationContext(UserConfig.class);</span><br></pre></td></tr></table></figure>
 <p>通过这样的操作就可以得到一个Spring IOC的容器了，然后我们就可以用改容器调用getBean()，来获取我们需要的Bean。</p>
-<h3 id="Bean"><a href="#Bean" class="headerlink" title="Bean"></a>Bean</h3><p>Bean的定义和初始化在Spring IOC容器中是两大步骤，他是先定义，然后初始化和依赖注入。</p>
-<p>Bean的定义分为三步：</p>
-<ol>
-<li>Resourse定位：这步是Spring IOC容器根据开发者的配置，进行资源定位，在Spring的开发中。通过XML或者注解都是十分常见的方式，定位的内容是由开发者提供的。</li>
-<li>BeanDefinition的载入，这个时候只是将Resourse定位到的信息，保存到Bean定义中（BeanDefinition）中，此时并不会创建Bean的示例。</li>
-<li>BeanDefinition的注册：这个过程就是将BeanDefinition的信息发布到Spring IOC容器中，注意，此时依旧没有对应的Bean的示例创建。</li>
-</ol>
-<p>做完了这三步，Bean就在Spring容器中被定义了，而没有被初始化，更没有完成依赖注入，也就是没有注入其配置的资源给Bean，那么Bean它还不能完全使用。对于初始化和依赖注入，Spring Bean还有一个配置选项———-</p>
-<p>lazy-init，其含义就是是否延时初始化Spring Bean。在没有任何配置的情况下，它的默认值为dafault，实际值为false，也就是Spring IOC默认会自动初始化Bean。如果将其设置为true，那么只有当我们使用Spring IOC容器的getBean方法获取它时，他才会进行Bean的初始化，完成依赖注入。</p>
-<p>例如：</p>
-<p>会自动实列化</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"testBean"</span> <span class="attr">class</span>=<span class="string">"cn.itcast.test.TestBean"</span> /&gt;</span></span><br></pre></td></tr></table></figure>
-<p>获取的时候才实例化</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"testBean"</span> <span class="attr">calss</span>=<span class="string">"cn.itcast.test.TestBean"</span> <span class="attr">lazy-init</span>=<span class="string">"true"</span> /&gt;</span></span><br></pre></td></tr></table></figure>
-<p>这里需要注意的是，只有被设置为singleton的bean才会被自动初始化（没有配置延迟初始化），如果bean的作用域不是singleton的话，就不会被自动初始化。</p>
-<p>例如：</p>
-<p>即使没有配置延迟加载也不会自动初始化</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"testBean"</span> <span class="attr">class</span>=<span class="string">"cn.itcast.test.TestBean"</span> <span class="attr">scope</span>=<span class="string">"pototype"</span> /&gt;</span></span><br></pre></td></tr></table></figure>
 
       
     </div>
@@ -490,6 +472,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/04/11/Spring-Bean/" rel="prev" title="Spring-Bean">
+                Spring-Bean <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -587,7 +573,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-count">9</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -598,7 +584,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-count">5</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -609,7 +595,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">11</span>
+                  <span class="site-state-item-count">9</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -662,7 +648,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Spring-IOC"><span class="nav-number">1.</span> <span class="nav-text">Spring_IOC</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#为什么要用IOC？"><span class="nav-number">1.1.</span> <span class="nav-text">为什么要用IOC？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如何实现控制反转"><span class="nav-number">1.2.</span> <span class="nav-text">如何实现控制反转</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Spring-IOC容器"><span class="nav-number">1.3.</span> <span class="nav-text">Spring IOC容器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Spring-IOC容器的设计"><span class="nav-number">1.3.1.</span> <span class="nav-text">Spring IOC容器的设计</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Spring-IOC容器的初始化"><span class="nav-number">1.3.2.</span> <span class="nav-text">Spring IOC容器的初始化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Bean"><span class="nav-number">1.3.3.</span> <span class="nav-text">Bean</span></a></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Spring-IOC"><span class="nav-number">1.</span> <span class="nav-text">Spring_IOC</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#为什么要用IOC？"><span class="nav-number">1.1.</span> <span class="nav-text">为什么要用IOC？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如何实现控制反转"><span class="nav-number">1.2.</span> <span class="nav-text">如何实现控制反转</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Spring-IOC容器"><span class="nav-number">1.3.</span> <span class="nav-text">Spring IOC容器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Spring-IOC容器的设计"><span class="nav-number">1.3.1.</span> <span class="nav-text">Spring IOC容器的设计</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Spring-IOC容器的初始化"><span class="nav-number">1.3.2.</span> <span class="nav-text">Spring IOC容器的初始化</span></a></li></ol></li></ol></li></ol></div>
             
 
           </div>
@@ -696,7 +682,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">25.5k</span>
+    <span title="Site words total count">26.7k</span>
   
 </div>
 
