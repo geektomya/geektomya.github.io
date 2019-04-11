@@ -96,10 +96,12 @@
 <meta property="og:site_name" content="YAO">
 <meta property="og:description" content="DI什么是DI？IoC的一个重点是在系统运行中，动态的向某个对象提供它所需要的其他对象。这一点是通过DI（Dependency Injection，依赖注入）来实现的。比如对象A需要操作数据库，以前我们总是要在A中自己编写代码来获得一个Connection对象，有了 spring我们就只需要告诉spring，A中需要一个Connection，至于这个Connection怎么构造，何时构造，A不需要">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-04-11T08:55:29.686Z">
+<meta property="og:image" content="http://yoursite.com/2019/04/11/Spring-DI/1.png">
+<meta property="og:updated_time" content="2019-04-11T09:12:23.804Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Spring-DI">
 <meta name="twitter:description" content="DI什么是DI？IoC的一个重点是在系统运行中，动态的向某个对象提供它所需要的其他对象。这一点是通过DI（Dependency Injection，依赖注入）来实现的。比如对象A需要操作数据库，以前我们总是要在A中自己编写代码来获得一个Connection对象，有了 spring我们就只需要告诉spring，A中需要一个Connection，至于这个Connection怎么构造，何时构造，A不需要">
+<meta name="twitter:image" content="http://yoursite.com/2019/04/11/Spring-DI/1.png">
 
 
 
@@ -319,7 +321,7 @@
 		  
   <span class="post-updated">
     &nbsp; | &nbsp; 更新于
-    <time itemprop="dateUpdated" datetime="2019-04-11T16:55:29+08:00" content="2019-04-11">
+    <time itemprop="dateUpdated" datetime="2019-04-11T17:12:23+08:00" content="2019-04-11">
       2019-04-11
     </time>
   </span>
@@ -370,7 +372,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  1,130
+                  1,098
                 </span>
               
 
@@ -438,32 +440,7 @@
 <p>配置如下</p>
 <figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"object"</span> <span class="attr">class</span>=<span class="string">"IOC.ObjectDemo"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"propertyDemo"</span> <span class="attr">ref</span>=<span class="string">"property"</span>/&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"list"</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">list</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">ref</span> <span class="attr">bean</span>=<span class="string">"property"</span>/&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">ref</span> <span class="attr">bean</span>=<span class="string">"extendsTest1"</span>/&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">list</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"map"</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">map</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">entry</span> <span class="attr">key-ref</span>=<span class="string">"property"</span> <span class="attr">value-ref</span>=<span class="string">"property"</span>/&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">map</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"set"</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">set</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">ref</span> <span class="attr">bean</span>=<span class="string">"property"</span>/&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">ref</span> <span class="attr">bean</span>=<span class="string">"extendsTest1"</span>/&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">set</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br></pre></td></tr></table></figure>
 <p>从上面两个例子我们可以看到类类型的属性与一般类型的属性配置的区别</p>
-<table>
-<thead>
-<tr>
-<th></th>
-<th>非类类型</th>
-<th>类类型</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>非集合的简易属性</td>
-<td><code>&lt;property name=&quot;&quot; value=&quot;&quot;/&gt;</code></td>
-<td><code>&lt;property name=&quot;&quot; ref=&quot;&quot;/&gt;</code></td>
-</tr>
-<tr>
-<td>List</td>
-<td>`<list></list></td>
-</tr>
-</tbody>
-</table>
-<pre><code>&lt;value&gt;值&lt;/value&gt;
-&lt;value&gt;值&lt;/value&gt;
-</code></pre><p><code>|</code><list><br>       <ref bean=""><br>       <ref bean=""><br> </ref></ref></list><code>|
-| Map              |</code><map><br>      <entry key="" value=""><br>      <entry key="" value=""> </entry></entry></map><code>|</code><map></map></p>
-<p><entry key-ref="" value-ref=""><br><code>|
-| Set              |</code><set><br>      <value>123</value><br>      <value>456</value><br></set><code>|</code><set><br>      <ref bean=""><br>      <ref bean=""><br></ref></ref></set>`      |</entry></p>
+<p><img src="/2019/04/11/Spring-DI/1.png" alt=""></p>
 <p>也就是说需要注意的是当为类类型的时候 ref 所指向的是其他的Bean的id</p>
 <p>即<code>&lt;bean id=&quot;&quot;&gt;</code>这个Id 。</p>
 
