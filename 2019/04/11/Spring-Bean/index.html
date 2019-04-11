@@ -98,7 +98,7 @@
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://yoursite.com/2019/04/11/Spring-Bean/2.png">
 <meta property="og:image" content="http://yoursite.com/2019/04/11/Spring-Bean/3.png">
-<meta property="og:updated_time" content="2019-04-11T04:02:09.473Z">
+<meta property="og:updated_time" content="2019-04-11T04:05:27.059Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Spring-Bean">
 <meta name="twitter:description" content="BeanBean的常用配置id和name 一般情况下，装配一个Bean时，通过指定一个id属性作为Bean的名称 id属性在IOC容器中是唯一的 name其实也要是唯一的，同id的区别是可以存在特殊字符">
@@ -322,7 +322,7 @@
 		  
   <span class="post-updated">
     &nbsp; | &nbsp; 更新于
-    <time itemprop="dateUpdated" datetime="2019-04-11T12:02:09+08:00" content="2019-04-11">
+    <time itemprop="dateUpdated" datetime="2019-04-11T12:05:27+08:00" content="2019-04-11">
       2019-04-11
     </time>
   </span>
@@ -469,27 +469,38 @@
 <p>由上图可以看到，Spring IOC容器对Bean的管理还是比较复杂的，Spring IOC容器在执行了初始化和依赖注入后，会执行一定的步骤来完成初始化，通过这些步骤我们就能自定义初始化，而在Spring IOC容器正常关闭的时候，他也会执行一定的步骤来关闭容器，释放资源。</p>
 <p>下面对这些步骤进行详细的介绍。</p>
 <ol>
-<li><h4 id="instantiate-bean对象实例化"><a href="#instantiate-bean对象实例化" class="headerlink" title="instantiate bean对象实例化"></a>instantiate bean对象实例化</h4><p>  即调用类的构造方法。</p>
+<li><p><strong>instantiate bean对象实例化</strong>   </p>
+<p>  即调用类的构造方法。</p>
 </li>
-<li><h4 id="populate-properties封装属性"><a href="#populate-properties封装属性" class="headerlink" title="populate properties封装属性"></a>populate properties封装属性</h4><p>即调用类的属性设置方法。</p>
+<li><p><strong>populate properties封装属性</strong></p>
+<p>即调用类的属性设置方法。</p>
 </li>
-<li><h4 id="如果Bean实现BeanNameAware，则执行setBeanName"><a href="#如果Bean实现BeanNameAware，则执行setBeanName" class="headerlink" title="如果Bean实现BeanNameAware，则执行setBeanName"></a>如果Bean实现BeanNameAware，则执行setBeanName</h4><p>即为该bean设置name的时候调用，可以想象为容器为map，name就是那个key。</p>
+<li><p><strong>如果Bean实现BeanNameAware，则执行setBeanName</strong></p>
+<p>即为该bean设置name的时候调用，可以想象为容器为map，name就是那个key。</p>
 </li>
-<li><h4 id="如果Bean实现BeanFactoryAware或者ApplicationContextAware设置工厂，则执行setBeanFactory或者上下文对象setApplicationContext"><a href="#如果Bean实现BeanFactoryAware或者ApplicationContextAware设置工厂，则执行setBeanFactory或者上下文对象setApplicationContext" class="headerlink" title="如果Bean实现BeanFactoryAware或者ApplicationContextAware设置工厂，则执行setBeanFactory或者上下文对象setApplicationContext"></a>如果Bean实现BeanFactoryAware或者ApplicationContextAware设置工厂，则执行setBeanFactory或者上下文对象setApplicationContext</h4><p>即为该bean设置容器的时候调用。</p>
+<li><p><strong>如果Bean实现BeanFactoryAware或者ApplicationContextAware设置工厂，则执行setBeanFactory或者上下文对象setApplicationContext</strong></p>
+<p>即为该bean设置容器的时候调用。</p>
 </li>
-<li><h4 id="如果存在类实现BeanPostProcessor（前处理Bean），执行postProcessBeforeInitialization"><a href="#如果存在类实现BeanPostProcessor（前处理Bean），执行postProcessBeforeInitialization" class="headerlink" title="如果存在类实现BeanPostProcessor（前处理Bean），执行postProcessBeforeInitialization"></a>如果存在类实现BeanPostProcessor（前处理Bean），执行postProcessBeforeInitialization</h4><p>即在调用init-method之前调用。</p>
+<li><p><strong>如果存在类实现BeanPostProcessor（前处理Bean），执行postProcessBeforeInitialization</strong></p>
+<p>即在调用init-method之前调用。</p>
 </li>
-<li><h4 id="如果bean实现InitializingBean，则实行afterPropertiesSet"><a href="#如果bean实现InitializingBean，则实行afterPropertiesSet" class="headerlink" title="如果bean实现InitializingBean，则实行afterPropertiesSet"></a>如果bean实现InitializingBean，则实行afterPropertiesSet</h4><p>属性设置后调用。</p>
+<li><p><strong>如果bean实现InitializingBean，则实行afterPropertiesSet</strong></p>
+<p>属性设置后调用。</p>
 </li>
-<li><h4 id="调用init-method-quot-setup-quot-指定的初始化方法"><a href="#调用init-method-quot-setup-quot-指定的初始化方法" class="headerlink" title="调用init-method=&quot;setup&quot;指定的初始化方法"></a>调用<code>init-method=&quot;setup&quot;</code>指定的初始化方法</h4><p>执行init方法。</p>
+<li><p><strong>调用<code>init-method=&quot;setup&quot;</code>指定的初始化方法</strong></p>
+<p>执行init方法。</p>
 </li>
-<li><h4 id="如果存在类实现BeanPostProcessor（后处理Bean），执行postProcessAfterInitialization"><a href="#如果存在类实现BeanPostProcessor（后处理Bean），执行postProcessAfterInitialization" class="headerlink" title="如果存在类实现BeanPostProcessor（后处理Bean），执行postProcessAfterInitialization"></a>如果存在类实现BeanPostProcessor（后处理Bean），执行postProcessAfterInitialization</h4><p>即在调用init-method之后调用。</p>
+<li><p><strong>如果存在类实现BeanPostProcessor（后处理Bean），执行postProcessAfterInitialization</strong></p>
+<p>即在调用init-method之后调用。</p>
 </li>
-<li><h4 id="执行业务处理"><a href="#执行业务处理" class="headerlink" title="执行业务处理"></a>执行业务处理</h4><p>即调用bean中的业务方法。</p>
+<li><p><strong>执行业务处理</strong></p>
+<p>即调用bean中的业务方法。</p>
 </li>
-<li><h4 id="如果Bean实现DisposableBean，执行destory方法"><a href="#如果Bean实现DisposableBean，执行destory方法" class="headerlink" title="如果Bean实现DisposableBean，执行destory方法"></a>如果Bean实现DisposableBean，执行destory方法</h4><p>spring自身中的销毁方法。</p>
+<li><p><strong>如果Bean实现DisposableBean，执行destory方法</strong></p>
+<p> spring自身中的销毁方法。</p>
 </li>
-<li><h4 id="调用destroy-method-quot-teardown-quot-指定的销毁方法"><a href="#调用destroy-method-quot-teardown-quot-指定的销毁方法" class="headerlink" title="调用destroy-method=&quot;teardown&quot;指定的销毁方法"></a>调用<code>destroy-method=&quot;teardown&quot;</code>指定的销毁方法</h4><p>执行destory方法。</p>
+<li><p><strong>调用<code>destroy-method=&quot;teardown&quot;</code>指定的销毁方法</strong></p>
+<p>  执行destory方法。</p>
 </li>
 </ol>
 <p><strong>需要注意的是：</strong>有些步骤是需要在一些条件下才会执行的。还有就是有些接口只是针对单个Bean而言的；BeanPostProcessor接口则是针对所有的Bean而言的。当一个Bean实现了BeanPostProcessor接口，我们只需要在Spring IOC容器中定义它就可以了，Spring IOC容器会自动识别并调用。</p>
@@ -714,7 +725,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Bean"><span class="nav-number">1.</span> <span class="nav-text">Bean</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Bean的常用配置"><span class="nav-number">1.1.</span> <span class="nav-text">Bean的常用配置</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#id和name"><span class="nav-number">1.1.1.</span> <span class="nav-text">id和name</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#class"><span class="nav-number">1.1.2.</span> <span class="nav-text">class</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#scope"><span class="nav-number">1.1.3.</span> <span class="nav-text">scope</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Bean的定义和初始化"><span class="nav-number">1.2.</span> <span class="nav-text">Bean的定义和初始化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Bean的生命周期"><span class="nav-number">1.3.</span> <span class="nav-text">Bean的生命周期</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#instantiate-bean对象实例化"><span class="nav-number">1.3.1.</span> <span class="nav-text">instantiate bean对象实例化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#populate-properties封装属性"><span class="nav-number">1.3.2.</span> <span class="nav-text">populate properties封装属性</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#如果Bean实现BeanNameAware，则执行setBeanName"><span class="nav-number">1.3.3.</span> <span class="nav-text">如果Bean实现BeanNameAware，则执行setBeanName</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#如果Bean实现BeanFactoryAware或者ApplicationContextAware设置工厂，则执行setBeanFactory或者上下文对象setApplicationContext"><span class="nav-number">1.3.4.</span> <span class="nav-text">如果Bean实现BeanFactoryAware或者ApplicationContextAware设置工厂，则执行setBeanFactory或者上下文对象setApplicationContext</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#如果存在类实现BeanPostProcessor（前处理Bean），执行postProcessBeforeInitialization"><span class="nav-number">1.3.5.</span> <span class="nav-text">如果存在类实现BeanPostProcessor（前处理Bean），执行postProcessBeforeInitialization</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#如果bean实现InitializingBean，则实行afterPropertiesSet"><span class="nav-number">1.3.6.</span> <span class="nav-text">如果bean实现InitializingBean，则实行afterPropertiesSet</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#调用init-method-quot-setup-quot-指定的初始化方法"><span class="nav-number">1.3.7.</span> <span class="nav-text">调用init-method=&quot;setup&quot;指定的初始化方法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#如果存在类实现BeanPostProcessor（后处理Bean），执行postProcessAfterInitialization"><span class="nav-number">1.3.8.</span> <span class="nav-text">如果存在类实现BeanPostProcessor（后处理Bean），执行postProcessAfterInitialization</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#执行业务处理"><span class="nav-number">1.3.9.</span> <span class="nav-text">执行业务处理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#如果Bean实现DisposableBean，执行destory方法"><span class="nav-number">1.3.10.</span> <span class="nav-text">如果Bean实现DisposableBean，执行destory方法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#调用destroy-method-quot-teardown-quot-指定的销毁方法"><span class="nav-number">1.3.11.</span> <span class="nav-text">调用destroy-method=&quot;teardown&quot;指定的销毁方法</span></a></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Bean"><span class="nav-number">1.</span> <span class="nav-text">Bean</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Bean的常用配置"><span class="nav-number">1.1.</span> <span class="nav-text">Bean的常用配置</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#id和name"><span class="nav-number">1.1.1.</span> <span class="nav-text">id和name</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#class"><span class="nav-number">1.1.2.</span> <span class="nav-text">class</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#scope"><span class="nav-number">1.1.3.</span> <span class="nav-text">scope</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Bean的定义和初始化"><span class="nav-number">1.2.</span> <span class="nav-text">Bean的定义和初始化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Bean的生命周期"><span class="nav-number">1.3.</span> <span class="nav-text">Bean的生命周期</span></a></li></ol></li></ol></div>
             
 
           </div>
