@@ -77,7 +77,7 @@
 
 
 
-  <meta name="keywords" content="Tomcat,Connecton Pool," />
+  <meta name="keywords" content="IOC," />
 
 
 
@@ -88,20 +88,20 @@
 
 
 
-<meta name="description" content="前言在我们进行动态Web开发的时候，要经常对数据库进行操作，而传统的JDBC操作由于步骤的重复性会导致性能的程序性能的下降（在使用JDBC连接数据库时，程序会进行多个Socket连接操作，所以这种传统的数据库操作性能是很低的），此时我们就可以通过数据库源提升与数据库的操作性能。">
-<meta name="keywords" content="Tomcat,Connecton Pool">
+<meta name="description" content="Spring_IOC在学习Spring的过程中，最核心的就是的理念就是IOC(控制反转)以及AOP(面向切面编程),其中IOC是Spring的基础，而AOP则是其重要的应用。这篇文章记录了我对学习IOC之中的一些总结。">
+<meta name="keywords" content="IOC">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Tomcat数据源">
-<meta property="og:url" content="http://yoursite.com/2019/04/01/Tomcat数据源/index.html">
+<meta property="og:title" content="Spring_IOC">
+<meta property="og:url" content="http://yoursite.com/2019/04/06/Spring-IOC/index.html">
 <meta property="og:site_name" content="YAO">
-<meta property="og:description" content="前言在我们进行动态Web开发的时候，要经常对数据库进行操作，而传统的JDBC操作由于步骤的重复性会导致性能的程序性能的下降（在使用JDBC连接数据库时，程序会进行多个Socket连接操作，所以这种传统的数据库操作性能是很低的），此时我们就可以通过数据库源提升与数据库的操作性能。">
+<meta property="og:description" content="Spring_IOC在学习Spring的过程中，最核心的就是的理念就是IOC(控制反转)以及AOP(面向切面编程),其中IOC是Spring的基础，而AOP则是其重要的应用。这篇文章记录了我对学习IOC之中的一些总结。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://yoursite.com/2019/04/01/Tomcat数据源/15.png">
-<meta property="og:updated_time" content="2019-04-10T10:46:36.559Z">
+<meta property="og:image" content="http://yoursite.com/2019/04/06/Spring-IOC/1.png">
+<meta property="og:updated_time" content="2019-04-13T00:41:45.952Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Tomcat数据源">
-<meta name="twitter:description" content="前言在我们进行动态Web开发的时候，要经常对数据库进行操作，而传统的JDBC操作由于步骤的重复性会导致性能的程序性能的下降（在使用JDBC连接数据库时，程序会进行多个Socket连接操作，所以这种传统的数据库操作性能是很低的），此时我们就可以通过数据库源提升与数据库的操作性能。">
-<meta name="twitter:image" content="http://yoursite.com/2019/04/01/Tomcat数据源/15.png">
+<meta name="twitter:title" content="Spring_IOC">
+<meta name="twitter:description" content="Spring_IOC在学习Spring的过程中，最核心的就是的理念就是IOC(控制反转)以及AOP(面向切面编程),其中IOC是Spring的基础，而AOP则是其重要的应用。这篇文章记录了我对学习IOC之中的一些总结。">
+<meta name="twitter:image" content="http://yoursite.com/2019/04/06/Spring-IOC/1.png">
 
 
 
@@ -131,13 +131,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2019/04/01/Tomcat数据源/"/>
+  <link rel="canonical" href="http://yoursite.com/2019/04/06/Spring-IOC/"/>
 
 
 
 
 
-  <title>Tomcat数据源 | YAO</title>
+  <title>Spring_IOC | YAO</title>
   
 
 
@@ -278,7 +278,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/04/01/Tomcat数据源/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/04/06/Spring-IOC/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="HY">
@@ -295,7 +295,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Tomcat数据源</h1>
+          <h1 class="post-title" itemprop="name headline">Spring_IOC</h1>
         
 
         <div class="post-meta">
@@ -307,8 +307,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-04-01T22:07:02+08:00">
-                2019-04-01
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-04-06T18:41:52+08:00">
+                2019-04-06
               </time>
             
 
@@ -321,8 +321,8 @@
 		  
   <span class="post-updated">
     &nbsp; | &nbsp; 更新于
-    <time itemprop="dateUpdated" datetime="2019-04-10T18:46:36+08:00" content="2019-04-10">
-      2019-04-10
+    <time itemprop="dateUpdated" datetime="2019-04-13T08:41:45+08:00" content="2019-04-13">
+      2019-04-13
     </time>
   </span>
 
@@ -341,8 +341,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/" itemprop="url" rel="index">
-                    <span itemprop="name">Java</span>
+                  <a href="/categories/Spring/" itemprop="url" rel="index">
+                    <span itemprop="name">Spring</span>
                   </a>
                 </span>
 
@@ -372,7 +372,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  1,198
+                  1,033
                 </span>
               
 
@@ -409,37 +409,30 @@
       
 
       
-        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在我们进行动态Web开发的时候，要经常对数据库进行操作，而传统的JDBC操作由于步骤的重复性会导致性能的程序性能的下降（在使用JDBC连接数据库时，程序会进行多个Socket连接操作，所以这种传统的数据库操作性能是很低的），此时我们就可以通过数据库源提升与数据库的操作性能。</p>
+        <h1 id="Spring-IOC"><a href="#Spring-IOC" class="headerlink" title="Spring_IOC"></a>Spring_IOC</h1><p>在学习Spring的过程中，最核心的就是的理念就是IOC(控制反转)以及AOP(面向切面编程),其中IOC是Spring的基础，而AOP则是其重要的应用。这篇文章记录了我对学习IOC之中的一些总结。</p>
 <a id="more"></a>
-<p>JDBC操作原理：</p>
-<ol>
-<li>加载数据库驱动程序，数据库驱动程序通过classpath配置（放到相应位置，使得能够找到）</li>
-<li>通过DriverManager类取得数据库的连接对象</li>
-<li>通过Connection实例化XXXXStatement对象，编写SQL语句操作数据库。</li>
-<li>数据库属于资源操作，操作完成后要关闭数据库。</li>
-</ol>
-<p>可以发现大多时候对数据库的操作中都要经过相同的步骤（以上 1，2，4），而只是步骤3不同，所以在进行数据库操作的时候，可以将重复的3个步骤去掉，而只保留步骤3，那么性能肯定会有所提高，这实际上就是数据源产生的原因。</p>
-<h2 id="数据源"><a href="#数据源" class="headerlink" title="数据源"></a>数据源</h2><p>数据源的操作核心原理就是,在一个对象池中保存多个数据库的连接（也称为数据库连接池 ，Connection Pool），这样以后再进行数据库的操作时，直接从连接池中取出一个数据库连接，当数据库操作完成后，再将此连接放回到数据库连接池中，然后等待其他用户继续去使用。</p>
-<p>通过数据源操作，可以很好的解决传统JDBC的问题，但是再使用的时候也要注意几个问题</p>
-<ol>
-<li>最小连接数，如果一个程序在使用时没有一个用户连接，则数据库最小应该维持的数据库连接数</li>
-<li>最大连接数，一个程序中一个数据库最多可以打开的数据库连接数</li>
-<li>最大等待时间，当一个数据库连接池中已经没有更多的数据库连接提供给用户使用时，其他用户等待的最大时间，如果在等待时间内有连接放回，则可以继续使用，如果超过了最大等待时间，则用户无法取得数据库连接。</li>
-</ol>
-<p>如果要自己来通过Java程序实现这些的话，还是有一些困难的，所幸的是在Tomcat4.1x版本之后已经支持了此操作，所以在Web开发中可以直接通过Tomcat即可实现数据库连接池的功能。（如果不使用Tomcat实现数据库连接池，也可以使用其他的，如C3P0，还有使用框架来实现）</p>
-<h2 id="在Tomcat中使用数据库连接池"><a href="#在Tomcat中使用数据库连接池" class="headerlink" title="在Tomcat中使用数据库连接池"></a>在Tomcat中使用数据库连接池</h2><p>在Web容器中，数据库的连接池都是通过数据源（javax.sql.DataSource）访问的，既可以通过javax.sql.DataSource类取得一个Connection对象，但是要想得到一个DataSource对象，需要使用JNDI进行查找。如下图所示：</p>
-<p><img src="/2019/04/01/Tomcat数据源/15.png" alt=""></p>
-<p>从上图可以看见客户端通过查询JNDI上所绑定的名称取得一个DataSource对象，并且通过DataSource取得Connection Pool中保存的一个数据库连接对象。</p>
-<p><code>JNDI（Java Naming and Directory Interface，Java命名及目录接口）是JavaEE提供的一个服务，其主要功能是通过一个名称为 key 查找到对应的一个对象 value</code></p>
-<h2 id="在Tomcat配置数据库连接池"><a href="#在Tomcat配置数据库连接池" class="headerlink" title="在Tomcat配置数据库连接池"></a>在Tomcat配置数据库连接池</h2><h5 id="准备工作："><a href="#准备工作：" class="headerlink" title="准备工作："></a>准备工作：</h5><p>在tomcat的lib文件夹下导入数据库的数据库的驱动程序</p>
-<h5 id="配置server-xml"><a href="#配置server-xml" class="headerlink" title="配置server.xml"></a>配置server.xml</h5><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">Context</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">Resource</span> <span class="attr">name</span>=<span class="string">"jdbc/XXX"</span>     配置一个连接池资源，名字为<span class="attr">jdbc</span>/<span class="attr">XXX</span></span></span><br><span class="line"><span class="tag">              <span class="attr">auth</span>=<span class="string">"Container"</span>    容器负责资源的连接</span></span><br><span class="line"><span class="tag">              <span class="attr">type</span>=<span class="string">"javax.sql.DataSource"</span> 此数据源对应的类型是<span class="attr">DateSource</span></span></span><br><span class="line"><span class="tag">              <span class="attr">maxActive</span>=<span class="string">"100"</span>   可以打开的最大连接数</span></span><br><span class="line"><span class="tag">              <span class="attr">maxldle</span>=<span class="string">"30"</span>      维持的最小连接数</span></span><br><span class="line"><span class="tag">              <span class="attr">maxWait</span>=<span class="string">"10000"</span>   用户等待的最大时间</span></span><br><span class="line"><span class="tag">              <span class="attr">username</span>=<span class="string">"root"</span>   数据库用户名</span></span><br><span class="line"><span class="tag">              <span class="attr">password</span>=<span class="string">"root"</span>   数据库密码</span></span><br><span class="line"><span class="tag">              <span class="attr">driverClassName</span>=<span class="string">"com.mysql.jdbc.Driver"</span> 数据库驱动程序</span></span><br><span class="line"><span class="tag">              <span class="attr">url</span>=<span class="string">"jdbc:mysql://localhost:3306/mydb"</span>  数据库名称</span></span><br><span class="line">&lt;/Context&gt;</span><br></pre></td></tr></table></figure>
-<h5 id="配置web-xml"><a href="#配置web-xml" class="headerlink" title="配置web.xml"></a>配置web.xml</h5><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">resource-ref</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">description</span>&gt;</span>DB Connection<span class="tag">&lt;/<span class="name">description</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">res-ref-name</span>&gt;</span>jdbc/XXX<span class="tag">&lt;/<span class="name">res-ref-name</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">res-type</span>&gt;</span>javax.sql.DataSource<span class="tag">&lt;/<span class="name">res-type</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">res-auth</span>&gt;</span>Container<span class="tag">&lt;/<span class="name">res-auth</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">resource-ref</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<h5 id="查找数据源"><a href="#查找数据源" class="headerlink" title="查找数据源"></a>查找数据源</h5><p>数据源的查找是按照JNDI方式进行查找的，所以如果使用数据源取得数据库连接，则必须按照以下步骤进行</p>
-<ol>
-<li>初始化名称查找下上文：Context ctx = new InitialContext();</li>
-<li>通过名称查找DataSource对象：DataSource ds = (DataSource)ctx.lookup(“jdbc:comp/env/“JNDI名称); </li>
-<li>通过DataSource取得一个数据库连接：Connection conn = ds.getConnection();</li>
-</ol>
+<h2 id="为什么要用IOC？"><a href="#为什么要用IOC？" class="headerlink" title="为什么要用IOC？"></a>为什么要用IOC？</h2><p>IOC（Inverse Of Control）正如它的名字一样，用它可以将原本需要自己主动去做的事交给别人去做，然后我们在需要的时候告诉他一声就可以。在程序应用中，通过描述(在Java种可以实XML或者注解)并通过第三方去产生或获取特定对象的方式。举个简单的例子：如果你现在想要喝杯橙汁，在没有饮品店的日子，最直观的做法是自己准备果汁机，橙子，水等等来做，这个过程是一个自己 <strong>“主动”</strong>创造的过程。然而到了今日，你想和橙汁，只需要去饮品店下单就可以了，这样你就不用自己去创造了，但是也达到了你的要求。也就是说通过IOC我们可以更加专注于自己的需求，而不用去解决一些额外的问题。</p>
+<h2 id="如何实现控制反转"><a href="#如何实现控制反转" class="headerlink" title="如何实现控制反转"></a>如何实现控制反转</h2><p>在Spring中实现控制反转的是IOC容器，其实方法是依赖注入(Dependency Injection,DI)。Spring会提供IOC容器来管理对应的资源，正如上面例子中的橙汁一样，我们把做好的橙汁放到饮品店里面，让他进行管理，需要的时候直接告诉饮品店我们的需求，就给你相应的橙汁。在这个例子中，饮品店就当与一个IOC容器，我们需要的时候就直接去要就好了，而不需要知道它的具体实现。</p>
+<h2 id="Spring-IOC容器"><a href="#Spring-IOC容器" class="headerlink" title="Spring IOC容器"></a>Spring IOC容器</h2><p>从上面可以知道Spring IOC容器的作用，它可以容纳我们所开发的各种Bean,并且我们可以从中获取各种发布在Spring IOC容器里的Bean，并且可以通过描述得到它。</p>
+<h3 id="Spring-IOC容器的设计"><a href="#Spring-IOC容器的设计" class="headerlink" title="Spring IOC容器的设计"></a>Spring IOC容器的设计</h3><p>Spring IOC容器的主要设计是基于BeanFactory和ApplicaionContext两个接口，其中后者是前者的子接口之一。<img src="/2019/04/06/Spring-IOC/1.png" alt=""></p>
+<p>由上图可以看出BeanFactory是Spring IOC容器所定义的最底层的接口，BeanFactory提供了基础的容器功能。</p>
+<p>而ApplicationContext则是基于BeanFactory建立的一套更加丰富的容器体系。所以绝大数情况下使用ApplicationContext作为Spring IOC容器。由于BeanFactory提供了Spring IOC 容器最底层的设计，所以我们来看一下它的源码。</p>
+<p>BeanFactory.java</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">BeanFactory</span> </span>&#123;</span><br><span class="line">String FACTORY_BEAN_PREFIX = <span class="string">"&amp;"</span>;</span><br><span class="line"></span><br><span class="line">	<span class="function">Object <span class="title">getBean</span><span class="params">(String name)</span> <span class="keyword">throws</span> BeansException</span>;</span><br><span class="line"></span><br><span class="line">	&lt;T&gt; <span class="function">T <span class="title">getBean</span><span class="params">(String name, Class&lt;T&gt; requiredType)</span> <span class="keyword">throws</span> BeansException</span>;</span><br><span class="line"></span><br><span class="line">	<span class="function">Object <span class="title">getBean</span><span class="params">(String name, Object... args)</span> <span class="keyword">throws</span> BeansException</span>;</span><br><span class="line"></span><br><span class="line">	&lt;T&gt; <span class="function">T <span class="title">getBean</span><span class="params">(Class&lt;T&gt; requiredType)</span> <span class="keyword">throws</span> BeansException</span>;</span><br><span class="line"></span><br><span class="line">	&lt;T&gt; <span class="function">T <span class="title">getBean</span><span class="params">(Class&lt;T&gt; requiredType, Object... args)</span> <span class="keyword">throws</span> BeansException</span>;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">boolean</span> <span class="title">containsBean</span><span class="params">(String name)</span></span>;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">boolean</span> <span class="title">isSingleton</span><span class="params">(String name)</span> <span class="keyword">throws</span> NoSuchBeanDefinitionException</span>;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">boolean</span> <span class="title">isPrototype</span><span class="params">(String name)</span> <span class="keyword">throws</span> NoSuchBeanDefinitionException</span>;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">boolean</span> <span class="title">isTypeMatch</span><span class="params">(String name, ResolvableType typeToMatch)</span> <span class="keyword">throws</span> NoSuchBeanDefinitionException</span>;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">boolean</span> <span class="title">isTypeMatch</span><span class="params">(String name, Class&lt;?&gt; typeToMatch)</span> <span class="keyword">throws</span> NoSuchBeanDefinitionException</span>;</span><br><span class="line">	</span><br><span class="line">	Class&lt;?&gt; getType(String name) <span class="keyword">throws</span> NoSuchBeanDefinitionException;</span><br><span class="line">	</span><br><span class="line">	String[] getAliases(String name);</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>getBean的多个方法用于配置获取给Spring IOC容器的Bean。</li>
+<li>isSingleton用于判断是否为单例，如果判断为真，说明该Bean在容器中是作为一个唯一单例存在的。</li>
+<li>isPrototype则与isSingleton相反。</li>
+</ul>
+<h3 id="Spring-IOC容器的初始化"><a href="#Spring-IOC容器的初始化" class="headerlink" title="Spring IOC容器的初始化"></a>Spring IOC容器的初始化</h3><p>上面说过大多数情况下，我们通过ApplicationContext作为IOC容器，所以我们一般通过ApplicationContext的实现类来创造Spring IOC容器的初始化。</p>
+<p>Spring IOC大体的初始化过程入下：</p>
+<p>当需要通过XML的名字来初始化一个Spring IOC容器的就使用：ClassPathXmlApplicationContext</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ApplicationContext ctx = <span class="keyword">new</span> ClassPathXmlApplicationContext(<span class="string">"Spring.xml"</span>);</span><br></pre></td></tr></table></figure>
+<p>当我们通过XML的路径来初始化一个Spring IOC容器的就使用：FileSystemXmlApplicationContext</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ApplicationContext ctx = <span class="keyword">new</span> FileSystemXmlApplicationContext(<span class="string">"src//Spring.xml"</span>);</span><br></pre></td></tr></table></figure>
+<p>当我们是通过注解配置的时候要初始化Spring IOC容器就使用：AnnotationConfigApplicationContext</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ApplicationContext ctx=<span class="keyword">new</span> AnnotationConfigApplicationContext(UserConfig.class);</span><br></pre></td></tr></table></figure>
+<p>通过这样的操作就可以得到一个Spring IOC的容器了，然后我们就可以用该容器调用getBean()，来获取我们需要的Bean。</p>
 
       
     </div>
@@ -457,9 +450,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/Tomcat/" rel="tag"><i class="fa fa-tag"></i> Tomcat</a>
-          
-            <a href="/tags/Connecton-Pool/" rel="tag"><i class="fa fa-tag"></i> Connecton Pool</a>
+            <a href="/tags/IOC/" rel="tag"><i class="fa fa-tag"></i> IOC</a>
           
         </div>
       
@@ -472,8 +463,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/03/18/MVC-Servlet/" rel="next" title="MVC-Servlet">
-                <i class="fa fa-chevron-left"></i> MVC-Servlet
+              <a href="/2019/04/01/Tomcat数据源/" rel="next" title="Tomcat数据源">
+                <i class="fa fa-chevron-left"></i> Tomcat数据源
               </a>
             
           </div>
@@ -482,8 +473,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2019/04/06/Spring-IOC/" rel="prev" title="Spring_IOC">
-                Spring_IOC <i class="fa fa-chevron-right"></i>
+              <a href="/2019/04/08/Spring-DI/" rel="prev" title="Spring-DI">
+                Spring-DI <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -657,7 +648,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据源"><span class="nav-number">2.</span> <span class="nav-text">数据源</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#在Tomcat中使用数据库连接池"><span class="nav-number">3.</span> <span class="nav-text">在Tomcat中使用数据库连接池</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#在Tomcat配置数据库连接池"><span class="nav-number">4.</span> <span class="nav-text">在Tomcat配置数据库连接池</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#准备工作："><span class="nav-number">4.0.0.1.</span> <span class="nav-text">准备工作：</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#配置server-xml"><span class="nav-number">4.0.0.2.</span> <span class="nav-text">配置server.xml</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#配置web-xml"><span class="nav-number">4.0.0.3.</span> <span class="nav-text">配置web.xml</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#查找数据源"><span class="nav-number">4.0.0.4.</span> <span class="nav-text">查找数据源</span></a></li></ol></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Spring-IOC"><span class="nav-number">1.</span> <span class="nav-text">Spring_IOC</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#为什么要用IOC？"><span class="nav-number">1.1.</span> <span class="nav-text">为什么要用IOC？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如何实现控制反转"><span class="nav-number">1.2.</span> <span class="nav-text">如何实现控制反转</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Spring-IOC容器"><span class="nav-number">1.3.</span> <span class="nav-text">Spring IOC容器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Spring-IOC容器的设计"><span class="nav-number">1.3.1.</span> <span class="nav-text">Spring IOC容器的设计</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Spring-IOC容器的初始化"><span class="nav-number">1.3.2.</span> <span class="nav-text">Spring IOC容器的初始化</span></a></li></ol></li></ol></li></ol></div>
             
 
           </div>
