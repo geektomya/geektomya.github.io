@@ -88,18 +88,18 @@
 
 
 
-<meta name="description" content="1.昨天在ubuntu服务器上装东西，由于一直在操作/usr文件夹，有时候就在一直改权限，所以一时兴起修改了/usr的权限为777.然后今天再次打开服务器的时候，突然发现sudo命令用不了，权限也就随之改不了，然后在网上了解到可以通过su来再次改变权限。然而难受的是，我在装ubuntu后，没有对su设置密码。所以导致了整个方法也走不通了，然后还看到可以进入recovery模式，进行修改权限恢复，令">
+<meta name="description" content="哭兮兮的经历记录了在学习linux系统中遇到的各种坑呀坑">
 <meta name="keywords" content="难受啊马飞">
 <meta property="og:type" content="article">
 <meta property="og:title" content="linux中的坑呀坑">
 <meta property="og:url" content="http://yoursite.com/2019/06/05/linux中的坑呀坑/index.html">
 <meta property="og:site_name" content="YAO">
-<meta property="og:description" content="1.昨天在ubuntu服务器上装东西，由于一直在操作/usr文件夹，有时候就在一直改权限，所以一时兴起修改了/usr的权限为777.然后今天再次打开服务器的时候，突然发现sudo命令用不了，权限也就随之改不了，然后在网上了解到可以通过su来再次改变权限。然而难受的是，我在装ubuntu后，没有对su设置密码。所以导致了整个方法也走不通了，然后还看到可以进入recovery模式，进行修改权限恢复，令">
+<meta property="og:description" content="哭兮兮的经历记录了在学习linux系统中遇到的各种坑呀坑">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-06-05T13:14:35.563Z">
+<meta property="og:updated_time" content="2019-06-05T13:17:51.760Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="linux中的坑呀坑">
-<meta name="twitter:description" content="1.昨天在ubuntu服务器上装东西，由于一直在操作/usr文件夹，有时候就在一直改权限，所以一时兴起修改了/usr的权限为777.然后今天再次打开服务器的时候，突然发现sudo命令用不了，权限也就随之改不了，然后在网上了解到可以通过su来再次改变权限。然而难受的是，我在装ubuntu后，没有对su设置密码。所以导致了整个方法也走不通了，然后还看到可以进入recovery模式，进行修改权限恢复，令">
+<meta name="twitter:description" content="哭兮兮的经历记录了在学习linux系统中遇到的各种坑呀坑">
 
 
 
@@ -319,7 +319,7 @@
 		  
   <span class="post-updated">
     &nbsp; | &nbsp; 更新于
-    <time itemprop="dateUpdated" datetime="2019-06-05T21:14:35+08:00" content="2019-06-05">
+    <time itemprop="dateUpdated" datetime="2019-06-05T21:17:51+08:00" content="2019-06-05">
       2019-06-05
     </time>
   </span>
@@ -370,7 +370,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  404
+                  428
                 </span>
               
 
@@ -407,7 +407,9 @@
       
 
       
-        <p>1.昨天在ubuntu服务器上装东西，由于一直在操作<code>/usr</code>文件夹，有时候就在一直改权限，所以一时兴起修改了<code>/usr</code>的权限为777.然后今天再次打开服务器的时候，突然发现<code>sudo</code>命令用不了，权限也就随之改不了，然后在网上了解到可以通过<code>su</code>来再次改变权限。然而难受的是，我在装ubuntu后，没有对su设置密码。所以导致了整个方法也走不通了，然后还看到可以进入recovery模式，进行修改权限恢复，令人再次难受的是，我是云服务器，所以这个方法我也行不通了，最后只有哭兮兮的将系统重装了。</p>
+        <h3 id="哭兮兮的经历"><a href="#哭兮兮的经历" class="headerlink" title="哭兮兮的经历"></a>哭兮兮的经历</h3><p>记录了在学习linux系统中遇到的各种坑呀坑</p>
+<a id="more"></a>
+<p>1.昨天在ubuntu服务器上装东西，由于一直在操作<code>/usr</code>文件夹，有时候就在一直改权限，所以一时兴起修改了<code>/usr</code>的权限为777.然后今天再次打开服务器的时候，突然发现<code>sudo</code>命令用不了，权限也就随之改不了，然后在网上了解到可以通过<code>su</code>来再次改变权限。然而难受的是，我在装ubuntu后，没有对su设置密码。所以导致了整个方法也走不通了，然后还看到可以进入recovery模式，进行修改权限恢复，令人再次难受的是，我是云服务器，所以这个方法我也行不通了，最后只有哭兮兮的将系统重装了。</p>
 <p>2.之前听说过linux是大小写敏感的，但是具体会是怎么样的，还是没有一个具体的概念，然后一次在运行项目的时候，调用一个接口显示500，然后看原因，提示不存在某一个表。但是数据库中这个表是有的。然后就想到会不会linux中mysql的中相关的也是大小写敏感嘞，然后改写了表名，再次请求，然后成功了。也就是说很多在windows上面不是大小写敏感的东西，有可能在linux上默认都是大小写敏感。当然，对于mysql来说，如果不想它是大小写敏感的的话可以修改mysql的my.cnf文件，在[mysqld]下加入如下代码：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">lower_case_table_names=1</span><br></pre></td></tr></table></figure>
 <p>这样就可以取消大小写敏感了。</p>
@@ -518,8 +520,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -603,6 +614,22 @@
 		
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#哭兮兮的经历"><span class="nav-number">1.</span> <span class="nav-text">哭兮兮的经历</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
