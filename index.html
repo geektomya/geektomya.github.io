@@ -275,6 +275,200 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/08/10/py中的闭包和装饰器/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="HY">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="YAO">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/08/10/py中的闭包和装饰器/" itemprop="url">py中的闭包和装饰器</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-08-10T08:32:14+08:00">
+                2019-08-10
+              </time>
+            
+
+            
+
+            
+          </span>
+		  
+		  
+		  
+  <span class="post-updated">
+    &nbsp; | &nbsp; 更新于
+    <time itemprop="dateUpdated" datetime="2019-08-10T08:51:41+08:00" content="2019-08-10">
+      2019-08-10
+    </time>
+  </span>
+
+
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Python/" itemprop="url" rel="index">
+                    <span itemprop="name">Python</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  437
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  2
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="Python中的闭包以及装饰器的使用"><a href="#Python中的闭包以及装饰器的使用" class="headerlink" title="Python中的闭包以及装饰器的使用"></a>Python中的闭包以及装饰器的使用</h3><h4 id="闭包"><a href="#闭包" class="headerlink" title="闭包"></a>闭包</h4><p>求两个数的和用一般的写法为</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">add</span><span class="params">(a,b)</span></span></span><br><span class="line"><span class="function">	<span class="title">return</span> <span class="title">a</span>+<span class="title">b</span></span></span><br></pre></td></tr></table></figure>
+<p>用闭包的方式</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">sum</span><span class="params">(a)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">add</span><span class="params">(b)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> a+b</span><br><span class="line">    <span class="keyword">return</span> add</span><br><span class="line">  <span class="comment"># add函数名的引用</span></span><br></pre></td></tr></table></figure>
+<p>用闭包来实现一个计数器</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">counter</span><span class="params">(FIRST=<span class="number">0</span>)</span>:</span></span><br><span class="line">	cnt = [FIRST]</span><br><span class="line">	<span class="function"><span class="keyword">def</span> <span class="title">add_one</span><span class="params">()</span>:</span></span><br><span class="line">		cnt[<span class="number">0</span>] += <span class="number">1</span></span><br><span class="line">		<span class="keyword">return</span> cnt[<span class="number">0</span>]</span><br><span class="line">	<span class="keyword">return</span> add_one</span><br></pre></td></tr></table></figure>
+<p>闭包的一般模式</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 函数的闭包</span></span><br><span class="line"><span class="comment"># 套路为</span></span><br><span class="line"><span class="comment"># def funtion1():</span></span><br><span class="line"><span class="comment"># 	funtion1的代码块</span></span><br><span class="line"><span class="comment"># 	def function2():</span></span><br><span class="line"><span class="comment">#       function2的代码</span></span><br><span class="line"><span class="comment"># 		return 返回function2的值</span></span><br><span class="line"><span class="comment"># 	return function2</span></span><br></pre></td></tr></table></figure>
+<p>闭包的lambda形式</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># a*x+b=y</span></span><br><span class="line"><span class="comment"># 闭包的一般写法</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">a_line</span><span class="params">(a,b)</span>:</span></span><br><span class="line">	<span class="function"><span class="keyword">def</span> <span class="title">arg_y</span><span class="params">(x)</span>:</span></span><br><span class="line">		<span class="keyword">return</span> a*x+b</span><br><span class="line">	<span class="keyword">return</span> arg_y</span><br><span class="line"><span class="comment"># 闭包的lambda方式写法</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">a_line1</span><span class="params">(a,b)</span>:</span></span><br><span class="line">	<span class="keyword">return</span>  <span class="keyword">lambda</span> x:a*x+b</span><br></pre></td></tr></table></figure>
+<h4 id="装饰器"><a href="#装饰器" class="headerlink" title="装饰器"></a>装饰器</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 利用装饰器实现输出函数的调用时间</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line"><span class="comment"># 先定义装饰函数</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">timmer</span><span class="params">(func)</span>:</span></span><br><span class="line">	<span class="function"><span class="keyword">def</span> <span class="title">wrapper</span><span class="params">()</span>:</span></span><br><span class="line">		start_time = time.time()</span><br><span class="line">		func()</span><br><span class="line">		end_time = time.time()</span><br><span class="line">		print(<span class="string">'%s 运行时间是 %s'</span> %(func.__name__,end_time-start_time))</span><br><span class="line">	<span class="keyword">return</span> wrapper</span><br><span class="line"></span><br><span class="line"><span class="meta">@timmer</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">I_can_sleep</span><span class="params">()</span>:</span> <span class="comment">#被装饰函数</span></span><br><span class="line">	time.sleep(<span class="number">3</span>)</span><br><span class="line"></span><br><span class="line">I_can_sleep()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 装饰器的模板()被装饰函数无参数</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># def wai(func):</span></span><br><span class="line"><span class="comment"># 	def nei():</span></span><br><span class="line"><span class="comment"># 		start</span></span><br><span class="line"><span class="comment"># 		func()</span></span><br><span class="line"><span class="comment"># 		stop</span></span><br><span class="line"><span class="comment"># 	return  nei</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 装饰器的模板（）被装饰函数有两个参数</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># def wai(func):</span></span><br><span class="line"><span class="comment"># 	def nei(a,b):</span></span><br><span class="line"><span class="comment"># 		start</span></span><br><span class="line"><span class="comment"># 		func()</span></span><br><span class="line"><span class="comment"># 		stop</span></span><br><span class="line"><span class="comment"># 	return  nei</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#装饰器的模板，装饰器函数有参数</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># def new_wai(argv):</span></span><br><span class="line"><span class="comment"># 	def wai(func):</span></span><br><span class="line"><span class="comment"># 		def nei(a,b):</span></span><br><span class="line"><span class="comment"># 			start</span></span><br><span class="line"><span class="comment"># 			func()</span></span><br><span class="line"><span class="comment"># 			stop</span></span><br><span class="line"><span class="comment"># 		return  nei</span></span><br><span class="line"><span class="comment"># 	return wai</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 装饰器中获取到被装饰函数的名字，用 func.__name__</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># def wai(func):</span></span><br><span class="line"><span class="comment"># 	def nei():</span></span><br><span class="line"><span class="comment"># 		start</span></span><br><span class="line"><span class="comment"># 		print(func.__name__)</span></span><br><span class="line"><span class="comment"># 		stop</span></span><br><span class="line"><span class="comment"># 	return  nei</span></span><br></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/06/05/linux中的坑呀坑/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -508,7 +702,7 @@
 		  
   <span class="post-updated">
     &nbsp; | &nbsp; 更新于
-    <time itemprop="dateUpdated" datetime="2019-06-05T20:53:34+08:00" content="2019-06-05">
+    <time itemprop="dateUpdated" datetime="2019-06-05T21:21:35+08:00" content="2019-06-05">
       2019-06-05
     </time>
   </span>
@@ -828,201 +1022,11 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/05/06/为什么java中只有值传递/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="HY">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="YAO">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/05/06/为什么java中只有值传递/" itemprop="url">为什么java中只有值传递</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-05-06T22:52:25+08:00">
-                2019-05-06
-              </time>
-            
-
-            
-
-            
-          </span>
-		  
-		  
-		  
-  <span class="post-updated">
-    &nbsp; | &nbsp; 更新于
-    <time itemprop="dateUpdated" datetime="2019-05-13T21:38:54+08:00" content="2019-05-13">
-      2019-05-13
-    </time>
-  </span>
-
-
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/" itemprop="url" rel="index">
-                    <span itemprop="name">Java</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  1,036
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  4
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h2 id="为什么java中只有值传递"><a href="#为什么java中只有值传递" class="headerlink" title="为什么java中只有值传递"></a>为什么java中只有值传递</h2><p><strong>值传递（pass by value）：</strong>是指在调用函数时将实际参数复制一份传递到函数中，这样在函数中如果参数进行修改，将不会影响到实际参数</p>
-<p><strong>引用传递（pass by reference）：</strong>是指在调用函数的时候将实际参数的地址直接传递到函数中，那么在函数中对参数的修改，将影响到实际参数。</p>
-<p><strong>区别：</strong>值传递会创建副本，引用传递不会</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2019/05/06/为什么java中只有值传递/" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -1072,7 +1076,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">16</span>
+                  <span class="site-state-item-count">17</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -1083,7 +1087,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-count">8</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -1094,7 +1098,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">16</span>
+                  <span class="site-state-item-count">17</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -1165,7 +1169,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">34.0k</span>
+    <span title="Site words total count">34.5k</span>
   
 </div>
 

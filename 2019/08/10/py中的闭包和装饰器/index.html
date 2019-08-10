@@ -77,7 +77,7 @@
 
 
 
-  <meta name="keywords" content="IOC," />
+  <meta name="keywords" content="闭包和装饰器," />
 
 
 
@@ -88,20 +88,18 @@
 
 
 
-<meta name="description" content="Spring_IOC在学习Spring的过程中，最核心的就是的理念就是IOC(控制反转)以及AOP(面向切面编程),其中IOC是Spring的基础，而AOP则是其重要的应用。这篇文章记录了我对学习IOC之中的一些总结。">
-<meta name="keywords" content="IOC">
+<meta name="description" content="Python中的闭包以及装饰器的使用闭包求两个数的和用一般的写法为 12def add(a,b)	return a+b 用闭包的方式 12345def sum(a):    def add(b):        return a+b    return add  # add函数名的引用 用闭包来实现一个计数器 123456def counter(FIRST=0):	cnt = [FIRST]	de">
+<meta name="keywords" content="闭包和装饰器">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Spring_IOC">
-<meta property="og:url" content="http://yoursite.com/2019/04/06/Spring-IOC/index.html">
+<meta property="og:title" content="py中的闭包和装饰器">
+<meta property="og:url" content="http://yoursite.com/2019/08/10/py中的闭包和装饰器/index.html">
 <meta property="og:site_name" content="YAO">
-<meta property="og:description" content="Spring_IOC在学习Spring的过程中，最核心的就是的理念就是IOC(控制反转)以及AOP(面向切面编程),其中IOC是Spring的基础，而AOP则是其重要的应用。这篇文章记录了我对学习IOC之中的一些总结。">
+<meta property="og:description" content="Python中的闭包以及装饰器的使用闭包求两个数的和用一般的写法为 12def add(a,b)	return a+b 用闭包的方式 12345def sum(a):    def add(b):        return a+b    return add  # add函数名的引用 用闭包来实现一个计数器 123456def counter(FIRST=0):	cnt = [FIRST]	de">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://yoursite.com/2019/04/06/Spring-IOC/1.png">
-<meta property="og:updated_time" content="2019-04-13T00:41:45.952Z">
+<meta property="og:updated_time" content="2019-08-10T00:51:41.075Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Spring_IOC">
-<meta name="twitter:description" content="Spring_IOC在学习Spring的过程中，最核心的就是的理念就是IOC(控制反转)以及AOP(面向切面编程),其中IOC是Spring的基础，而AOP则是其重要的应用。这篇文章记录了我对学习IOC之中的一些总结。">
-<meta name="twitter:image" content="http://yoursite.com/2019/04/06/Spring-IOC/1.png">
+<meta name="twitter:title" content="py中的闭包和装饰器">
+<meta name="twitter:description" content="Python中的闭包以及装饰器的使用闭包求两个数的和用一般的写法为 12def add(a,b)	return a+b 用闭包的方式 12345def sum(a):    def add(b):        return a+b    return add  # add函数名的引用 用闭包来实现一个计数器 123456def counter(FIRST=0):	cnt = [FIRST]	de">
 
 
 
@@ -131,13 +129,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2019/04/06/Spring-IOC/"/>
+  <link rel="canonical" href="http://yoursite.com/2019/08/10/py中的闭包和装饰器/"/>
 
 
 
 
 
-  <title>Spring_IOC | YAO</title>
+  <title>py中的闭包和装饰器 | YAO</title>
   
 
 
@@ -278,7 +276,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/04/06/Spring-IOC/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/08/10/py中的闭包和装饰器/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="HY">
@@ -295,7 +293,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Spring_IOC</h1>
+          <h1 class="post-title" itemprop="name headline">py中的闭包和装饰器</h1>
         
 
         <div class="post-meta">
@@ -307,8 +305,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-04-06T18:41:52+08:00">
-                2019-04-06
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-08-10T08:32:14+08:00">
+                2019-08-10
               </time>
             
 
@@ -321,8 +319,8 @@
 		  
   <span class="post-updated">
     &nbsp; | &nbsp; 更新于
-    <time itemprop="dateUpdated" datetime="2019-04-13T08:41:45+08:00" content="2019-04-13">
-      2019-04-13
+    <time itemprop="dateUpdated" datetime="2019-08-10T08:51:41+08:00" content="2019-08-10">
+      2019-08-10
     </time>
   </span>
 
@@ -341,8 +339,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Spring/" itemprop="url" rel="index">
-                    <span itemprop="name">Spring</span>
+                  <a href="/categories/Python/" itemprop="url" rel="index">
+                    <span itemprop="name">Python</span>
                   </a>
                 </span>
 
@@ -372,7 +370,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  1,033
+                  437
                 </span>
               
 
@@ -388,7 +386,7 @@
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
                 <span title="阅读时长">
-                  4
+                  2
                 </span>
               
             </div>
@@ -409,30 +407,17 @@
       
 
       
-        <h1 id="Spring-IOC"><a href="#Spring-IOC" class="headerlink" title="Spring_IOC"></a>Spring_IOC</h1><p>在学习Spring的过程中，最核心的就是的理念就是IOC(控制反转)以及AOP(面向切面编程),其中IOC是Spring的基础，而AOP则是其重要的应用。这篇文章记录了我对学习IOC之中的一些总结。</p>
-<a id="more"></a>
-<h2 id="为什么要用IOC？"><a href="#为什么要用IOC？" class="headerlink" title="为什么要用IOC？"></a>为什么要用IOC？</h2><p>IOC（Inverse Of Control）正如它的名字一样，用它可以将原本需要自己主动去做的事交给别人去做，然后我们在需要的时候告诉他一声就可以。在程序应用中，通过描述(在Java种可以实XML或者注解)并通过第三方去产生或获取特定对象的方式。举个简单的例子：如果你现在想要喝杯橙汁，在没有饮品店的日子，最直观的做法是自己准备果汁机，橙子，水等等来做，这个过程是一个自己 <strong>“主动”</strong>创造的过程。然而到了今日，你想和橙汁，只需要去饮品店下单就可以了，这样你就不用自己去创造了，但是也达到了你的要求。也就是说通过IOC我们可以更加专注于自己的需求，而不用去解决一些额外的问题。</p>
-<h2 id="如何实现控制反转"><a href="#如何实现控制反转" class="headerlink" title="如何实现控制反转"></a>如何实现控制反转</h2><p>在Spring中实现控制反转的是IOC容器，其实方法是依赖注入(Dependency Injection,DI)。Spring会提供IOC容器来管理对应的资源，正如上面例子中的橙汁一样，我们把做好的橙汁放到饮品店里面，让他进行管理，需要的时候直接告诉饮品店我们的需求，就给你相应的橙汁。在这个例子中，饮品店就当与一个IOC容器，我们需要的时候就直接去要就好了，而不需要知道它的具体实现。</p>
-<h2 id="Spring-IOC容器"><a href="#Spring-IOC容器" class="headerlink" title="Spring IOC容器"></a>Spring IOC容器</h2><p>从上面可以知道Spring IOC容器的作用，它可以容纳我们所开发的各种Bean,并且我们可以从中获取各种发布在Spring IOC容器里的Bean，并且可以通过描述得到它。</p>
-<h3 id="Spring-IOC容器的设计"><a href="#Spring-IOC容器的设计" class="headerlink" title="Spring IOC容器的设计"></a>Spring IOC容器的设计</h3><p>Spring IOC容器的主要设计是基于BeanFactory和ApplicaionContext两个接口，其中后者是前者的子接口之一。<img src="/2019/04/06/Spring-IOC/1.png" alt=""></p>
-<p>由上图可以看出BeanFactory是Spring IOC容器所定义的最底层的接口，BeanFactory提供了基础的容器功能。</p>
-<p>而ApplicationContext则是基于BeanFactory建立的一套更加丰富的容器体系。所以绝大数情况下使用ApplicationContext作为Spring IOC容器。由于BeanFactory提供了Spring IOC 容器最底层的设计，所以我们来看一下它的源码。</p>
-<p>BeanFactory.java</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">BeanFactory</span> </span>&#123;</span><br><span class="line">String FACTORY_BEAN_PREFIX = <span class="string">"&amp;"</span>;</span><br><span class="line"></span><br><span class="line">	<span class="function">Object <span class="title">getBean</span><span class="params">(String name)</span> <span class="keyword">throws</span> BeansException</span>;</span><br><span class="line"></span><br><span class="line">	&lt;T&gt; <span class="function">T <span class="title">getBean</span><span class="params">(String name, Class&lt;T&gt; requiredType)</span> <span class="keyword">throws</span> BeansException</span>;</span><br><span class="line"></span><br><span class="line">	<span class="function">Object <span class="title">getBean</span><span class="params">(String name, Object... args)</span> <span class="keyword">throws</span> BeansException</span>;</span><br><span class="line"></span><br><span class="line">	&lt;T&gt; <span class="function">T <span class="title">getBean</span><span class="params">(Class&lt;T&gt; requiredType)</span> <span class="keyword">throws</span> BeansException</span>;</span><br><span class="line"></span><br><span class="line">	&lt;T&gt; <span class="function">T <span class="title">getBean</span><span class="params">(Class&lt;T&gt; requiredType, Object... args)</span> <span class="keyword">throws</span> BeansException</span>;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">boolean</span> <span class="title">containsBean</span><span class="params">(String name)</span></span>;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">boolean</span> <span class="title">isSingleton</span><span class="params">(String name)</span> <span class="keyword">throws</span> NoSuchBeanDefinitionException</span>;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">boolean</span> <span class="title">isPrototype</span><span class="params">(String name)</span> <span class="keyword">throws</span> NoSuchBeanDefinitionException</span>;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">boolean</span> <span class="title">isTypeMatch</span><span class="params">(String name, ResolvableType typeToMatch)</span> <span class="keyword">throws</span> NoSuchBeanDefinitionException</span>;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">boolean</span> <span class="title">isTypeMatch</span><span class="params">(String name, Class&lt;?&gt; typeToMatch)</span> <span class="keyword">throws</span> NoSuchBeanDefinitionException</span>;</span><br><span class="line">	</span><br><span class="line">	Class&lt;?&gt; getType(String name) <span class="keyword">throws</span> NoSuchBeanDefinitionException;</span><br><span class="line">	</span><br><span class="line">	String[] getAliases(String name);</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<ul>
-<li>getBean的多个方法用于配置获取给Spring IOC容器的Bean。</li>
-<li>isSingleton用于判断是否为单例，如果判断为真，说明该Bean在容器中是作为一个唯一单例存在的。</li>
-<li>isPrototype则与isSingleton相反。</li>
-</ul>
-<h3 id="Spring-IOC容器的初始化"><a href="#Spring-IOC容器的初始化" class="headerlink" title="Spring IOC容器的初始化"></a>Spring IOC容器的初始化</h3><p>上面说过大多数情况下，我们通过ApplicationContext作为IOC容器，所以我们一般通过ApplicationContext的实现类来创造Spring IOC容器的初始化。</p>
-<p>Spring IOC大体的初始化过程入下：</p>
-<p>当需要通过XML的名字来初始化一个Spring IOC容器的就使用：ClassPathXmlApplicationContext</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ApplicationContext ctx = <span class="keyword">new</span> ClassPathXmlApplicationContext(<span class="string">"Spring.xml"</span>);</span><br></pre></td></tr></table></figure>
-<p>当我们通过XML的路径来初始化一个Spring IOC容器的就使用：FileSystemXmlApplicationContext</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ApplicationContext ctx = <span class="keyword">new</span> FileSystemXmlApplicationContext(<span class="string">"src//Spring.xml"</span>);</span><br></pre></td></tr></table></figure>
-<p>当我们是通过注解配置的时候要初始化Spring IOC容器就使用：AnnotationConfigApplicationContext</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ApplicationContext ctx=<span class="keyword">new</span> AnnotationConfigApplicationContext(UserConfig.class);</span><br></pre></td></tr></table></figure>
-<p>通过这样的操作就可以得到一个Spring IOC的容器了，然后我们就可以用该容器调用getBean()，来获取我们需要的Bean。</p>
+        <h3 id="Python中的闭包以及装饰器的使用"><a href="#Python中的闭包以及装饰器的使用" class="headerlink" title="Python中的闭包以及装饰器的使用"></a>Python中的闭包以及装饰器的使用</h3><h4 id="闭包"><a href="#闭包" class="headerlink" title="闭包"></a>闭包</h4><p>求两个数的和用一般的写法为</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">add</span><span class="params">(a,b)</span></span></span><br><span class="line"><span class="function">	<span class="title">return</span> <span class="title">a</span>+<span class="title">b</span></span></span><br></pre></td></tr></table></figure>
+<p>用闭包的方式</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">sum</span><span class="params">(a)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">add</span><span class="params">(b)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> a+b</span><br><span class="line">    <span class="keyword">return</span> add</span><br><span class="line">  <span class="comment"># add函数名的引用</span></span><br></pre></td></tr></table></figure>
+<p>用闭包来实现一个计数器</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">counter</span><span class="params">(FIRST=<span class="number">0</span>)</span>:</span></span><br><span class="line">	cnt = [FIRST]</span><br><span class="line">	<span class="function"><span class="keyword">def</span> <span class="title">add_one</span><span class="params">()</span>:</span></span><br><span class="line">		cnt[<span class="number">0</span>] += <span class="number">1</span></span><br><span class="line">		<span class="keyword">return</span> cnt[<span class="number">0</span>]</span><br><span class="line">	<span class="keyword">return</span> add_one</span><br></pre></td></tr></table></figure>
+<p>闭包的一般模式</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 函数的闭包</span></span><br><span class="line"><span class="comment"># 套路为</span></span><br><span class="line"><span class="comment"># def funtion1():</span></span><br><span class="line"><span class="comment"># 	funtion1的代码块</span></span><br><span class="line"><span class="comment"># 	def function2():</span></span><br><span class="line"><span class="comment">#       function2的代码</span></span><br><span class="line"><span class="comment"># 		return 返回function2的值</span></span><br><span class="line"><span class="comment"># 	return function2</span></span><br></pre></td></tr></table></figure>
+<p>闭包的lambda形式</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># a*x+b=y</span></span><br><span class="line"><span class="comment"># 闭包的一般写法</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">a_line</span><span class="params">(a,b)</span>:</span></span><br><span class="line">	<span class="function"><span class="keyword">def</span> <span class="title">arg_y</span><span class="params">(x)</span>:</span></span><br><span class="line">		<span class="keyword">return</span> a*x+b</span><br><span class="line">	<span class="keyword">return</span> arg_y</span><br><span class="line"><span class="comment"># 闭包的lambda方式写法</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">a_line1</span><span class="params">(a,b)</span>:</span></span><br><span class="line">	<span class="keyword">return</span>  <span class="keyword">lambda</span> x:a*x+b</span><br></pre></td></tr></table></figure>
+<h4 id="装饰器"><a href="#装饰器" class="headerlink" title="装饰器"></a>装饰器</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 利用装饰器实现输出函数的调用时间</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line"><span class="comment"># 先定义装饰函数</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">timmer</span><span class="params">(func)</span>:</span></span><br><span class="line">	<span class="function"><span class="keyword">def</span> <span class="title">wrapper</span><span class="params">()</span>:</span></span><br><span class="line">		start_time = time.time()</span><br><span class="line">		func()</span><br><span class="line">		end_time = time.time()</span><br><span class="line">		print(<span class="string">'%s 运行时间是 %s'</span> %(func.__name__,end_time-start_time))</span><br><span class="line">	<span class="keyword">return</span> wrapper</span><br><span class="line"></span><br><span class="line"><span class="meta">@timmer</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">I_can_sleep</span><span class="params">()</span>:</span> <span class="comment">#被装饰函数</span></span><br><span class="line">	time.sleep(<span class="number">3</span>)</span><br><span class="line"></span><br><span class="line">I_can_sleep()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 装饰器的模板()被装饰函数无参数</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># def wai(func):</span></span><br><span class="line"><span class="comment"># 	def nei():</span></span><br><span class="line"><span class="comment"># 		start</span></span><br><span class="line"><span class="comment"># 		func()</span></span><br><span class="line"><span class="comment"># 		stop</span></span><br><span class="line"><span class="comment"># 	return  nei</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 装饰器的模板（）被装饰函数有两个参数</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># def wai(func):</span></span><br><span class="line"><span class="comment"># 	def nei(a,b):</span></span><br><span class="line"><span class="comment"># 		start</span></span><br><span class="line"><span class="comment"># 		func()</span></span><br><span class="line"><span class="comment"># 		stop</span></span><br><span class="line"><span class="comment"># 	return  nei</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#装饰器的模板，装饰器函数有参数</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># def new_wai(argv):</span></span><br><span class="line"><span class="comment"># 	def wai(func):</span></span><br><span class="line"><span class="comment"># 		def nei(a,b):</span></span><br><span class="line"><span class="comment"># 			start</span></span><br><span class="line"><span class="comment"># 			func()</span></span><br><span class="line"><span class="comment"># 			stop</span></span><br><span class="line"><span class="comment"># 		return  nei</span></span><br><span class="line"><span class="comment"># 	return wai</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 装饰器中获取到被装饰函数的名字，用 func.__name__</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># def wai(func):</span></span><br><span class="line"><span class="comment"># 	def nei():</span></span><br><span class="line"><span class="comment"># 		start</span></span><br><span class="line"><span class="comment"># 		print(func.__name__)</span></span><br><span class="line"><span class="comment"># 		stop</span></span><br><span class="line"><span class="comment"># 	return  nei</span></span><br></pre></td></tr></table></figure>
 
       
     </div>
@@ -450,7 +435,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/IOC/" rel="tag"><i class="fa fa-tag"></i> IOC</a>
+            <a href="/tags/闭包和装饰器/" rel="tag"><i class="fa fa-tag"></i> 闭包和装饰器</a>
           
         </div>
       
@@ -463,8 +448,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/04/01/Tomcat数据源/" rel="next" title="Tomcat数据源">
-                <i class="fa fa-chevron-left"></i> Tomcat数据源
+              <a href="/2019/06/05/linux中的坑呀坑/" rel="next" title="linux中的坑呀坑">
+                <i class="fa fa-chevron-left"></i> linux中的坑呀坑
               </a>
             
           </div>
@@ -472,10 +457,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/04/08/Spring-DI/" rel="prev" title="Spring-DI">
-                Spring-DI <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -648,7 +629,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Spring-IOC"><span class="nav-number">1.</span> <span class="nav-text">Spring_IOC</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#为什么要用IOC？"><span class="nav-number">1.1.</span> <span class="nav-text">为什么要用IOC？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如何实现控制反转"><span class="nav-number">1.2.</span> <span class="nav-text">如何实现控制反转</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Spring-IOC容器"><span class="nav-number">1.3.</span> <span class="nav-text">Spring IOC容器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Spring-IOC容器的设计"><span class="nav-number">1.3.1.</span> <span class="nav-text">Spring IOC容器的设计</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Spring-IOC容器的初始化"><span class="nav-number">1.3.2.</span> <span class="nav-text">Spring IOC容器的初始化</span></a></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Python中的闭包以及装饰器的使用"><span class="nav-number">1.</span> <span class="nav-text">Python中的闭包以及装饰器的使用</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#闭包"><span class="nav-number">1.1.</span> <span class="nav-text">闭包</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#装饰器"><span class="nav-number">1.2.</span> <span class="nav-text">装饰器</span></a></li></ol></li></ol></div>
             
 
           </div>
