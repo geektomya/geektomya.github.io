@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+<script>
+    (function(){
+        if(''){
+            if (prompt('请输入文章密码') !== ''){
+                alert('密码错误！');
+                history.back();
+            }
+        }
+    })();
+</script>
+</script>
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.ico?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.ico?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, hy" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="vim的四种模式 正常模式(normal-mode)  插入模式(insert-mode)     命令模式(command-mode)     可视模式(visual-mode)      正常模式用vim命令打开一个文件后，出来的那个界面就是正常模式的界面，在这个模式下你可以浏览文件的内容，也可以进行修改。然后不管处于什么界面中只要按  ESC  都会进入正常模式。处于该模式下的时候，输入不同">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux-vim的命令">
+<meta property="og:url" content="http://yoursite.com/2019/11/06/Linux-vim的命令/index.html">
+<meta property="og:site_name" content="YAO">
+<meta property="og:description" content="vim的四种模式 正常模式(normal-mode)  插入模式(insert-mode)     命令模式(command-mode)     可视模式(visual-mode)      正常模式用vim命令打开一个文件后，出来的那个界面就是正常模式的界面，在这个模式下你可以浏览文件的内容，也可以进行修改。然后不管处于什么界面中只要按  ESC  都会进入正常模式。处于该模式下的时候，输入不同">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-11-06T13:59:30.880Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Linux-vim的命令">
+<meta name="twitter:description" content="vim的四种模式 正常模式(normal-mode)  插入模式(insert-mode)     命令模式(command-mode)     可视模式(visual-mode)      正常模式用vim命令打开一个文件后，出来的那个界面就是正常模式的界面，在这个模式下你可以浏览文件的内容，也可以进行修改。然后不管处于什么界面中只要按  ESC  都会进入正常模式。处于该模式下的时候，输入不同">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/11/06/Linux-vim的命令/"/>
+
+
+
+
+
+  <title>Linux-vim的命令 | YAO</title>
+  
+
+
+
+
+
+
+
+
+  
+  
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">YAO</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Something I Like .</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/06/Linux-vim的命令/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="HY">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="YAO">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Linux-vim的命令</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-11-06T18:33:12+08:00">
+                2019-11-06
+              </time>
+            
+
+            
+
+            
+          </span>
+		  
+		  
+		  
+  <span class="post-updated">
+    &nbsp; | &nbsp; 更新于
+    <time itemprop="dateUpdated" datetime="2019-11-06T21:59:30+08:00" content="2019-11-06">
+      2019-11-06
+    </time>
+  </span>
+
+
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  1,205
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  4
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="vim的四种模式"><a href="#vim的四种模式" class="headerlink" title="vim的四种模式"></a>vim的四种模式</h3><ul>
+<li>正常模式(normal-mode) </li>
+<li>插入模式(insert-mode)    </li>
+<li>命令模式(command-mode)    </li>
+<li>可视模式(visual-mode)    </li>
+</ul>
+<h3 id="正常模式"><a href="#正常模式" class="headerlink" title="正常模式"></a>正常模式</h3><p>用vim命令打开一个文件后，出来的那个界面就是正常模式的界面，在这个模式下你可以浏览文件的内容，也可以进行修改。然后不管处于什么界面中只要按  <code>ESC</code>  都会进入正常模式。处于该模式下的时候，输入不同的命令将产生不同的操作</p>
+<h4 id="移动"><a href="#移动" class="headerlink" title="移动"></a>移动</h4><blockquote>
+<p>h：当前光标向左移动</p>
+<p>j：当前光标向下移动</p>
+<p>k：当前光标向上移动</p>
+<p>l：当前光标向右移动</p>
+<p>f{想要移动到的字符}：移动到当前行的该光标后第一个该字符</p>
+</blockquote>
+<h4 id="复制粘贴剪切"><a href="#复制粘贴剪切" class="headerlink" title="复制粘贴剪切"></a>复制粘贴剪切</h4><p>复制操作</p>
+<blockquote>
+<p>yy：复制当前行</p>
+<p>[n]yy：复制当前行开始的n行</p>
+<p>y$：复制当前光标到该行尾的东西</p>
+</blockquote>
+<p>粘贴操作</p>
+<blockquote>
+<p>p：粘贴复制的内容</p>
+</blockquote>
+<p>剪切操作</p>
+<blockquote>
+<p>dd：剪切当前行</p>
+<p>[n]dd：剪切当前行开始的n行</p>
+</blockquote>
+<h4 id="删除替换"><a href="#删除替换" class="headerlink" title="删除替换"></a>删除替换</h4><p>删除操作</p>
+<blockquote>
+<p>x：删除当前光标指向的字符</p>
+<p>d$：删除当前光标到行尾的内容</p>
+<p>[n]x：删除当前光标开始的n个字符</p>
+<p>dd：删除当前行（剪切会删除复制）</p>
+<p>dw：删除一个单词</p>
+<p>J：删除光标所在行与上一行之间的空格</p>
+</blockquote>
+<p>替换操作</p>
+<blockquote>
+<p>r：替换当前光标的字符    </p>
+</blockquote>
+<p>用法 想要被替换的字符 r 新字符</p>
+<h4 id="撤销以及取消撤销"><a href="#撤销以及取消撤销" class="headerlink" title="撤销以及取消撤销"></a>撤销以及取消撤销</h4><blockquote>
+<p>u：撤销上次的操作，如果有多次，就按多次u</p>
+<p>ctrl + r：取消撤销操作，如果有多次，就按多次</p>
+</blockquote>
+<h3 id="插入模式"><a href="#插入模式" class="headerlink" title="插入模式"></a>插入模式</h3><p>在该模式下，我们可以像在记事本中一样随意的插入删除文本。</p>
+<p>在正常模式下不同的命令以不同的方式进入插入模式</p>
+<blockquote>
+<p>i：在光标之前插入</p>
+<p>a：在光标之后插入</p>
+<p>I：在光标的行首插入</p>
+<p>A：在光标的行末插入</p>
+<p>o：在光标所在行的上面插入</p>
+<p>O：在光标所在行的下面插入</p>
+<p>s：删除光标后的一个字符，然后进入插入模式</p>
+<p>S：删除光标所在的行，然后进入插入模式</p>
+</blockquote>
+<h3 id="命令模式"><a href="#命令模式" class="headerlink" title="命令模式"></a>命令模式</h3><h4 id="查找和高级替换"><a href="#查找和高级替换" class="headerlink" title="查找和高级替换"></a>查找和高级替换</h4><blockquote>
+<p>/要查找的内容：如果有多个匹配则按 <code>n</code> 跳到下一匹配，查找的内容可以是正则表达式</p>
+<p>:s/old/new：用new替换当前行中第一次出现的old</p>
+<p>:s/old/new/g：用new替换当前行中所有的的old</p>
+<p>:n,m s/old/new/g：用new替换从n到m行里面的所有old</p>
+<p>:%s/old/new/g：用new替换当前文件里所有的old</p>
+</blockquote>
+<h4 id="设置行号"><a href="#设置行号" class="headerlink" title="设置行号"></a>设置行号</h4><blockquote>
+<p>:set nu：可以显示出行号，只对当前vim有效，如果想要每次vim后都有行号，可以通过修改vim的配置文件使得每次都生效相同的功能，我的配置文件路径<code>/etc/vim/vimrc</code></p>
+</blockquote>
+<h4 id="执行临时命令"><a href="#执行临时命令" class="headerlink" title="执行临时命令"></a>执行临时命令</h4><blockquote>
+<p>:! +要执行的命令</p>
+</blockquote>
+<p>这个命令比较重要，很多时候我们有可能需要查看一些东西，但是又不愿意退出vim模式，这时候就可以用这个命令。</p>
+<h4 id="保存退出"><a href="#保存退出" class="headerlink" title="保存退出"></a>保存退出</h4><blockquote>
+<p>:w：保存文件</p>
+<p>:w!：若文本属性为只读时，强制保存</p>
+<p>:q：退出vim</p>
+<p>:q!：不管编辑或未编辑都不保存退出</p>
+<p>:wq：保存，退出</p>
+<p>:wq!：强制保存退出</p>
+<p>:e!：将文档还原成最原始状态</p>
+<p>:x：同样也是保存退出，类似<code>:wq</code></p>
+</blockquote>
+<h3 id="可视模式"><a href="#可视模式" class="headerlink" title="可视模式"></a>可视模式</h3><h4 id="什么是可视模式？"><a href="#什么是可视模式？" class="headerlink" title="什么是可视模式？"></a>什么是可视模式？</h4><p>可视模式简单来说就是选中一块编辑区域，然后在上面执行一些操作，比如删除，替换，改变大小写等。</p>
+<h4 id="选中方式"><a href="#选中方式" class="headerlink" title="选中方式"></a>选中方式</h4><ul>
+<li>v 进入字符可视化模式</li>
+<li>V 进入行可视化模式 </li>
+<li>Ctrl+v 进入块可视化模式</li>
+</ul>
+<h4 id="选中光标到行尾的内容"><a href="#选中光标到行尾的内容" class="headerlink" title="选中光标到行尾的内容"></a>选中光标到行尾的内容</h4><blockquote>
+<p>v  +  f{光标的内容} + $</p>
+</blockquote>
+<h4 id="选中-quot-quot-里面的内容"><a href="#选中-quot-quot-里面的内容" class="headerlink" title="选中&quot; &quot;里面的内容"></a>选中<code>&quot; &quot;</code>里面的内容</h4><blockquote>
+<p>f + 首字母 + vi + “</p>
+</blockquote>
+<h4 id="再次选择上次选中的区域"><a href="#再次选择上次选中的区域" class="headerlink" title="再次选择上次选中的区域"></a>再次选择上次选中的区域</h4><p>（没有被删除的情况下）可以使用</p>
+<blockquote>
+<p>gv</p>
+</blockquote>
+<h4 id="切换当前光标的端点"><a href="#切换当前光标的端点" class="headerlink" title="切换当前光标的端点"></a>切换当前光标的端点</h4><p>选中的区域是以两个端点（左上，右下）来标识的，有时候需要在两个端点之间切换，就可以使用该命令</p>
+<blockquote>
+<p>o   </p>
+</blockquote>
+<h4 id="其他操作"><a href="#其他操作" class="headerlink" title="其他操作"></a>其他操作</h4><p>在选中的区域上也可以使用正常模式下的一些命令，以及一些其他命令</p>
+<blockquote>
+<p>d：删除选中文本<br>c：修改选中文本<br>r：替换选中文本<br>I：在选中文本前插入<br>A：在选中文本后插入<br>gu：选中区域转为小写<br>gU：选中区域转为大写<br>g~：大小写互调</p>
+</blockquote>
+<p><em>大体上vim中我所接触到的命令就如此了，后面接触到再继续补充</em></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/11/06/Linux-常用命令/" rel="next" title="Linux-常用命令">
+                <i class="fa fa-chevron-left"></i> Linux-常用命令
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/11/10/Linux-用户和权限管理/" rel="prev" title="Linux-用户和权限管理">
+                Linux-用户和权限管理 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  <div class="post-spread">
+      
+        
+                                <div class="-mob-share-ui-button -mob-share-open">分享</div>
+                                <div class="-mob-share-ui" style="display: none">
+                                    <ul class="-mob-share-list">
+                                        <li class="-mob-share-weibo"><p>新浪微博</p></li>
+                                        <li class="-mob-share-tencentweibo"><p>腾讯微博</p></li>
+                                        <li class="-mob-share-qzone"><p>QQ空间</p></li>
+                                        <li class="-mob-share-qq"><p>QQ好友</p></li>
+                                        <li class="-mob-share-weixin"><p>微信</p></li>
+                                        <li class="-mob-share-douban"><p>豆瓣</p></li>
+                                    </ul>
+                                    <div class="-mob-share-close">取消</div>
+                                </div>
+                                <div class="-mob-share-ui-bg"></div>
+                                <script id="-mob-share" src="http://f1.webshare.mob.com/code/mob-share.js?appkey=262488aa81530"></script>
+
+								
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.png"
+                alt="HY" />
+            
+              <p class="site-author-name" itemprop="name">HY</p>
+              <p class="site-description motion-element" itemprop="description">A man is only as good as what he loves.</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">19</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">17</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/yqh74110" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:yaoqiuhong@outlook.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=298 height=52 src="//music.163.com/outchain/player?type=2&id=1334259177&auto=0&height=32"></iframe>		
+<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=298 height=52 src="//music.163.com/outchain/player?type=2&id=436147067&auto=0&height=32"></iframe>	  
+<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=298 height=52 src="//music.163.com/outchain/player?type=2&id=32431822&auto=0&height=32"></iframe>
+
+          
+
+        </div>
+		
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#vim的四种模式"><span class="nav-number">1.</span> <span class="nav-text">vim的四种模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#正常模式"><span class="nav-number">2.</span> <span class="nav-text">正常模式</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#移动"><span class="nav-number">2.1.</span> <span class="nav-text">移动</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#复制粘贴剪切"><span class="nav-number">2.2.</span> <span class="nav-text">复制粘贴剪切</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#删除替换"><span class="nav-number">2.3.</span> <span class="nav-text">删除替换</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#撤销以及取消撤销"><span class="nav-number">2.4.</span> <span class="nav-text">撤销以及取消撤销</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#插入模式"><span class="nav-number">3.</span> <span class="nav-text">插入模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#命令模式"><span class="nav-number">4.</span> <span class="nav-text">命令模式</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#查找和高级替换"><span class="nav-number">4.1.</span> <span class="nav-text">查找和高级替换</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#设置行号"><span class="nav-number">4.2.</span> <span class="nav-text">设置行号</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#执行临时命令"><span class="nav-number">4.3.</span> <span class="nav-text">执行临时命令</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#保存退出"><span class="nav-number">4.4.</span> <span class="nav-text">保存退出</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#可视模式"><span class="nav-number">5.</span> <span class="nav-text">可视模式</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#什么是可视模式？"><span class="nav-number">5.1.</span> <span class="nav-text">什么是可视模式？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#选中方式"><span class="nav-number">5.2.</span> <span class="nav-text">选中方式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#选中光标到行尾的内容"><span class="nav-number">5.3.</span> <span class="nav-text">选中光标到行尾的内容</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#选中-quot-quot-里面的内容"><span class="nav-number">5.4.</span> <span class="nav-text">选中&quot; &quot;里面的内容</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#再次选择上次选中的区域"><span class="nav-number">5.5.</span> <span class="nav-text">再次选择上次选中的区域</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#切换当前光标的端点"><span class="nav-number">5.6.</span> <span class="nav-text">切换当前光标的端点</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#其他操作"><span class="nav-number">5.7.</span> <span class="nav-text">其他操作</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">HY</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+      <span class="post-meta-item-text">Site words total count&#58;</span>
+    
+    <span title="Site words total count">43.3k</span>
+  
+</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  <!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/src/love.js"></script>
+</body>
+</html>

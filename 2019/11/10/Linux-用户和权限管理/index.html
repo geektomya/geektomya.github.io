@@ -1,0 +1,1099 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+<script>
+    (function(){
+        if(''){
+            if (prompt('请输入文章密码') !== ''){
+                alert('密码错误！');
+                history.back();
+            }
+        }
+    })();
+</script>
+</script>
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.ico?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.ico?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, hy" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Linux中的用户在Linux中有三类用户他们分别是： 第一类：root（超级管理员），UID为0，这个用户有极大的权限，可以直接无视很多的限制，包括读写执行的权限。 第二类：系统用户，UID为1～499。一般是不会被登入的。 第三类：普通用户，UID范围一般是500～65534。这类用户的权限会受到基本权限的限制，也会受到来自管理员的限制。不过要注意nobody这个特殊的帐号，UID为65534">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux-用户和权限管理">
+<meta property="og:url" content="http://yoursite.com/2019/11/10/Linux-用户和权限管理/index.html">
+<meta property="og:site_name" content="YAO">
+<meta property="og:description" content="Linux中的用户在Linux中有三类用户他们分别是： 第一类：root（超级管理员），UID为0，这个用户有极大的权限，可以直接无视很多的限制，包括读写执行的权限。 第二类：系统用户，UID为1～499。一般是不会被登入的。 第三类：普通用户，UID范围一般是500～65534。这类用户的权限会受到基本权限的限制，也会受到来自管理员的限制。不过要注意nobody这个特殊的帐号，UID为65534">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-11-11T15:09:47.934Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Linux-用户和权限管理">
+<meta name="twitter:description" content="Linux中的用户在Linux中有三类用户他们分别是： 第一类：root（超级管理员），UID为0，这个用户有极大的权限，可以直接无视很多的限制，包括读写执行的权限。 第二类：系统用户，UID为1～499。一般是不会被登入的。 第三类：普通用户，UID范围一般是500～65534。这类用户的权限会受到基本权限的限制，也会受到来自管理员的限制。不过要注意nobody这个特殊的帐号，UID为65534">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/11/10/Linux-用户和权限管理/"/>
+
+
+
+
+
+  <title>Linux-用户和权限管理 | YAO</title>
+  
+
+
+
+
+
+
+
+
+  
+  
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">YAO</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Something I Like .</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/10/Linux-用户和权限管理/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="HY">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="YAO">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Linux-用户和权限管理</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-11-10T15:25:02+08:00">
+                2019-11-10
+              </time>
+            
+
+            
+
+            
+          </span>
+		  
+		  
+		  
+  <span class="post-updated">
+    &nbsp; | &nbsp; 更新于
+    <time itemprop="dateUpdated" datetime="2019-11-11T23:09:47+08:00" content="2019-11-11">
+      2019-11-11
+    </time>
+  </span>
+
+
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  4,786
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  18
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="Linux中的用户"><a href="#Linux中的用户" class="headerlink" title="Linux中的用户"></a>Linux中的用户</h3><p>在Linux中有三类用户他们分别是：</p>
+<p><strong>第一类</strong>：root（超级管理员），UID为0，这个用户有极大的权限，可以直接无视很多的限制，包括读写执行的权限。</p>
+<p><strong>第二类</strong>：系统用户，UID为1～499。一般是不会被登入的。</p>
+<p><strong>第三类</strong>：普通用户，UID范围一般是500～65534。这类用户的权限会受到基本权限的限制，也会受到来自管理员的限制。不过要注意nobody这个特殊的帐号，UID为65534，这个用户的权限会进一步的受到限制，一般用于实现来宾帐号。</p>
+<h3 id="查看用户和组信息"><a href="#查看用户和组信息" class="headerlink" title="查看用户和组信息"></a>查看用户和组信息</h3><p><strong>（1）/etc/passwd</strong> </p>
+<p>文件中保存了用户的信息，可以通过查看该文件来查看用户的信息，在该文件中，用户的信息将会有七个字段，他们分别代表了用户的各个信息。</p>
+<ul>
+<li>第一个字段：用户名</li>
+<li>第二个字段：用户是否需要密码验证（x）代表需要，不写代表不需要</li>
+<li>第三个字段：用户的id，如果重复了，就以最小的为准</li>
+<li>第四个字段：组id</li>
+<li>第五个字段：是注释</li>
+<li>第六个字段：该用户的/home目录</li>
+<li>第七个字段：用户登录的命令解释器。（/sbin/nologin意味不可登录，/bin/bash意味可以登录）</li>
+</ul>
+<p>一般来说，只有 root 用户的 uid 是为0的。如果一个普通用户的 uid 修改为0的话，那么他只要以普通用户的用户名和密码登录，系统就会自动切换到root用户。因此系统其实最主要是根据用户的id来判断用户的角色的，而不是通过改用户名。</p>
+<p><strong>（2）/etc/shadow</strong></p>
+<p>文件中保存了用户和用户密码的信息，可以通过查看该文件来获取某个用户的密码。该文件一共有九个字段，他们分别是：</p>
+<ul>
+<li>第一个字段：用户名</li>
+<li>第二个字段：通过sha-512加密(二次加密，在经过第一次加密后，第二次加入随机数再次加密)的密码</li>
+<li>第三个字段：最后一次修改密码距离1970年1月1日的天数间隔</li>
+<li>第四个字段：密码最短有效期</li>
+<li>第五个字段：密码最长有效期</li>
+<li>第六个字段：密码过期前几天进行警告</li>
+<li>第七个字段：账户过期后，被锁定的天数</li>
+<li>第八个字段：账号失效时间距离1970年1月1日的天数间隔</li>
+<li>第九个字段：未分配功能</li>
+</ul>
+<p>如果是 * 表示该用户禁用，!! 表示用户密码未初始化，如果为空，表示空密码。可以通过chage修改用户的密码策略，当然也可以通过修改shadow文件（不建议！！！）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chage [选项] 用户名</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>-m：密码可更改的最小天数。为零时代表任何时候都可以更改密码。<br>-M：密码保持有效的最大天数。<br>-w：用户密码到期前，提前收到警告信息的天数。<br>-E：帐号到期的日期。过了这天，此帐号将不可用。<br>-d：上一次更改的日期。<br>-i：停滞时期。如果一个密码已过期这些天，那么此帐号将不可用。<br>-l：例出当前的设置。由非特权用户来确定他们的密码或帐号何时过期。</p>
+</blockquote>
+<p><strong>（3）/etc/group</strong></p>
+<p>查看组信息，组信息的显示有四个字段</p>
+<ul>
+<li>第一个字段：组名</li>
+<li>第二个字段：组密码占位符  –&gt; x</li>
+<li>第三个字段：组id</li>
+<li>第四个字段：组成员</li>
+</ul>
+<p>一个用户只能有一个主要组，最多可以有31个附加组。主要组是用户创建文件时默认的所有组，附加组主要用于权限管理。不论用户属于哪个组，用户都能拥有该组的权限。</p>
+<p>特殊组wheel：</p>
+<p>在Linux中有一个特殊组wheel，wheel组就类似于一个管理员的组。在linux中，即使我们有系统管理员root的权限，也不推荐用root用户登录。一般情况下用普通用户登录就可以了，在需要root权限执行一些操作时，再su登录成为root用户。但是，任何人只要知道了root用户的密码，就都可以通过su命令来登录为root用户–这无疑为系统带来了安全隐患。所以，将普通用户加入到wheel组中，被加入的这个普通用户就成了管理员组内的用户了，然后可以修改配置文件使得只有wheel组内的用户可以切换到root用户。</p>
+<p>（<strong>4）id</strong></p>
+<p>id命令可以用来查看某个用户是否存在与系统中。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">id 用户名</span><br></pre></td></tr></table></figure>
+<h3 id="管理用户和组信息"><a href="#管理用户和组信息" class="headerlink" title="管理用户和组信息"></a>管理用户和组信息</h3><h4 id="用户管理"><a href="#用户管理" class="headerlink" title="用户管理"></a>用户管理</h4><p><strong>（1）useradd</strong></p>
+<p>通过useradd命令，我们可以为系统新建一个用户</p>
+<blockquote>
+<p>c&lt;备注&gt; 　加上备注文字。备注文字会保存在passwd的备注栏位中。</p>
+<p>-d&lt;登入目录&gt; 　指定用户登入时的起始目录。</p>
+<p>-D 　变更预设值．</p>
+<p>-e&lt;有效期限&gt; 　指定帐号的有效期限。</p>
+<p>-f&lt;缓冲天数&gt; 　指定在密码过期后多少天即关闭该帐号。</p>
+<p>-g&lt;群组&gt; 　指定用户所属的群组。</p>
+<p>-G&lt;群组&gt; 　指定用户所属的附加群组。</p>
+<p>-m 　自动建立用户的登入目录。</p>
+<p>-M 　不要自动建立用户的登入目录。</p>
+<p>-n 　取消建立以用户名称为名的群组．</p>
+<p>-r 　建立系统帐号。</p>
+<p>-s<shell>　 　指定用户登入后所使用的shell。</shell></p>
+<p>-u<uid> 　指定用户ID。</uid></p>
+</blockquote>
+<p>新建用户的过程中，系统做了什么？</p>
+<p><em>useradd只是创建了一个用户名，如 （useradd +用户名 ），它并没有在/home目录下创建同名文件夹，也没有创建密码，除了添加一个新用户之外什么都没有。因此利用这个用户登录系统，是登录不了的，为了避免这样的情况出现，可以用 （useradd -m +用户名）的方式创建，它会在/home目录下创建同名文件夹，然后利用（ passwd + 用户名）为指定的用户名设置密码。</em></p>
+<p>网上很多人都说useradd 用户后，会生成自己的家目录什么的，但是我在自己的ubuntu上发现并没有，用这个命令创建一个用户后，还有很多需要自己去完善的东西，才能真正的使用这个用户。</p>
+<p><strong>（2）adduser</strong></p>
+<p>adduser，这个命令实际是一个perl脚本，是useradd等类似底层命令的更友好的前端，它会用交互性的方式建立新用户，使用它可以指定新用户的家目录，登录密码，是否加密主目录等等，它会：</p>
+<blockquote>
+<p>1：建立一个新目录作为家目录 </p>
+<p>2：建立同名新组 </p>
+<p>3：把用户的主要组设为该组(除非命令选项覆盖以上默认动作，比如–disall-homdirecry之类) </p>
+<p>4：从/etc/SKEL目录下拷贝文件到家目录，完成初始化 </p>
+<p>5：建立新用户的密码 </p>
+<p>6：如果其存在的话，还会执行一个脚本。</p>
+</blockquote>
+<p>用户创建时，默认的属性（比如UID，GID，是否创建家目录，创建邮箱等）都是通过/etc/login.defs文件控制的，修改此文件的属性，会影响以后创建的所有用户。也可以创建用户时指定参数修改，这样只对当前创建用户有效</p>
+<p>另外，adduser的可用参数与上面的useradd一致。</p>
+<p><strong>总结：新建用户，系统应该做得事。</strong></p>
+<ol>
+<li>新建用户时，系统会将 /etc/skel 中的目录及文件拷贝到新建用户的家目录中</li>
+<li>在 /var/spool/mail 中，新建用户名的邮箱 </li>
+<li>在 /etc下的 passwd 、shadow 、group文件中，增加用户信息</li>
+</ol>
+<p><strong>（3）userdel</strong></p>
+<p>通过userdel可以删除系统中的用户。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">userdel  -r  用户名  #删除用户一定记得加 -r 参数 ！！</span><br></pre></td></tr></table></figure>
+<ul>
+<li>不加 -r 参数，只删除 passwd、shadow 和 group 文件中的用户信息，/home 目录下的文件不删除，/var/spool/mail/ 下的文件不删除</li>
+<li>加  -r 参数，删除 passwd、shadow 和 group 文件中的用户信息，同时删除用户的家目录和邮箱</li>
+</ul>
+<p><strong>（4）passwd</strong></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">passwd  add   #给a用户设置密码</span><br></pre></td></tr></table></figure>
+<p><strong>（5）usermod</strong></p>
+<p>usermod可用来修改用户帐号的各项设定。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">usermod [-LU][-c &lt;备注&gt;][-d &lt;登入目录&gt;][-e &lt;有效期限&gt;][-f &lt;缓冲天数&gt;][-g &lt;群组&gt;][-G &lt;群组&gt;][-l &lt;帐号名称&gt;][-s &lt;shell&gt;][-u &lt;uid&gt;][用户帐号]</span><br></pre></td></tr></table></figure>
+<p>可用参数</p>
+<blockquote>
+<p>-c&lt;备注&gt; 　修改用户帐号的备注文字。</p>
+<p>-d登入目录&gt; 　修改用户登入时的目录。</p>
+<p>-e&lt;有效期限&gt; 　修改帐号的有效期限。</p>
+<p>-f&lt;缓冲天数&gt; 　修改在密码过期后多少天即关闭该帐号。</p>
+<p>-g&lt;群组&gt; 　修改用户所属的群组。</p>
+<p>-G&lt;群组&gt; 　修改用户所属的附加群组。</p>
+<p>-l&lt;帐号名称&gt; 　修改用户帐号名称。</p>
+<p>-L 　锁定用户密码，使密码无效。</p>
+<p>-s<shell> 　修改用户登入后所使用的shell。</shell></p>
+<p>-u<uid> 　修改用户ID。</uid></p>
+<p>-U 　解除密码锁定。</p>
+<p>-a 　默认情况下，当用户已经存在附加组时，再添加附加组则会把之前的附加组给替换了，加 -a 参数，则不替换原来的附加组，意味着该用户可以有多个附加组。</p>
+</blockquote>
+<p>虽然 usermod 和 passwd 这两个命令都可以锁定和解锁用户，但是还是有区别的。区别之一就是passwd命令操作完后会有提示。还有一个区别就是 passwd 的权限比 usermod 大，使用 usermod 锁定的用户可以用 passwd 来解锁，但是使用 passwd 锁定的用户不能用 usermod 来解锁</p>
+<h4 id="组管理"><a href="#组管理" class="headerlink" title="组管理"></a>组管理</h4><p>（<strong>1）groupadd</strong></p>
+<p>groupadd 命令用于创建一个新的工作组，新工作组的信息将被添加到系统文件中。</p>
+<p>相关文件:</p>
+<ul>
+<li>/etc/group 组账户信息。</li>
+<li>/etc/gshadow 安全组账户信息。</li>
+<li>/etc/login.defs Shadow密码套件配置。</li>
+</ul>
+<p>用法</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">groupadd [-g gid [-o]] [-r] [-f] group</span><br></pre></td></tr></table></figure>
+<p>可用参数</p>
+<blockquote>
+<p>-g：指定新建工作组的 id；</p>
+<p>-r：创建系统工作组，系统工作组的组ID小于 500；</p>
+<p>-K：覆盖配置文件 “/ect/login.defs”；</p>
+<p>-o：允许添加组 ID 号不唯一的工作组。</p>
+<p>-f,–force: 如果指定的组已经存在，此选项将失明了仅以成功状态退出。当与 -g 一起使用，并且指定的GID_MIN已经存在时，选择另一个唯一的GID（即-g关闭）。</p>
+</blockquote>
+<p> <strong>（2）groupdel</strong></p>
+<p>需要从系统上删除群组时，可用groupdel(group delete)指令来完成这项工作。倘若该群组中仍包括某些用户，则必须先删除这些用户后，方能删除群组。</p>
+<p>用法</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">groupdel [群组名称]</span><br></pre></td></tr></table></figure>
+<p>可选参数</p>
+<blockquote>
+<p>  -r , –remove                            删除主目录和邮件池</p>
+</blockquote>
+<p><strong>（3）groupmod</strong></p>
+<p>需要更改群组的识别码或名称时，可用groupmod指令来完成这项工作。</p>
+<p>用法</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">groupmod [-g &lt;群组识别码&gt; &lt;-o&gt;][-n &lt;新群组名称&gt;][群组名称]</span><br></pre></td></tr></table></figure>
+<p>可选参数</p>
+<blockquote>
+<p>-g &lt;群组识别码&gt; 　设置欲使用的群id。</p>
+<p>-o 　重复使用群组id。</p>
+<p>-n &lt;新群组名称&gt; 　设置欲使用的群组名称。</p>
+</blockquote>
+<p><strong>（4）groupmems</strong> </p>
+<p>更改和查看组成员（只有root可以执行）</p>
+<p>用法</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">groupmems [options] [-g GROUPNAME]</span><br></pre></td></tr></table></figure>
+<p>可选参数</p>
+<blockquote>
+<p>-a  用户名    将一个用户添加到组成员列表</p>
+<p>-d  用户名    从组成员列表中删除用户</p>
+<p>-g  组  名    超级用户可以指定修改哪个组的组成员列表</p>
+<p>-l -g  组名   列出组成员</p>
+<p>-p -g  组名   从组成员列表中删除所有用户</p>
+</blockquote>
+<h3 id="what’s-sudo-and-su"><a href="#what’s-sudo-and-su" class="headerlink" title="what’s sudo and su"></a>what’s sudo and su</h3><h4 id="sudo"><a href="#sudo" class="headerlink" title="sudo"></a>sudo</h4><p>sudo是一种权限管理机制，依赖于/etc/sudoers，其定义了授权给哪个用户可以以管理员的身份能够执行什么样的管理命令；</p>
+<p>格式：sudo -u USERNAME COMMAND</p>
+<p>默认情况下，系统只有root用户可以执行sudo命令。需要root用户通过使用visudo命令编辑sudo的配置文件/etc/sudoers，才可以授权其他普通用户执行sudo命令。</p>
+<h4 id="su"><a href="#su" class="headerlink" title="su"></a>su</h4><p>su为switch user，即切换用户的简写。</p>
+<p>格式为两种：</p>
+<p>su -l USERNAME（-l为login，即登陆的简写）</p>
+<p>su USERNAME</p>
+<p>如果不指定USERNAME（用户名），默认即为root，所以切换到root的身份的命令即为：su -root或su -，su root 或su。</p>
+<p>su USERNAME，与su - USERNAME的不同之处如下：</p>
+<p>su - USERNAME切换用户后，同时切换到新用户的工作环境中。</p>
+<p>su USERNAME切换用户后，不改变原用户的工作目录，及其他环境变量目录。</p>
+<h4 id="su-1"><a href="#su-1" class="headerlink" title="su -"></a>su -</h4><p>su -，su -l或su –login 命令改变身份时，也同时变更工作目录，以及HOME，SHELL，USER，LOGNAME。此外，也会变更PATH变量。用su -命令则默认转换成成root用户了。</p>
+<p>而不带参数的“su命令”不会改变当前工作目录以及HOME,SHELL,USER,LOGNAME。只是拥有了root的权限而已。</p>
+<p>su -使用root的密码,而sudo su使用用户密码</p>
+<h3 id="文件与目录的权限"><a href="#文件与目录的权限" class="headerlink" title="文件与目录的权限"></a>文件与目录的权限</h3><p>在Linux中有严格的权限等级，不同的用户可能对与同一文件拥有不同权限。那么怎么查看文件的权限呢？我们一般可以使用<code>ls -l</code>查看当前目录下的各个文件的权限。</p>
+<p>ls -l 命令的输出结果类似如下：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">drwxr-xr-x 2 huny huny   4096 11月 10 20:01 Demo</span><br><span class="line">drwxr-xr-x 3 huny huny   4096 11月 10 14:30 GpssWorld</span><br><span class="line">-r--r--rw- 1 huny huny      0 11月  7 21:13 test</span><br><span class="line">-rw-r--r-- 1 huny huny   1080 11月  6 20:52 vimTest.txt</span><br><span class="line">drwxr-xr-x 3 huny huny   4096 11月  5 09:29 安卓实验课</span><br><span class="line">-rw-r--r-- 1 huny huny 178333 11月  7 21:35 深度截图_20191107213501.png</span><br></pre></td></tr></table></figure>
+<p>在这个输出中，前面的最前面的一个 <code>-</code>和 <code>d</code>代表文件的不同类型，后面的<code>rwxr-xr-x</code>这种形式的表示文件的权限情况。<code>rwxr-xr-x</code>这里面其实是九个字符，前三个代表了文件属主的权限，中间三个代表了文件属组的权限，后面三个代表了其他用户的权限。然后后面的数字代表了文件的链接数。接着的huny huny，其中的第一个是文件所属的用户，第二个是所属的组。接着是文件的大小，时间，和文件名。</p>
+<h4 id="文件类型"><a href="#文件类型" class="headerlink" title="文件类型"></a>文件类型</h4><p>在Linux中一共有七中文件类型：</p>
+<ul>
+<li>-：普通文件</li>
+<li>d：目录文件</li>
+<li>b：块设备文件</li>
+<li>c：字符特殊文件</li>
+<li>l：符号连接（类似与windows的快捷方式）</li>
+<li>f：命名管道</li>
+<li>s：套接字文件</li>
+</ul>
+<p>知道什么符号代表什么文件过后，我们就可以去看该文件的权限类型了（同意权限针对不同的文件类型表达的意思不一样。）</p>
+<h4 id="文件权限"><a href="#文件权限" class="headerlink" title="文件权限"></a>文件权限</h4><p>Linux中的权限可以用字符来表示，也可以用数字来表示</p>
+<table>
+<thead>
+<tr>
+<th>权限</th>
+<th>对应数字</th>
+<th>意义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>r</td>
+<td>4</td>
+<td>可读</td>
+</tr>
+<tr>
+<td>w</td>
+<td>2</td>
+<td>可写</td>
+</tr>
+<tr>
+<td>x</td>
+<td>1</td>
+<td>可执行</td>
+</tr>
+</tbody>
+</table>
+<p>对目录来说</p>
+<blockquote>
+<p>r：可以查询目录下的文件（ls  ll命令）</p>
+<p>w：具有修改目录结构的权限，比如新建文件和目录，删除此目录下文件和目录（cp mv touch rm命令）</p>
+<p>x：目录有执行权限但是不能运行，可以进入目录（cd命令）</p>
+</blockquote>
+<p> 对文件来说最高权限是x，对于目录来说最高权限是w，一般给目录赋予权限0 ，5（rx），7（rxw），赋予4 ，1， 6都是没有意义的。对于文件能否删除，首先要对目录具有执行权限，同时对文件也具有执行权限。</p>
+<h3 id="如何修改文件权限"><a href="#如何修改文件权限" class="headerlink" title="如何修改文件权限"></a>如何修改文件权限</h3><h4 id="chmod"><a href="#chmod" class="headerlink" title="chmod"></a>chmod</h4><p>chmod命令可以用来变更文件或目录的权限。</p>
+<p>用法：<code>chmod [options] mode files</code></p>
+<blockquote>
+<p>mode : 权限设定字串，格式如下 :</p>
+<p><code>[ugoa...][[+-=][rwxX]...][,...]</code></p>
+</blockquote>
+<blockquote>
+<p>其中：</p>
+<ul>
+<li>u 表示该文件的拥有者，g 表示与该文件的拥有者属于同一个群体(group)者，o 表示其他以外的人，a 表示这三者皆是。u用户 g组 o其它  a 所有用户(默认)</li>
+<li>+ 表示增加权限、- 表示取消权限、= 表示唯一设定权限。</li>
+<li>r 表示可读取，w 表示可写入，x 表示可执行，X 表示只有当该文件是个子目录或者该文件已经被设定过为可执行。</li>
+</ul>
+</blockquote>
+<blockquote>
+<p>其他参数说明：</p>
+<ul>
+<li>-c : 若该文件权限确实已经更改，才显示其更改动作（-c，–changes只输出被改变文件的信息）</li>
+<li>-f : 若该文件权限无法被更改也不要显示错误讯息（–silent，–quiet，当chmod不能改变文件模式时，不通知文件的用户）</li>
+<li>-v : 显示权限变更的详细资料</li>
+<li>-R : 对目前目录下的所有文件与子目录进行相同的权限变更(即以递回的方式逐个变更)–recursive可递归遍历子目录，把修改应到目录下所有文件和子目录</li>
+<li>–help : 显示辅助说明、输出帮助信息。</li>
+<li>–version : 显示版本</li>
+<li>–reference=filename参照filename的权限来设置权限</li>
+<li>-v，–verbose无论修改是否成功，输出每个文件的信息</li>
+</ul>
+</blockquote>
+<p>例子：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">chmod u+r 文件名          #给属主加读权限</span><br><span class="line">chmod a+x 文件名          #给所有用户和其他人加执行权限</span><br><span class="line">chmod g-w file1          #file1的属组去掉写权限)</span><br><span class="line">chmod o=x 文件名          #其他用户只有执行权限</span><br><span class="line">chmod a=- 文件名          #去除所有用户的权限</span><br><span class="line">chmod ug=rw,o=r file      #给属主属组读写权限，给其他用户读权限</span><br><span class="line">chmod 644 file                #给属组读写权限，其他用户和属组为读权限)</span><br></pre></td></tr></table></figure>
+<h4 id="chown"><a href="#chown" class="headerlink" title="chown"></a>chown</h4><p>用来改变文件或目录的所有者和所属用户组</p>
+<p>用法：<code>chown [-cfhvR] [--help] [--version] user[:group] file...</code></p>
+<blockquote>
+<p>参数说明：</p>
+<ul>
+<li>user : 新的文件拥有者的使用者 ID</li>
+<li>group : 新的文件拥有者的使用者组(group)</li>
+<li>-c : 显示更改的部分的信息</li>
+<li>-f : 忽略错误信息</li>
+<li>-h :修复符号链接</li>
+<li>-v : 显示详细的处理信息</li>
+<li>-R : 处理指定目录以及其子目录下的所有文件</li>
+<li>–help : 显示辅助说明</li>
+<li>–version : 显示版本</li>
+</ul>
+</blockquote>
+<p>例子：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chown root:root  vimTest.txt      #将vimTest.java的属主和属组改为root：root</span><br></pre></td></tr></table></figure>
+<h4 id="chgrp"><a href="#chgrp" class="headerlink" title="chgrp"></a>chgrp</h4><p>可以单独更改属组</p>
+<p>用法：<code>chgrp [-cfhRv][--help][--version][所属群组][文件或目录...] 或 chgrp [-cfhRv][--help][--reference=&lt;参考文件或目录&gt;][--version][文件或目录...]</code></p>
+<blockquote>
+<p>参数说明：</p>
+<p>　-c或–changes 效果类似”-v”参数，但仅回报更改的部分。</p>
+<p>　　-f或–quiet或–silent 　不显示错误信息。</p>
+<p>　　-h或–no-dereference 　只对符号连接的文件作修改，而不更动其他任何相关文件。</p>
+<p>　　-R或–recursive 　递归处理，将指定目录下的所有文件及子目录一并处理。</p>
+<p>　　-v或–verbose 　显示指令执行过程。</p>
+<p>　　–help 　在线帮助。</p>
+<p>　　–reference=&lt;参考文件或目录&gt; 　把指定文件或目录的所属群组全部设成和参考文件或目录的所属群组相同。</p>
+<p>　　–version 　显示版本信息。</p>
+</blockquote>
+<p>例子：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chgrp root vimTest.txt          #将vimTest.java的属组改为root</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/11/06/Linux-vim的命令/" rel="next" title="Linux-vim的命令">
+                <i class="fa fa-chevron-left"></i> Linux-vim的命令
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  <div class="post-spread">
+      
+        
+                                <div class="-mob-share-ui-button -mob-share-open">分享</div>
+                                <div class="-mob-share-ui" style="display: none">
+                                    <ul class="-mob-share-list">
+                                        <li class="-mob-share-weibo"><p>新浪微博</p></li>
+                                        <li class="-mob-share-tencentweibo"><p>腾讯微博</p></li>
+                                        <li class="-mob-share-qzone"><p>QQ空间</p></li>
+                                        <li class="-mob-share-qq"><p>QQ好友</p></li>
+                                        <li class="-mob-share-weixin"><p>微信</p></li>
+                                        <li class="-mob-share-douban"><p>豆瓣</p></li>
+                                    </ul>
+                                    <div class="-mob-share-close">取消</div>
+                                </div>
+                                <div class="-mob-share-ui-bg"></div>
+                                <script id="-mob-share" src="http://f1.webshare.mob.com/code/mob-share.js?appkey=262488aa81530"></script>
+
+								
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.png"
+                alt="HY" />
+            
+              <p class="site-author-name" itemprop="name">HY</p>
+              <p class="site-description motion-element" itemprop="description">A man is only as good as what he loves.</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">19</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">17</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/yqh74110" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:yaoqiuhong@outlook.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=298 height=52 src="//music.163.com/outchain/player?type=2&id=1334259177&auto=0&height=32"></iframe>		
+<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=298 height=52 src="//music.163.com/outchain/player?type=2&id=436147067&auto=0&height=32"></iframe>	  
+<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=298 height=52 src="//music.163.com/outchain/player?type=2&id=32431822&auto=0&height=32"></iframe>
+
+          
+
+        </div>
+		
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Linux中的用户"><span class="nav-number">1.</span> <span class="nav-text">Linux中的用户</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#查看用户和组信息"><span class="nav-number">2.</span> <span class="nav-text">查看用户和组信息</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#管理用户和组信息"><span class="nav-number">3.</span> <span class="nav-text">管理用户和组信息</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#用户管理"><span class="nav-number">3.1.</span> <span class="nav-text">用户管理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#组管理"><span class="nav-number">3.2.</span> <span class="nav-text">组管理</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#what’s-sudo-and-su"><span class="nav-number">4.</span> <span class="nav-text">what’s sudo and su</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#sudo"><span class="nav-number">4.1.</span> <span class="nav-text">sudo</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#su"><span class="nav-number">4.2.</span> <span class="nav-text">su</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#su-1"><span class="nav-number">4.3.</span> <span class="nav-text">su -</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#文件与目录的权限"><span class="nav-number">5.</span> <span class="nav-text">文件与目录的权限</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#文件类型"><span class="nav-number">5.1.</span> <span class="nav-text">文件类型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#文件权限"><span class="nav-number">5.2.</span> <span class="nav-text">文件权限</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#如何修改文件权限"><span class="nav-number">6.</span> <span class="nav-text">如何修改文件权限</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#chmod"><span class="nav-number">6.1.</span> <span class="nav-text">chmod</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#chown"><span class="nav-number">6.2.</span> <span class="nav-text">chown</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#chgrp"><span class="nav-number">6.3.</span> <span class="nav-text">chgrp</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">HY</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+      <span class="post-meta-item-text">Site words total count&#58;</span>
+    
+    <span title="Site words total count">43.3k</span>
+  
+</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  <!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/src/love.js"></script>
+</body>
+</html>
