@@ -1,0 +1,914 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+<script>
+    (function(){
+        if(''){
+            if (prompt('请输入文章密码') !== ''){
+                alert('密码错误！');
+                history.back();
+            }
+        }
+    })();
+</script>
+</script>
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.ico?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.ico?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, hy" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="进程是个什么玩意？ 在Linux中，每一个执行的程序都称为一个进程。每一个进程都分配一个ID号。 没一个进程，都会对应一个父进程，而这个父进程可以复制多个子进程。从这一点其实还可以推测出，进程在Linux中是树型结构。 每一个进程都可能以两种方式存在的。前台与后台，所谓前台进程就是用户目前屏幕上可以进行操作的。后台进程则是实际在操作，但由于屏幕上无法看到的进程，通常使用后台的方式执行。 一般系统的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="linux-进程管理（一）">
+<meta property="og:url" content="http://yoursite.com/2019/11/14/linux-进程管理（一）/index.html">
+<meta property="og:site_name" content="YAO">
+<meta property="og:description" content="进程是个什么玩意？ 在Linux中，每一个执行的程序都称为一个进程。每一个进程都分配一个ID号。 没一个进程，都会对应一个父进程，而这个父进程可以复制多个子进程。从这一点其实还可以推测出，进程在Linux中是树型结构。 每一个进程都可能以两种方式存在的。前台与后台，所谓前台进程就是用户目前屏幕上可以进行操作的。后台进程则是实际在操作，但由于屏幕上无法看到的进程，通常使用后台的方式执行。 一般系统的">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-11-15T14:30:59.254Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="linux-进程管理（一）">
+<meta name="twitter:description" content="进程是个什么玩意？ 在Linux中，每一个执行的程序都称为一个进程。每一个进程都分配一个ID号。 没一个进程，都会对应一个父进程，而这个父进程可以复制多个子进程。从这一点其实还可以推测出，进程在Linux中是树型结构。 每一个进程都可能以两种方式存在的。前台与后台，所谓前台进程就是用户目前屏幕上可以进行操作的。后台进程则是实际在操作，但由于屏幕上无法看到的进程，通常使用后台的方式执行。 一般系统的">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/11/14/linux-进程管理（一）/"/>
+
+
+
+
+
+  <title>linux-进程管理（一） | YAO</title>
+  
+
+
+
+
+
+
+
+
+  
+  
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">YAO</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Something I Like .</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/14/linux-进程管理（一）/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="HY">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="YAO">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">linux-进程管理（一）</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-11-14T22:15:35+08:00">
+                2019-11-14
+              </time>
+            
+
+            
+
+            
+          </span>
+		  
+		  
+		  
+  <span class="post-updated">
+    &nbsp; | &nbsp; 更新于
+    <time itemprop="dateUpdated" datetime="2019-11-15T22:30:59+08:00" content="2019-11-15">
+      2019-11-15
+    </time>
+  </span>
+
+
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  2,289
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  10
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="进程是个什么玩意？"><a href="#进程是个什么玩意？" class="headerlink" title="进程是个什么玩意？"></a>进程是个什么玩意？</h3><ol>
+<li>在Linux中，每一个执行的程序都称为一个进程。每一个进程都分配一个ID号。</li>
+<li>没一个进程，都会对应一个父进程，而这个父进程可以复制多个子进程。从这一点其实还可以推测出，进程在Linux中是树型结构。</li>
+<li>每一个进程都可能以两种方式存在的。前台与后台，所谓前台进程就是用户目前屏幕上可以进行操作的。后台进程则是实际在操作，但由于屏幕上无法看到的进程，通常使用后台的方式执行。</li>
+<li>一般系统的服务都是后台进程的方式存在，而且会常驻在系统中，直到关机才结束。</li>
+</ol>
+<a id="more"></a>
+<h3 id="如何查看进程"><a href="#如何查看进程" class="headerlink" title="如何查看进程"></a>如何查看进程</h3><p>一般我们会使用三条命令来查看进程，分别是<code>ps</code>，<code>pstree</code>，<code>top</code>。</p>
+<p>其中ps命令可以查看各种进程信息，pstree查看进程树的情况，然后top的作用比较强大，可以查看各个进程资源的占用状况。</p>
+<h4 id="ps"><a href="#ps" class="headerlink" title="ps"></a>ps</h4><p>用法 <code>ps -选项</code></p>
+<p>选项说明</p>
+<blockquote>
+<p>-a：显示当前终端的所有进程信息</p>
+<p>-u：以用户的形式显示进程信息</p>
+<p>-x：显示后台进程运行的参数</p>
+<p>-e：显示所有进程</p>
+<p>-f：全格式</p>
+</blockquote>
+<p>我们以命令 <code>ps -ef</code>的输出的部分例子作为分析</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">huny@huny-PC:~$ ps -ef  #以全格式显示当前所有的进程</span><br><span class="line">UID        PID  PPID  C STIME TTY          TIME CMD</span><br><span class="line">root         9     2  0 17:55 ?        00:00:00 [rcu_bh]</span><br><span class="line">root      5431     1  0 17:58 ?        00:00:00 /usr/lib/upower/upowerd</span><br><span class="line">root     11470  3131  5 18:54 tty1     00:06:05 /usr/lib/xorg/Xorg -background none :0 -seat seat0 -auth /var/run/lightdm/root/:0 -nolisten tcp vt1 -novtswitch</span><br><span class="line">root     11544  3131  0 18:54 ?        00:00:00 lightdm --session-child 13 22</span><br><span class="line">huny     11632     1  0 18:54 ?        00:00:00 /lib/systemd/systemd --user</span><br><span class="line">huny     11633 11632  0 18:54 ?        00:00:00 (sd-pam)</span><br><span class="line">huny     11658     1  0 18:54 ?        00:00:00 /usr/bin/dbus-daemon --fork --print-pid 5 --print-address 7 --session</span><br></pre></td></tr></table></figure>
+<p><strong>UID</strong>是用户名（执行改线程的用户）。</p>
+<p><strong>PID</strong>是该线程在系统中的唯一标识。</p>
+<p><strong>PPID</strong>是该进程的父进程I的ID。</p>
+<p><strong>C</strong>是CPU用于计算执行优先级的因子，数值越大，表明进程是CPU密集型运算， 执行优先级会降低；数值越小，表明进程是I/O密集型运算，执行优先级会提高。</p>
+<p><strong>STIME</strong>是进程启动的时间。</p>
+<p><strong>TIME</strong>是累积的 CPU 时间（user+system）</p>
+<p>C<strong>MD</strong>是启动进程所用的命令和参数。</p>
+<h4 id="pstree"><a href="#pstree" class="headerlink" title="pstree"></a>pstree</h4><p>如果需要查看进程树的状况的时候，我们就可以使用pstree命令。下面我截取了部分我电脑上输入pstree的信息。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">huny@huny-PC:~$ pstree</span><br><span class="line">systemd─┬─ModemManager─┬─&#123;gdbus&#125;</span><br><span class="line">        │              └─&#123;gmain&#125;</span><br><span class="line">        ├─NetworkManager─┬─dhclient</span><br><span class="line">        │                ├─&#123;gdbus&#125;</span><br><span class="line">        │                └─&#123;gmain&#125;</span><br><span class="line">        ├─QQProtect.exe───15*[&#123;QQProtect.exe&#125;]</span><br><span class="line">        ├─TIM.exe───55*[&#123;TIM.exe&#125;]</span><br><span class="line">        ├─accounts-daemon─┬─&#123;gdbus&#125;</span><br><span class="line">        │                 └─&#123;gmain&#125;</span><br><span class="line">        ├─acpid</span><br><span class="line">        ├─at-spi-bus-laun─┬─dbus-daemon</span><br><span class="line">        │                 ├─&#123;dconf worker&#125;</span><br><span class="line">        │                 ├─&#123;gdbus&#125;</span><br><span class="line">        │                 └─&#123;gmain&#125;</span><br><span class="line">        ├─at-spi2-registr─┬─&#123;gdbus&#125;</span><br><span class="line">        │                 └─&#123;gmain&#125;</span><br><span class="line">        ├─bamfdaemon-dbus───bamfdaemon─┬─&#123;gdbus&#125;</span><br><span class="line">        │                              └─&#123;gmain&#125;</span><br><span class="line">        ├─bluetoothd</span><br><span class="line">        ├─cron</span><br><span class="line">        ├─cupsd</span><br><span class="line">        ├─4*[dbus-daemon]</span><br><span class="line">        ├─2*[dbus-launch]</span><br><span class="line">        ├─dconf-service─┬─&#123;gdbus&#125;</span><br><span class="line">        │               └─&#123;gmain&#125;</span><br><span class="line">        ├─dde-control-cen─┬─&#123;QDBusConnection&#125;</span><br><span class="line">        │                 ├─&#123;QThread&#125;</span><br><span class="line">        │                 ├─&#123;QXcbEventReader&#125;</span><br><span class="line">        │                 ├─&#123;Qt bearer threa&#125;</span><br><span class="line">        │                 ├─&#123;dconf worker&#125;</span><br><span class="line">        │                 ├─&#123;disk_cache:0&#125;</span><br><span class="line">        │                 ├─&#123;gdbus&#125;</span><br><span class="line">        │                 └─&#123;gmain&#125;</span><br><span class="line">        ├─dde-file-manage─┬─&#123;QDBusConnection&#125;</span><br><span class="line">        │                 └─&#123;gmain&#125;</span><br></pre></td></tr></table></figure>
+<p>其实可以从这个输出中（自己输出看一下整体的结构）看出，系统中的所有的进程的父进程都是systemd。</p>
+<p>如果觉得在终端上显示观看不太方便，可以使用输出重定向将结果输出到文件。</p>
+<p>例如<code>pstree &gt; out.txt</code>这样就可以在当前目录下查看out.txt来观察pstree命令的结果。</p>
+<h4 id="top"><a href="#top" class="headerlink" title="top"></a>top</h4><p>top命令真的十分的强大，当我们需要查看系统中各个进程的资源占用情况，那么使用这个命令绝对是会让我们欣喜的。</p>
+<p>直接在终端输入<code>ps</code>命令进入top视图（部分输出如下）。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">top - 21:09:13 up  3:13,  1 user,  load average: 1.44, 1.60, 1.52</span><br><span class="line">Tasks: 296 total,   2 running, 221 sleeping,   0 stopped,   1 zombie</span><br><span class="line"><span class="meta">%</span>Cpu(s):  8.5 us,  5.1 sy,  0.0 ni, 86.1 id,  0.0 wa,  0.0 hi,  0.3 si,  0.0 st</span><br><span class="line">KiB Mem : 16292804 total,  9736652 free,  2827132 used,  3729020 buff/cache</span><br><span class="line">KiB Swap:  8388604 total,  8388604 free,        0 used. 12489240 avail Mem </span><br><span class="line"></span><br><span class="line">  PID USER      PR  NI    VIRT    RES    SHR S  %CPU %MEM     TIME+ COMMAND                     </span><br><span class="line">14229 huny      20   0 2165636 287516  63520 S  16.3  1.8  15:45.71 TIM.exe                     </span><br><span class="line">13905 huny      20   0 5900760 269560 164456 S  14.0  1.7  16:53.91 netease-cloud-m             </span><br><span class="line">14054 huny      20   0    9380   6732   1980 S  11.6  0.0   9:55.58 wineserver.real             </span><br><span class="line">11470 root      20   0  587440 166508 134444 S   8.5  1.0   7:22.55 Xorg                         </span><br><span class="line">11809 huny      20   0 3468336 103444  76484 S   8.5  0.6   7:10.48 kwin_x11                     </span><br><span class="line">14531 huny      20   0  976664 229780 135208 S   3.9  1.4   9:22.44 chrome                       </span><br><span class="line">15352 huny      20   0 1568616 135040  89420 S   3.9  0.8   5:47.90 Typora                     16832 huny      20   0 1849376 175768  82316 S   3.9  1.1   3:34.45 Typora                       </span><br><span class="line">22383 huny      20   0   46812   3876   3180 R   0.8  0.0   0:01.00 top                       </span><br><span class="line">    1 root      20   0  204896   7168   5208 S   0.0  0.0   0:02.95 systemd                     </span><br><span class="line">    2 root      20   0       0      0      0 S   0.0  0.0   0:00.03 kthreadd                 </span><br><span class="line">    4 root       0 -20       0      0      0 I   0.0  0.0   0:00.00 kworker/0:0H        </span><br><span class="line">    6 root       0 -20       0      0      0 I   0.0  0.0   0:00.00 mm_percpu_wq                 </span><br><span class="line">    7 root      20   0       0      0      0 S   0.0  0.0   0:00.45 ksoftirqd/0                </span><br><span class="line">    8 root      20   0       0      0      0 I   0.0  0.0   0:22.53 rcu_sched</span><br></pre></td></tr></table></figure>
+<p><strong>第一行</strong></p>
+<p>系统的一些基本信息</p>
+<ul>
+<li>21:09:13：当前系统时间</li>
+<li>3:13：系统已经开机3小时13分钟了</li>
+<li>1 user：当前只有一个用户登录</li>
+<li>load average：后面三个数分别是1分钟、5分钟、15分钟的负载情况。</li>
+<li>load average数据是每隔5秒钟检查一次活跃的进程数，然后按特定算法计算出的数值。</li>
+</ul>
+<p><strong>第二行</strong></p>
+<p>系统的进程信息</p>
+<ul>
+<li>total表示总共的进程数</li>
+<li>running表示处于运行中的进程数</li>
+<li>sleep标识休眠中的进程数，stopped是已经停止了的进程</li>
+<li>zombie是僵尸进程（父进程已经退出,而该进程dead之后没有进程接受）的数目。</li>
+</ul>
+<p><strong>第三行</strong></p>
+<p>cpu的状态信息</p>
+<ul>
+<li>us：用户空间占用CPU的百分比</li>
+<li>sy：内核空间占用CPU的百分比。</li>
+<li>ni：改变过优先级的进程占用CPU的百分比 </li>
+<li>id：空闲CPU百分比 </li>
+<li>wa：IO等待占用CPU的百分比</li>
+<li>hi：硬中断（Hardware IRQ）占用CPU的百分比</li>
+<li>si：软中断（Software Interrupts）占用CPU的百分比</li>
+</ul>
+<p>什么是硬中断/软中断？</p>
+<p><strong>硬中断</strong></p>
+<p>由与系统相连的外设(比如网卡、硬盘)自动产生的。主要是用来通知操作系统系统外设状态的变化。比如当网卡收到数据包的时候，就会发出一个中断。我们通常所说的中断指的是硬中断(hardirq)。</p>
+<p><strong>软中断</strong></p>
+<p>为了满足实时系统的要求，中断处理应该是越快越好。linux为了实现这个特点，当中断发生的时候，硬中断处理那些短时间</p>
+<p>就可以完成的工作，而将那些处理事件比较长的工作，放到中断之后来完成，也就是软中断(softirq)来完成。</p>
+<p>这里的CPU的使用比率貌似和windows概念不同，涉及到用户态和系统态，有空去了解了解。</p>
+<p><strong>第四行</strong></p>
+<p>内存的相关信息</p>
+<ul>
+<li>total：物理内存总量</li>
+<li>used：使用中的内存总量</li>
+<li>free：空闲内存总量</li>
+<li>buffers：缓存的内存量 </li>
+</ul>
+<p><strong>第五行</strong></p>
+<p>交换分区的信息</p>
+<ul>
+<li>total：交换区总量</li>
+<li>used：使用的交换区总量</li>
+<li>free：空闲交换区总量</li>
+<li>cached：缓冲的交换区总量</li>
+</ul>
+<p>这里需要注意的一点是：</p>
+<blockquote>
+<p>第四行中使用中的内存总量（used）指的是现在系统内核控制的内存数，空闲内存总量（free）是内核还未纳入其管控范围的数量。纳入内核管理的内存不见得都在使用中，还包括过去使用过的现在可以被重复利用的内存，内核并不把这些可被重新使用的内存交还到free中去，因此在Linux上free内存会越来越少，但不用为此担心。</p>
+<p>如果出于习惯去计算可用内存数，这里有个近似的计算公式：第四行的free + 第四行的buffers + 第五行的cached。</p>
+<p>对于内存监控，在top里我们要时刻监控第五行swap交换分区的used，如果这个数值在不断的变化，说明内核在不断进行内存和swap的数据交换，这是真正的内存不够用了。</p>
+</blockquote>
+<p>然后下面的各行就是个进程的状态信息</p>
+<p>其中：</p>
+<p>USER：进程所有者</p>
+<p>PR：进程优先级</p>
+<p>NI：nice值（-19—-20）越大表示优先级越低。</p>
+<p>S：进程状态</p>
+<p>COMMAND：进程名称（命令/命令行）</p>
+<p><strong>切换观察模式</strong></p>
+<p>如果是多cpu的电脑，那么上面的cpu显示的是综合的cpu的信息，如果想要看单独的某个cpu的信息，可以在当前按<code>1</code>切换模式</p>
+<p>当然除此之外还有其他的模式可以选择，详情请参考：<a href="https://blog.csdn.net/jiangjiang_jian/article/details/84579958" target="_blank" rel="noopener">Linux top命令的用法详细详解</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/11/13/README/" rel="next" title="">
+                <i class="fa fa-chevron-left"></i> 
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  <div class="post-spread">
+      
+        
+                                <div class="-mob-share-ui-button -mob-share-open">分享</div>
+                                <div class="-mob-share-ui" style="display: none">
+                                    <ul class="-mob-share-list">
+                                        <li class="-mob-share-weibo"><p>新浪微博</p></li>
+                                        <li class="-mob-share-tencentweibo"><p>腾讯微博</p></li>
+                                        <li class="-mob-share-qzone"><p>QQ空间</p></li>
+                                        <li class="-mob-share-qq"><p>QQ好友</p></li>
+                                        <li class="-mob-share-weixin"><p>微信</p></li>
+                                        <li class="-mob-share-douban"><p>豆瓣</p></li>
+                                    </ul>
+                                    <div class="-mob-share-close">取消</div>
+                                </div>
+                                <div class="-mob-share-ui-bg"></div>
+                                <script id="-mob-share" src="http://f1.webshare.mob.com/code/mob-share.js?appkey=262488aa81530"></script>
+
+								
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.png"
+                alt="HY" />
+            
+              <p class="site-author-name" itemprop="name">HY</p>
+              <p class="site-description motion-element" itemprop="description">A man is only as good as what he loves.</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">21</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">17</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/yqh74110" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:yaoqiuhong@outlook.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=298 height=52 src="//music.163.com/outchain/player?type=2&id=1334259177&auto=0&height=32"></iframe>		
+<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=298 height=52 src="//music.163.com/outchain/player?type=2&id=436147067&auto=0&height=32"></iframe>	  
+<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=298 height=52 src="//music.163.com/outchain/player?type=2&id=32431822&auto=0&height=32"></iframe>
+
+          
+
+        </div>
+		
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#进程是个什么玩意？"><span class="nav-number">1.</span> <span class="nav-text">进程是个什么玩意？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#如何查看进程"><span class="nav-number">2.</span> <span class="nav-text">如何查看进程</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#ps"><span class="nav-number">2.1.</span> <span class="nav-text">ps</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#pstree"><span class="nav-number">2.2.</span> <span class="nav-text">pstree</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#top"><span class="nav-number">2.3.</span> <span class="nav-text">top</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">HY</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+      <span class="post-meta-item-text">Site words total count&#58;</span>
+    
+    <span title="Site words total count">48.3k</span>
+  
+</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  <!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/src/love.js"></script>
+</body>
+</html>
