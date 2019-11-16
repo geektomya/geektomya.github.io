@@ -320,7 +320,7 @@
 		  
   <span class="post-updated">
     &nbsp; | &nbsp; 更新于
-    <time itemprop="dateUpdated" datetime="2019-11-16T22:58:19+08:00" content="2019-11-16">
+    <time itemprop="dateUpdated" datetime="2019-11-16T23:05:46+08:00" content="2019-11-16">
       2019-11-16
     </time>
   </span>
@@ -387,108 +387,20 @@
 
       
         
-          
-            <h3 id="文件系统"><a href="#文件系统" class="headerlink" title="文件系统"></a>文件系统</h3><p>什么是文件系统？详情参考<a href="https://www.cnblogs.com/linux-xin/p/8126999.html" target="_blank" rel="noopener">Linux 文件系统(一)—虚拟文件系统VFS—-超级块、inode、dentry、file</a></p>
+          <h3 id="文件系统"><a href="#文件系统" class="headerlink" title="文件系统"></a>文件系统</h3><p>什么是文件系统？详情参考<a href="https://www.cnblogs.com/linux-xin/p/8126999.html" target="_blank" rel="noopener">Linux 文件系统(一)—虚拟文件系统VFS—-超级块、inode、dentry、file</a></p>
 <h4 id="ext4文件系统的基本结构"><a href="#ext4文件系统的基本结构" class="headerlink" title="ext4文件系统的基本结构"></a>ext4文件系统的基本结构</h4><ul>
 <li>超级块</li>
 <li>超级块副本</li>
 <li>I节点（inode） ls -li（查看i节点）</li>
 <li>数据块（datablock）du -h</li>
 </ul>
-<h4 id="超级块"><a href="#超级块" class="headerlink" title="超级块"></a>超级块</h4><p>请参考：<a href="https://www.cnblogs.com/betterquan/p/11369364.html" target="_blank" rel="noopener">超级块的定义</a></p>
-<h4 id="超级快副本"><a href="#超级快副本" class="headerlink" title="超级快副本"></a>超级快副本</h4><p>顾名思义，就是超级块的副本。</p>
-<h4 id="Inode"><a href="#Inode" class="headerlink" title="Inode"></a>Inode</h4><blockquote>
-<p>理解inode，要从文件储存说起。</p>
-<p>文件储存在硬盘上，硬盘的最小存储单位叫做”扇区”（Sector）。每个扇区储存512字节（相当于0.5KB）。</p>
-<p>操作系统读取硬盘的时候，不会一个个扇区地读取，这样效率太低，而是一次性连续读取多个扇区，即一次性读取一个”块”（block）。这种由多个扇区组成的”块”，是文件存取的最小单位。”块”的大小，最常见的是4KB，即连续八个 sector组成一个 block。</p>
-<p>文件数据都储存在”块”中，那么很显然，我们还必须找到一个地方储存文件的元信息，比如文件的创建者、文件的创建日期、文件的大小等等。这种储存文件元信息的区域就叫做inode，中文译名为”索引节点”。</p>
-<p>每一个文件都有对应的inode，里面包含了与该文件有关的一些信息。</p>
-</blockquote>
-<p>感觉这里的inode就跟c语言中的指针的功能差不多。</p>
-<h4 id="Datablock"><a href="#Datablock" class="headerlink" title="Datablock"></a>Datablock</h4><p> datablock，文件的内容都是存放在block中，1个block通常是4K，1个文件（比较大的）可能会占用多个block，但如果文件很少（比如0.1K），也会占用1个block，并且剩余空间不能使用。</p>
-<h3 id="Inode和数据块操作"><a href="#Inode和数据块操作" class="headerlink" title="Inode和数据块操作"></a>Inode和数据块操作</h3><p>首先通过<code>ls -li</code>查看文件的信息：</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">huny@huny-PC:~$ ls -li</span><br><span class="line">总用量 248</span><br><span class="line">1717797 -rw-------  1 huny huny    186 10月 29 08:06 2019-10-29-00-06-53.069-VBoxSVC-12857.log</span><br><span class="line">1704766 lrwxrwxrwx  1 huny huny      5 11月 14 21:27 aafile -&gt; afile</span><br><span class="line">1708491 -rw-r--r--  2 huny huny      4 11月 14 21:16 afile</span><br><span class="line">1712123 -rw-r--r--  1 huny huny      4 11月 14 21:17 afile3</span><br><span class="line">1707817 -rw-r--r--  1 huny huny      8 11月 14 21:20 afile4</span><br><span class="line">2228295 drwxr-xr-x  3 huny huny   4096 10月 19 14:44 Android</span><br><span class="line">2100345 drwxr-xr-x  4 huny huny   4096 10月 29 08:37 AndroidStudioProjects</span><br><span class="line">1708491 -rw-r--r--  2 huny huny      4 11月 14 21:16 bfile</span><br><span class="line">3023319 drwxrwxrwx  8 huny huny   4096 11月 12 22:22 blog</span><br><span class="line">1703986 drwxr-xr-x  5 huny huny   4096 11月 16 21:05 Desktop</span><br><span class="line">1703960 drwxr-xr-x  7 huny huny   4096 11月 10 18:12 Documents</span><br><span class="line">1703961 drwxr-xr-x  2 huny huny   4096 11月 16 14:58 Downloads</span><br><span class="line">1836292 drwxr-xr-x 10 huny huny   4096 11月  5 22:11 IdeaProjects</span><br><span class="line">1704989 -rw-r--r--  1 huny huny 167142 11月 12 09:39 java_error_in_STUDIO_18074.log</span><br><span class="line">1703965 drwxr-xr-x  3 huny huny   4096 10月 20 21:21 Music</span><br><span class="line">1714651 -rw-------  1 huny huny    162 11月 14 20:25 nohup.out</span><br><span class="line">1703938 drwxr-xr-x  3 huny huny   4096 10月 20 21:21 Pictures</span><br><span class="line">1707443 lrwxrwxrwx  1 huny huny     36 10月 20 21:34 PlayOnLinux's virtual drives -&gt; /home/huny/.PlayOnLinux//wineprefix/</span><br><span class="line">1717825 -rw-r--r--  1 huny huny      0 10月 27 20:23 stale_outputs_checked</span><br><span class="line">3541458 drwxr-xr-x  3 huny huny   4096 10月 28 23:58 Steam</span><br><span class="line">1703982 drwxr-xr-x  2 huny huny   4096 10月 20 21:21 Videos</span><br><span class="line">2230208 drwxr-xr-x  7 huny huny   4096 11月 13 13:43 个人资料</span><br><span class="line">3023275 drwxr-xr-x  2 huny huny   4096 11月 16 16:57 工具</span><br><span class="line">1703953 drwxr-xr-x  2 huny huny   4096 10月 19 01:44 模板</span><br><span class="line">2887058 drwxrwxrwx  2 huny huny   4096 10月 20 22:32 书</span><br><span class="line">huny@huny-PC:~$</span><br></pre></td></tr></table></figure>
-<p>在每一行输出的最前面的数字，及文件的inode标识，每个不同的文件的inode都是不同的。然后文件权限后面的数字，标识这个文件的硬链接数（inode对应了多少文件名）</p>
-<p>这里跟Inode有关的一些知识：</p>
-<ul>
-<li>mv改名不会改变i节点，改的是i节点和文件名的对应关系。</li>
-<li>vim会改变文件的i节点。通过swap文件来操作（为了保证一致性）</li>
-<li>rm实际是i节点和文件名断开。（所以删除文件才会那么快）</li>
-<li>ln让更多的文件名连接到这个文件（硬链接）</li>
-<li>（文件名只存在该父目录下），不能跨越分区使用</li>
-<li>ln -s（符号链接，也叫软链接。相当于windows的快捷方式）(可以跨文件系统使用)</li>
-</ul>
-<h3 id="查看系统内存信息"><a href="#查看系统内存信息" class="headerlink" title="查看系统内存信息"></a>查看系统内存信息</h3><p>前面<a href="http://blog.zhqy.xyz/articles/2019/11/15/1573828800331.html" target="_blank" rel="noopener">Linux - 进程管理（一）</a>中学过top命令中的输出第四行是关于内存的信息，那么除了top命令方式，还有什么方式可以查看内存信息呢？这时候就可以使用<code>free</code>命令来查看了。</p>
-<h4 id="free"><a href="#free" class="headerlink" title="free"></a>free</h4><p>用法：</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">free [-bkmotV][-s &lt;间隔秒数&gt;]</span><br></pre></td></tr></table></figure>
-<p>参数说明：</p>
-<ul>
-<li><p>-b 　以Byte为单位显示内存使用情况。</p>
-</li>
-<li><p>-k 　以KB为单位显示内存使用情况。</p>
-</li>
-<li><p>-m 　以MB为单位显示内存使用情况。</p>
-</li>
-<li><p>-h 　以合适的单位显示内存使用情况，最大为三位数，自动计算对应的单位值。单位有：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">B = bytes</span><br><span class="line">K = kilos</span><br><span class="line">M = megas</span><br><span class="line">G = gigas</span><br><span class="line">T = teras</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>-o 　不显示缓冲区调节列。</p>
-</li>
-<li><p>-s&lt;间隔秒数&gt; 　持续观察内存使用状况。</p>
-</li>
-<li><p>-t 　显示内存总和列。</p>
-</li>
-<li><p>-V 　显示版本信息。</p>
-</li>
-</ul>
-<p>示例：</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">huny@huny-PC:~$ free </span><br><span class="line">              total        used        free      shared  buff/cache   available</span><br><span class="line">Mem:       16292804     2007700    10698380      305468     3586724    13664372</span><br><span class="line">Swap:       8388604           0     8388604</span><br><span class="line">huny@huny-PC:~$</span><br></pre></td></tr></table></figure>
-<p>输出解释：</p>
-<p><strong>Mem</strong> 行(第二行)是内存的使用情况</p>
-<p><strong>Swap</strong> 行(第三行)是交换空间的使用情况</p>
-<p><strong>total</strong> 列显示系统总的可用物理内存和交换空间大小</p>
-<p><strong>used</strong> 列显示已经被使用的物理内存和交换空间</p>
-<p><strong>free</strong> 列显示还有多少物理内存和交换空间可用使用</p>
-<p><strong>hared</strong> 列显示被共享使用的物理内存大小</p>
-<p><strong>buff/cache</strong> 列显示被 buffer 和 cache 使用的物理内存大小</p>
-<p><strong>available</strong> 列显示还可以被应用程序使用的物理内存大小。</p>
-<h3 id="查看磁盘信息"><a href="#查看磁盘信息" class="headerlink" title="查看磁盘信息"></a>查看磁盘信息</h3><p>在Linux中如果要查看磁盘信息，可以使用<code>fdisk</code>，<code>df</code>，<code>du</code>命令来查看。</p>
-<h4 id="fdisk"><a href="#fdisk" class="headerlink" title="fdisk"></a>fdisk</h4><p>关于fdisk的使用详情参考：<a href="https://blog.csdn.net/yangzhengquan19/article/details/83788277" target="_blank" rel="noopener">linux fdisk 分区、格式化、挂载！</a></p>
-<p>这里我主要是查看各个分区的容量情况。使用<code>fdisk -l</code></p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">huny@huny-PC:~$ sudo fdisk -l</span><br><span class="line">[sudo] huny 的密码：</span><br><span class="line">Disk /dev/nvme0n1: 238.5 GiB, 256060514304 bytes, 500118192 sectors</span><br><span class="line">Units: sectors of 1 * 512 = 512 bytes</span><br><span class="line">Sector size (logical/physical): 512 bytes / 512 bytes</span><br><span class="line">I/O size (minimum/optimal): 512 bytes / 512 bytes</span><br><span class="line">Disklabel type: gpt</span><br><span class="line">Disk identifier: 02129907-7AE0-4914-8753-E1CA650EBC79</span><br><span class="line"></span><br><span class="line">Device             Start       End   Sectors  Size Type</span><br><span class="line">/dev/nvme0n1p1      2048  16779263  16777216    8G Linux swap</span><br><span class="line">/dev/nvme0n1p2  16779264 226496511 209717248  100G Linux filesystem</span><br><span class="line">/dev/nvme0n1p3 226496512 227522559   1026048  501M EFI System</span><br><span class="line">/dev/nvme0n1p4 227522560 500117503 272594944  130G Linux filesystem</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Disk /dev/sda: 477 GiB, 512110190592 bytes, 1000215216 sectors</span><br><span class="line">Units: sectors of 1 * 512 = 512 bytes</span><br><span class="line">Sector size (logical/physical): 512 bytes / 512 bytes</span><br><span class="line">I/O size (minimum/optimal): 512 bytes / 512 bytes</span><br><span class="line">Disklabel type: gpt</span><br><span class="line">Disk identifier: 31D4B0FB-2F6B-4161-B3DA-D6A68A38B4D9</span><br><span class="line"></span><br><span class="line">Device       Start        End   Sectors   Size Type</span><br><span class="line">/dev/sda1     2048    1085439   1083392   529M Windows recovery environment</span><br><span class="line">/dev/sda2  1085440    1290239    204800   100M EFI System</span><br><span class="line">/dev/sda3  1290240    1323007     32768    16M Microsoft reserved</span><br><span class="line">/dev/sda4  1323008 1000214527 998891520 476.3G Microsoft basic data</span><br><span class="line">huny@huny-PC:~$</span><br></pre></td></tr></table></figure>
-<p>从这个输出可以很明显的看出各个分区的状况。</p>
-<h4 id="df"><a href="#df" class="headerlink" title="df"></a>df</h4><p>用于显示 Linux系统中各文件系统的硬盘使用情况，包括文件系统所在硬盘分区的总容量、已使用的容量、剩余容量等。</p>
-<p>用法：</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df [选项] [目录或文件名]</span><br></pre></td></tr></table></figure>
-<p>常用参数：</p>
-<ul>
-<li>-a： 显示所有文件系统信息，包括系统特有的 /proc、/sysfs 等文件系统； </li>
-<li>-m：以 MB 为单位显示容量；                                      </li>
-<li>-k： 以 KB 为单位显示容量，默认以 KB 为单位；                   </li>
-<li>-h： 使用人们习惯的 KB、MB 或 GB 等单位自行显示容量；            </li>
-<li>-T： 显示该分区的文件系统名称；                                 </li>
-<li>-i：  不用硬盘容量显示，而是以含有 inode 的数量来显示。           </li>
-</ul>
-<p>不使用任何参数的 df 命令，默认会将系统内所有的文件系统信息，以 KB 为单位显示出来。 </p>
-<p>示例如下：</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">huny@huny-PC:~$ df</span><br><span class="line">文件系统           1K-块     已用      可用 已用% 挂载点</span><br><span class="line">udev             8117948        0   8117948    0% /dev</span><br><span class="line">tmpfs            1629284     1844   1627440    1% /run</span><br><span class="line">/dev/nvme0n1p2 102684472 14399960  83025252   15% /</span><br><span class="line">tmpfs            8146400   228536   7917864    3% /dev/shm</span><br><span class="line">tmpfs               5120        4      5116    1% /run/lock</span><br><span class="line">tmpfs            8146400        0   8146400    0% /sys/fs/cgroup</span><br><span class="line">/dev/nvme0n1p3    512000     6684    505316    2% /boot/efi</span><br><span class="line">/dev/nvme0n1p4 133109576 28142744  98135576   23% /home</span><br><span class="line">tmpfs            1629280       36   1629244    1% /run/user/1000</span><br><span class="line">/dev/sda4      499445756 71739576 427706180   15% /media/huny/881E9BCB1E9BB124</span><br><span class="line">huny@huny-PC:~$</span><br></pre></td></tr></table></figure>
-<p>输出结果是很显然的，可以清楚的看到各个文件系统的使用信息。</p>
-<h4 id="du"><a href="#du" class="headerlink" title="du"></a>du</h4><p>用于显示目录或文件的大小。du会显示指定的目录或文件所占用的磁盘空间。</p>
-<p>用法及参数参考：<a href="https://www.runoob.com/linux/linux-comm-du.html" target="_blank" rel="noopener">Linux du命令</a></p>
-<p>常用：</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">du -h 文件/目录    #输出文件系统分区使用的情况，例如：10KB，10MB，10GB等</span><br><span class="line">du -s 文件/目录    #显示文件或整个目录的大小，默认单位是KB</span><br><span class="line">du -sh 文件/目录   #查看某一个文件的大小</span><br><span class="line">du -sh * | sort -rh    #查看目录下所有文件的大小并按照大小排序</span><br></pre></td></tr></table></figure>
-<h4 id="df与du的区别"><a href="#df与du的区别" class="headerlink" title="df与du的区别"></a>df与du的区别</h4><p><strong>du(disk usage)</strong>是通过搜索文件来计算每个文件的大小然后累加，du能看到的文件只是一些当前存在的，没有被删除的。他计算的大小就是当前他认为存在的所有文件大小的累加和。</p>
-<p><strong>df(disk free)</strong>通过文件系统来快速获取空间大小的信息，当我们删除一个文件的时候，这个文件不是马上就在文件系统当中消失了，而是暂时消失了，当所有程序都不用时，才会根据OS的规则释放掉已经删除的文件， df记录的是通过文件系统获取到的文件的大小，他比du强的地方就是能够看到已经删除的文件，而且计算大小的时候，把这一部分的空间也加上了，更精确了。当文件系统也确定删除了该文件后，这时候du与df就一致了。</p>
-<p><strong>df和du统计的数据是不同的：</strong> 打个比方，文件是需要放到文件柜里的，就算只有一个文件，也要占用一个文件柜。文件柜占用的空间比文件要大。 df就是统计使用了多少个文件柜。 du则统计实际有多少个文件。 这样下来，df算的就大，du就小。</p>
-<p><em>简单地说，df命令是根据该卷的inode使用情况进行统计的，而du则是累加所有文件的字节数。一个文件就算只有1字节，也要占用一个inode。</em></p>
-<hr>
-<p>参考文章：</p>
-<p><a href="https://www.cnblogs.com/linux-xin/p/8126999.html" target="_blank" rel="noopener">Linux 文件系统(一)—虚拟文件系统VFS—-超级块、inode、dentry、file</a></p>
-<p><a href="https://blog.csdn.net/ouyang_peng/article/details/84292776" target="_blank" rel="noopener">Linux free 命令学习</a></p>
-<p><a href="https://blog.csdn.net/yangzhengquan19/article/details/83788277" target="_blank" rel="noopener">linux fdisk 分区、格式化、挂载！</a></p>
-<p><a href="https://www.cnblogs.com/Downtime/p/8523200.html" target="_blank" rel="noopener">linux下的du和df的区别</a></p>
-
-          
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2019/11/16/linux-内存与磁盘管理/" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
