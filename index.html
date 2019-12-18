@@ -387,39 +387,17 @@
 
       
         
-          
-            <p><img src="https://img.hacpai.com/bing/20171120.jpg?imageView2/1/w/960/h/540/interlace/1/q/100" alt=""> </p>
+          <p><img src="https://img.hacpai.com/bing/20171120.jpg?imageView2/1/w/960/h/540/interlace/1/q/100" alt=""> </p>
 <h3 id="什么是方法区？"><a href="#什么是方法区？" class="headerlink" title="什么是方法区？"></a>什么是方法区？</h3><blockquote>
 <p>方法区（Method area）是可供各个线程共享的运行时内存区域，它存储了每一个类的结构信息，例如：运行时常量池（Runtime constant pool）。字段和方法数据、构造函数和普通方法的字节码内容，还包括一些在类、实例、接口初始化时用到的特殊方法。<br>方法区在虚拟机启动的时候创建，方法区的容量可以是固定的，也可以随着程序的执行实现动态扩展，并在不需要过多空间的时候自动回收。方法区在实际内存中可以是不连续的。<br>方法区可以发生如下异常：<br>如果方法区的内存空间不能满足内存分配请求，那么Java虚拟机将抛出一个OutOfMemoryError。</p>
 </blockquote>
-<p>以上就是Java虚拟机规范中对方法区的一个定义，它描述的是一种规范，而不是一种具体的实现。因此在不同的虚拟机中方法区存在与不同的位置。我们这里将主要阐述Hotspot虚拟机中的方法区实现。<br>这里我们将方法区的历史分割成三个部分，以此来分别讲述这之间发生了什么。这三个部分分别是<strong>JDK7之前</strong>、<strong>JDK7</strong>和<strong>JDK8及以后</strong>。</p>
-<h3 id="JDK7之前"><a href="#JDK7之前" class="headerlink" title="JDK7之前"></a>JDK7之前</h3><p>在JDK之前，方法区位于永久代（PermGen），永久代和堆相互隔离，永久代的大小在JVM中可以设定一个固定值，不可变。</p>
-<blockquote>
-<p>永久代是Hotspot虚拟机特有的概念，是方法区的一种实现，别的JVM都没有这个东西。永久代与新生代和老年代相样，前者并不是位于堆中，后后两者是位于堆中的。</p>
-</blockquote>
-<p>在这个时候永久代就是方法区的实现，这个时期默认方法区即永久代。在这个时候永久代里面存放了很多东西，例如，符号引用（Symbols）、字符串常量池（interned strings）、类的静态变量（class static variables）、运行时常量池以及其它信息。由于这个时候方法区是由永久代实现的，那么方法区出现异常后会抛出这样的信息：<em>java.lang.OutOfMemoryError: PermGen</em>， 这里的 PermGen 就是永久代的意思，从这个就可以看出此时的方法区的实现是永久代。</p>
-<h3 id="JDK7"><a href="#JDK7" class="headerlink" title="JDK7"></a>JDK7</h3><p>在这个时候官方以及发现用永久代实现方法区容易导致内存泄漏的问题了，同时为了后面将Hotspot虚拟机与其他虚拟机整合，已经有将方法区改用其他的方式类实现了，但是并没有动工！此时只是将原本位于<strong>永久代中的字符串常量、类的静态变量池转移到了Java Heap中，还有符号引用转移到了Native Memory</strong><br>此时你使用<code>String</code>类的<code>intern()</code>方法，你会发现与jdk6及以前出现不一样的 结果。</p>
-<blockquote>
-<p>在 Jdk6 以及以前的版本中，字符串的常量池是放在堆的Perm区的，Perm区是一个类静态的区域，主要存储一些加载类的信息，常量池，方法片段等内容，默认大小只有4m，一旦常量池中大量使用 intern 是会直接产生java.lang.OutOfMemoryError:PermGen space错误的。</p>
-</blockquote>
-<h3 id="JDK8及以后"><a href="#JDK8及以后" class="headerlink" title="JDK8及以后"></a>JDK8及以后</h3><p>取消永久代，方法区由元空间（Metaspace）实现，元空间仍然与堆不相连，但与堆共享物理内存，逻辑上可认为在堆中。</p>
-<blockquote>
-<p>元空间的本质和永久代类似，都是对JVM规范中方法区的实现。不过<strong>元空间与永久代之间最大的区别在于：元空间并不在虚拟机中，而是使用本地内存。</strong>，理论上取决于32位/64位系统可虚拟的内存大小。可见也不是无限制的，需要配置参数。</p>
-</blockquote>
-<p>在之前的永久代实现中，如果要修改方法区的大小配置，需要使用<del>PermSize ，MaxPermSize</del>参数，而改为元空间之后，就需要使用MetaspaceSize，MaxMetaspaceSize。</p>
-<h3 id="为什么移除永久代？"><a href="#为什么移除永久代？" class="headerlink" title="为什么移除永久代？"></a>为什么移除永久代？</h3><ul>
-<li>字符串存在永久代中，容易出现性能问题和内存溢出。  </li>
-<li>永久代大小不容易确定，PermSize指定太小容易造成永久代OOM  </li>
-<li>永久代会为 GC 带来不必要的复杂度，并且回收效率偏低。  </li>
-<li>Oracle 可能会将HotSpot 与 JRockit 合二为一。</li>
-</ul>
-<blockquote>
-<p>在JDK1.7中, 已经把原本放在永久代的字符串常量池移出, 放在堆中. 为什么这样做呢?<br>因为使用永久代来实现方法区不是个好主意, 很容易遇到内存溢出的问题. 我们通常使用PermSize和MaxPermSize设置永久代的大小, 这个大小就决定了永久代的上限, 但是我们不是总是知道应该设置为多大的, 如果使用默认值容易遇到OOM错误。<br>类的元数据, 字符串池, 类的静态变量将会从永久代移除, 放入Java heap或者native memory。其中建议JVM的实现中将类的元数据放入 native memory, 将字符串池和类的静态变量放入java堆中. 这样可以加载多少类的元数据就不在由MaxPermSize控制, 而由系统的实际可用空间来控制.<br>为什么这么做呢? 减少OOM只是表因, 更深层的原因还是要合并HotSpot和JRockit的代码, JRockit从来没有一个叫永久代的东西, 但是运行良好, 也不需要开发运维人员设置这么一个永久代的大小。当然不用担心运行性能问题了, 在覆盖到的测试中, 程序启动和运行速度降低不超过1%, 但是这一点性能损失换来了更大的安全保障。</p>
-</blockquote>
-<hr>
-<p>本文参考：<br>《深入理解Java虚拟机》<br>《Java虚拟机规范（Java SE 8 版）》<br>     &nbsp;&nbsp;<a href="https://blog.csdn.net/qq_41872909/article/details/87903370" target="_blank" rel="noopener">JDK1.8之前和之后的方法区</a></p>
-
-          
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2019/12/18/articles/2019/12/18/1576664538449.html/" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -578,23 +556,15 @@
 
       
         
-          
-            <p><img src="https://img.hacpai.com/bing/20171231.jpg?imageView2/1/w/960/h/540/interlace/1/q/100" alt=""></p>
+          <p><img src="https://img.hacpai.com/bing/20171231.jpg?imageView2/1/w/960/h/540/interlace/1/q/100" alt=""></p>
 <p>   <em>“ 本文基于已经实现内网穿透的前提，例如外网服务器端口8090,已经映射到了某台内网服务器的80上 “</em></p>
-<h3 id="多说"><a href="#多说" class="headerlink" title="多说"></a>多说</h3><h4 id="这是撒？"><a href="#这是撒？" class="headerlink" title="这是撒？"></a>这是撒？</h4><p>这里的内网外入是指什么？比如我在外网服务器上面有一个网站，该网站有一个页面，页面很简单，就只有一个输入框，当我们在这个输入框输入一个内网地址的后，按下访问后，就可以访问到内网中相应的资源。当然访问到内网地址的模式有很多，也不是说完全需要以网页输入内网地址的形式进行。这里想要表达的仅仅是：<strong>我们可以输入某个已经穿透的内网中的任意地址然后获取相应的服务</strong>。在做这个之前也问过一些人，可能因为表述问题很多人给我推荐的是如何实现内网穿透，然后某个推荐：使用<strong>lua+nginx</strong>，我觉得挺不错的。在了解这个东西后才发现又是一片新大陆，用这个肯定能实现我想要的东西。但是心里总觉得用lua+nginx做这个是不是有点小题大做了，还要去学习哈lua，还要再给nginx添加lua的模块，不，我选择懒  :expressionless:，于是就开始瞎捉摸。不过好在经过无数次改配置中，直接通过nginx的配置文件外实现了想要的功能。</p>
-<h4 id="我的思路！"><a href="#我的思路！" class="headerlink" title="我的思路！"></a>我的思路！</h4><p>最开始我的第一想法是通过域名带个值为内网地址的url参数，然后通过nginx捕获，再实现转发，但是经过一系列操作后我发现这种方式最后获取到的只有目标网站的html，没有其他静态资源。几经尝试无果后放弃！</p>
-<p>然后还有想法是通过自定义请求头，将要访问的地址放入到请求头中访问，然后nginx获取，但是这种方式在写前端的时候折戟了，对于只会原生ajax请求的我，面对自定义请求头后的跨域问题一脸懵逼！于是再度放弃！😰   :sleepy:</p>
-<p>然后我又开始想，既然参数，请求头都不行的话，那么我就直接使用域名（<strong>内网地址+外网域名的形式</strong>），然后在nginx中实现捕获内网地址，再通过变量将捕获到的地址保存，最后通过代理到该变量的值的地址上！</p>
-<h3 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h3><h4 id="1-实现内网外入"><a href="#1-实现内网外入" class="headerlink" title="1.实现内网外入"></a>1.实现内网外入</h4><p>因为要实现内网外入，所以首先第一步肯定是实现内网穿透，现在实现内网穿透的工具有很多，比如花生壳呀什么的，但是不太建议这种。如果有需要我建议直接去github拉一个，这里推荐一个<a href="https://github.com/geektomya/netagent" target="_blank" rel="noopener">netagent</a>，这是之前在b3log仓库里面发现的，b3log的现在失效了，贴了一个我fork的。这个工具比较小巧，还是比较好用的。如果技术够好的话，那就直接自己写一个吧～～。</p>
-<h4 id="2-泛域名解析"><a href="#2-泛域名解析" class="headerlink" title="2.泛域名解析"></a>2.泛域名解析</h4><p>因为我们需要通过<code>内网地址+域名</code>这种形式来访问，所以那么 <code>内网地址+域名</code>本身应该就是一个域名，这样才能确保到达我的服务器。而我们不知道用户将要请求什么内网地址，所以这里我们需要在你的域名提供商提供商那里将你的域名实现<strong>泛域名解析</strong>。比如我的域名是<code>zhqy.xyz</code>，那么在经过泛域名解析后，就可以输入类似于<code>172.22.4.2.zhqy.xyz</code>这样的域名到达我的服务器，然后我服务器在对该域名进行正则匹配提取目的地址。</p>
-<h4 id="3-提取目的地址与访问"><a href="#3-提取目的地址与访问" class="headerlink" title="3.提取目的地址与访问"></a>3.提取目的地址与访问</h4><p>当请求到达服务器后，就需要对请求进行判断是不是想要内网外入的请求，如果是内网外入的请求就将内网目的地址提取出来，然后进行后续操作，这里服务器的nginx配置如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">server &#123;</span><br><span class="line"></span><br><span class="line">	#监听80端口</span><br><span class="line">        listen       80;</span><br><span class="line"></span><br><span class="line">	#这里进行泛域名匹配，确保所有的以 .zhqy.xyz 结尾的域名都可以解析到本机，需要配合域名服务商进行泛域名解析</span><br><span class="line">        server_name  ~^(.+)\.zhqy\.xyz$; </span><br><span class="line"></span><br><span class="line">        #提取域名 *.zhqy.xyz 的前一部分存入$cqupt</span><br><span class="line">        set $cqupt $1;</span><br><span class="line"></span><br><span class="line">	</span><br><span class="line">        location /&#123;</span><br><span class="line">        # echo &quot;cqupt: $cqupt&quot;;  可以此语句验证是否捕获匹配的域名</span><br><span class="line"></span><br><span class="line">	#跳转到已经经过内网穿透的端口去访问</span><br><span class="line">        proxy_pass http://127.0.0.1:8090; </span><br><span class="line">        proxy_redirect off;</span><br><span class="line">          </span><br><span class="line"> 	#这里将捕获到的地址存入host，然后在穿透的主机上直接重定向到 $host即可</span><br><span class="line">        proxy_set_header   Host    $cqupt; </span><br><span class="line">        proxy_set_header   X-Real-IP   $remote_addr;</span><br><span class="line">        proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>这里因为我不是穿透的80端口，所以<code>proxy_pass</code>的时候要先去8090端口，然后在内网主机中nginx对请求请求代理到<code>$host</code>就可以了。这里需要注意的是，内网地址为域名的时候，你要先指定内网的DNS，这样才能正常访问到。内网主机的nginx配置如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">#这里填写内网中映射的端口</span><br><span class="line">       listen       80;</span><br><span class="line"></span><br><span class="line">       #这是添加DNS，其中第一个就是内网服务器的DNS</span><br><span class="line">       resolver 202.202.32.33 114.114.114.114 8.8.8.8 valid=3600s;</span><br><span class="line"></span><br><span class="line">       location / &#123;</span><br><span class="line">     	proxy_pass http://$host;</span><br><span class="line">    proxy_redirect off;</span><br><span class="line">		proxy_set_header   Host    $host;</span><br><span class="line">	proxy_set_header   X-Real-IP   $remote_addr;</span><br><span class="line">	proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;</span><br><span class="line">       &#125;</span><br></pre></td></tr></table></figure></p>
-<p>这里如果你是穿透的外网服务器的80端口，那么就只需要在上面的第一个nginx配置中添加一句 <code>resolve DNS</code>的语句，然后将<code>proxy_pass</code>中的地址改为你的目的地址就可以，这样就不用做后面的内网服务器nginx这一步操作了。</p>
-<h4 id="效果演示"><a href="#效果演示" class="headerlink" title="效果演示"></a>效果演示</h4><p>在配好所有的东西后，我们就可以通过我们的方法’畅游‘内网世界了。比如我现在有一个内网地址<code>172.22.4.2</code>，先通过内网中的机器正常的访问，结果如下：<br><img src="https://img.hacpai.com/file/2019/12/image-d04012e9.png" alt="image.png"><br>然后通过我们的内网外入来访问，结果如下：<br><img src="https://img.hacpai.com/file/2019/12/image-0c40ed01.png" alt="image.png"></p>
-<p>就这样通过一顿操作后，就终于实现了所谓的内网外入了！！！</p>
-<h3 id="写在最后"><a href="#写在最后" class="headerlink" title="写在最后"></a>写在最后</h3><p>经过上述配置已经简单的实现了一个内网外入的功能，但是有一点值得注意的就是<code>安全</code>问题了。既然别人屏蔽了内网中的站点，那么我们对内网开了一个口子总归是不好的。在这份配置文件中还有很多值得去完善的问题，例如禁止抓跑，爬取呀什么的，还有应当对内网地址确定一个白名单，哪些是可以通过访问的，哪些是一定不能通过外网访问的。</p>
-
-          
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2019/12/16/articles/2019/12/16/1576502421990.html/" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -753,48 +723,17 @@
 
       
         
-          
-            <p><img src="https://img.hacpai.com/bing/20181222.jpg?imageView2/1/w/960/h/540/interlace/1/q/100" alt=""></p>
+          <p><img src="https://img.hacpai.com/bing/20181222.jpg?imageView2/1/w/960/h/540/interlace/1/q/100" alt=""></p>
 <p>了解jvm的过程就像从喜欢到恋爱的过程，刚开始懵懵懂懂，然后心生胆怯，最后沉迷于此。</p>
 <hr>
 <h3 id="Java虚拟机结构"><a href="#Java虚拟机结构" class="headerlink" title="Java虚拟机结构"></a>Java虚拟机结构</h3><p>这里将会从class文件格式、JVM中的数据类型讲到JVM的运行时数据区</p>
-<h4 id="class文件格式"><a href="#class文件格式" class="headerlink" title="class文件格式"></a>class文件格式</h4><p>“ Write once, run anywhere”，这句话对Java开发者来说都是无比的熟悉了。那么这种说法是怎么来的呢，为什么Java会有这样的口号呢？这其中的奥秘就在与class文件。在Java中，源文件（.java）首先会被编译为字节码文件（.class），然后再将字节码文件通过jvm去执行。在字节码的格式中，精确定义了类与接口的表示形式，包括了在<strong>平台相关</strong>的目标文件格式中的一些细节上的惯例，列如字节序（byte ordering）等。</p>
-<blockquote>
-<p>这里请不要认为此处的<strong>平台相关的目标文件格式</strong>是指在特定平台编译出的class文件无法再其他平台中使用。相反，正是因为强制，明确的定义了本来会跟平台相关的细节，所以才达到了<strong>Java语言是平台无关的效果</strong>。</p>
-</blockquote>
-<p>也就是说Java语言的确是平台无关的。但这种平台无关性，正是由于class文件的平台有关有JVM的平台有关造就的。</p>
-<h4 id="数据类型"><a href="#数据类型" class="headerlink" title="数据类型"></a>数据类型</h4><p>同Java语言中的数据类型相似，JVM可以操作的数据类型也分为两大类：原始类型（primitive type，也经常被翻译成原生类型或者基本类型）和引用类型。与之对应，也存在原始值（primitive value）和引用值(reference value)两种类型的数值。他们可用于变量赋值，参数传递，方法返回和运算操作。</p>
-<blockquote>
-<p>Java虚拟机希望可能多的类型检查能在程序运行之前完成，换句话说，编译器应当在编译期间尽最大的努力完成尽可能的类型检查，使得虚拟机在运行期间无需进行这些操作，原始类型的值不需要通过特殊标记或额外识别手段来在运行期确定他们的实际数据类型，也无需刻意见他们与引用类型的值区分开。虚拟机的字节码指令本身就可以确定他的指令操作数的类型是什么，所以可以利用这种特性直接确定操作数的数值类型。<br>Java虚拟值是直接支持对象的。这里的对象可以是指动态分配的某个类的实例，也可以是指某个数组。虚拟机中使用<code>reference</code>类型来表示某个对象的引用。关于<code>reference</code>类型的值，你可以想象成指向对象的指针。没一个对象都可能存在多个指向它的引用，对象的操作，传递和检查都通过引用它的<code>reference</code>类型的值来进行。</p>
-</blockquote>
-<p>这里的reference类型与int、long、double等类型是同一层次的概念。<code>reference</code>是前面提到过的引用类型（reference type）的一种。而int、long、double等则是前面提到过的原始类型（primitive type）的一种。前者是具体的数据类型，后者是某种数据类型的统称。</p>
-<h5 id="原始类型与值"><a href="#原始类型与值" class="headerlink" title="原始类型与值"></a>原始类型与值</h5><p>Java虚拟机所支持的原始数据类型包括数值类型，boolean类型和returnAddress类型。<br><strong>数值类型</strong><br>byte、short、int、long、float、double、char。<br><strong>boolean类型</strong><br>虽然虚拟机中定义了这种类型，但是却没有提供专门操作boolean的字节码指令，Java语言表达式所操作的boolean值在编译之后都是用虚拟机中的int数据类型来代替。Java虚拟机直接支持boolean类型的数组。boolean类型数组的访问和修改共用byte数组的<code>baload</code>和<code>bastore</code>指令。在Oracle的虚拟机实现中。Java语言中的boolean数组将会被编译层Java虚拟机的byte数组，每个元素占8位。不管是用int表示还是byte，，虚拟机都会将映射后的true用1来表示。false用0来表示。<br><strong>returnAddress</strong><br>returnAddress类型是指向某个操作码的指针，此操作码与Java虚拟机指令相对应。在虚拟机所有支持的原始类型中，只有returnAddress类型是不能直接与Java语言的数据类型相对应。</p>
-<h5 id="引用类型与值"><a href="#引用类型与值" class="headerlink" title="引用类型与值"></a>引用类型与值</h5><p>Java中有三种引用类型，类类型（class type）、数组类型（array type和接口类型（interface type）。这些引用类型的值分别指向动态创建的类实例，数组实例和实现了某个接口的类实例或数组实例。在引用类型中还有一个特殊的值null，当一个引用不指向任何对象的时候，他的值就用null来表示。一个为null的引用，起初并不具备任何实际的运行期类型。但它可以转换为任意的引用类型。引用类型的默认值就是null。<br>Java虚拟机规范并没有规定null在虚拟机实现应该怎么用编码来表示。</p>
-<h4 id="运行时数据区"><a href="#运行时数据区" class="headerlink" title="运行时数据区"></a>运行时数据区</h4><blockquote>
-<p>Java虚拟机定义了若干种程序运行期间会使用到的运行时数据区，其中有一些会随着虚拟机的启动而创建，随着虚拟机的退出而销毁。另外一些则则是与线程一一对应的，这些与线程对应的数据区域会随着线程开始和结束而创建和销毁。</p>
-</blockquote>
-<p>Java运行时数据区图示如下：</p>
-<p><img src="https://img.hacpai.com/file/2019/12/QQ20180624150918-f5a7888e.png" alt="QQ20180624150918.png"></p>
-<h5 id="程序计数器（Program-Counter-Register）"><a href="#程序计数器（Program-Counter-Register）" class="headerlink" title="程序计数器（Program Counter Register）"></a>程序计数器（Program Counter Register）</h5><p>Java虚拟机可以支持多条线程同时执行，每一条Java虚拟机线程都有自己的程序计数器。在任意的时刻，一个Java虚拟机线程只会执行一个方法的代码，这个正在被执行的方法被称为当前方法，因此为了能够在切换线程后能恢复到正确的执行位置，每条线程都需要有一个独立的程序计数器，各条程序计数器之间互不影响，独立存储。我们层这类内存区域为“线程”私有的。如果这个方法不是<code>native</code>的，那么PC寄存器就保存Java虚拟机正在执行的字节码指令的地址。如果该方法是<code>native</code>的，那PC寄存器的值是空（Undefined）。PC寄存器的容量至少应该保存一个returnAddress类型的数据或者一个与平台相关的本地指针的值。此内存区域是唯一一个在Java虚拟机规范中没有规定任何OutOfMemoryError的区域。</p>
-<h5 id="Java虚拟机栈（Java-Virtual-Machine-Stack）"><a href="#Java虚拟机栈（Java-Virtual-Machine-Stack）" class="headerlink" title="Java虚拟机栈（Java Virtual Machine Stack）"></a>Java虚拟机栈（Java Virtual Machine Stack）</h5><p>每一台哦Java虚拟机线程都有自己私有的Java虚拟机栈，这个栈与线程同时创建，用于存储栈帧（Frame），Java虚拟机栈的作用与传统语言中的栈非常相似，用于存储局部变量与一些尚未计算好的结果，另外，他在方法的调用和返回中也扮演了重要的角色，因为除了栈帧的出栈与入栈之外，Java虚拟机不会再受其他因素影响，所以栈帧可以在堆中分配（从虚拟机的实现来看），Java虚拟机栈所使用的内存不需要是连续的。<br>更多详细内容请移步<a href="http://blog.zhqy.xyz/articles/2019/12/18/1576602859227.html" target="_blank" rel="noopener">详解jvm中的Java虚拟机栈</a></p>
-<h5 id="本地方法栈（Native-Method-Stack）"><a href="#本地方法栈（Native-Method-Stack）" class="headerlink" title="本地方法栈（Native Method Stack）"></a>本地方法栈（Native Method Stack）</h5><p>Java虚拟机实现可能会用到传统的栈（通常称为C Stack）来支持本地方法（除了Java以为其他方法编写的方法）的执行，这个栈就是本地方法栈。与Java虚拟机栈的功能类似，只不过一个是为了Java方法而服务的，一个是为了本地方法服务的。<br>在Java虚拟机规范中有提到，Java虚拟机实现应当提供给程序员或者最终用户调节本地方法栈初始容量的手段，对于长度可动态变化的本地方法栈而言，则应当提供调节其最大最小容量的手段。<br>另外值得一提的是，HotSpot虚拟机将 Java虚拟机栈和本地方法栈的实现合并在一起！</p>
-<h5 id="Java-堆"><a href="#Java-堆" class="headerlink" title="Java 堆"></a>Java 堆</h5><blockquote>
-<p>这里请注意不要<strong>混淆</strong>，<code>Stack</code>，<code>Heap</code>和<code>JVM Stack</code>，<code>Java Heap</code>的概念。Java虚拟机的实现本质上是由其他语言所编写的应用程序，Java语言程序里分配在<code>Java Stack</code>中的数据，从实现虚拟机的程序角度来看则可能分配在Heap之中。</p>
-</blockquote>
-<p>在Java虚拟机中。堆（Heap）是可供各个线程共享的运行时内存区域。也是提供<strong>几乎所有</strong>类实例和对象分配内存的区域。</p>
-<blockquote>
-<p>这里在Java虚拟机规范中描述的是，所有类实例和数组分配的内存的区域。但是随着JIT编译器的发展与逃逸分析技术日益陈述，栈上分配，标量替换等优化技术将会导致一些微妙的变化发生，所有的对象都分配在堆上也渐渐变得不那么绝对了。<br>Java堆在虚拟机启动的时候就被创建，他存储了动态内存管理系统（automatic storage management system），也就是常说的garbage collector（垃圾收集器）所管理的对象。Java堆的容量可以是固定的，也可以是随着程序执行的需求动态扩展，并在不需要过多空间是自动回收。Java堆所使用的内存同样不要求是连续的。当实际所需要的堆超过了能提供的最大容量时，系统会抛出一个<strong>OutOfMemoryError</strong>。<br>从内存回收的角度来看，由于现在的收集器采用分代收集算法，所以Java堆还可以细分为：新生代和老年代，再细致一点的有<strong>Eden</strong>空间，<strong>From Survivor</strong>空间，<strong>To Survivor</strong>空间等<br>从内存分配的角度来看，线程共享的Java堆中可能划分中多个线程私有的<strong>分配缓冲区（Thread Local Allocation Buffer，TLAB）</strong>。</p>
-</blockquote>
-<h5 id="方法区"><a href="#方法区" class="headerlink" title="方法区"></a>方法区</h5><p>方法区（Method Area）与Java堆一样，是各个线程共享的内存区域，它用于存储已被虚拟机加载的类信息，常量，静态变量，即时编译器所产生的本地代码数据等。<br>更多内容请穿越至<a href="http://blog.zhqy.xyz/articles/2019/12/18/1576664538449.html" target="_blank" rel="noopener">走进方法区的前世今生</a></p>
-<h5 id="运行时常量池"><a href="#运行时常量池" class="headerlink" title="运行时常量池"></a>运行时常量池</h5><p>运行时常量池（runtime constant pool）是class文件中每一个类或接口的<strong>常量池表</strong>（constant_pool table）的运行时表现，它包括了若干种不同的常量，从编译期可知的数字字面量到必须在运行时期解析后才能获得的方法或字段引用。每一个运行时常量池都在Java虚拟机的方法区中分配，在加载类和接口到虚拟机后，就创建对应的运行时常量池。在创建类和接口的运行时常量池时，可能会发生如下异常。</p>
-<ul>
-<li>当创建类或接口的时候，如果构造运行时常量池所需要的内存空间超过了方法区所能提供的最大值，那么Java虚拟机将会抛出OutOfMemoryError异常。</li>
-</ul>
-<p>以上就是关于Java虚拟机结构的一些内容了，需要注意的是，运行时数据区就是我们常说的<strong>Java内存结构（JVM内存结构）</strong>，而不是<strong>Java内存模型</strong>，更不是<strong>jvm内存模型（根本没有这个概念）</strong>。除此之外还有一个概念叫做<strong>Java对象模型</strong>，如果你对这几个东西还不甚了解的话，可以看下<a href="https://www.hollischuang.com/archives/2509" target="_blank" rel="noopener">JVM内存结构 VS Java内存模型 VS Java对象模型</a>。</p>
-<hr>
-<p>本文参考：<br>《深入理解Java虚拟机》<br>《Java虚拟机规范（Java SE 8 版）》</p>
-
-          
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2019/12/12/articles/2019/12/12/1576085235290.html/" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -953,157 +892,15 @@
 
       
         
-          
-            <p><img src="https://img.hacpai.com/bing/20180322.jpg?imageView2/1/w/960/h/540/interlace/1/q/100" alt="null"></p>
+          <p><img src="https://img.hacpai.com/bing/20180322.jpg?imageView2/1/w/960/h/540/interlace/1/q/100" alt="null"></p>
 <p>记录一些常见的面试题，为以后面试做准备</p>
-<h3 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h3><p>2019 - 12 -11</p>
-<p><a href="#1">1.jdk，jre的区别是什么？jvm又是什么？</a></p>
-<p><a href="#2">2.<code>static</code>关键字是什么意思？Java中是否可以覆盖（override）一个<code>private</code>或者是<code>static</code>的方法？</a></p>
-<p><a href="#3">3.是否可以在<code>static</code>环境中访问非<code>static</code>变量？</a></p>
-<p><a href="#4">4.Java中支持的数据类型有哪些？什么是自动拆装箱？</a></p>
-<p>2019 - 12 -12</p>
-<p><a href="#5">5.什么是Java虚拟机？为什么Java被称作是“平台无关的编程语言”？</a></p>
-<p><a href="#6">6.Java中的方法覆盖（Overriding）和方法重载（Overload）是什么意思？</a></p>
-<p><a href="#7">7.java中，什么是构造方法？什么是构造方法重载？什么是复制构造方法？</a></p>
-<p><a href="#8">8.Java支持多继承吗？</a></p>
-<p><a href="#9">9.接口和抽象类的区别是什么？</a></p>
-<p><a href="#10">10.什么是值传递和引用传递</a></p>
-<p><a href="#11">11.进程和线程的区别是什么？</a></p>
-<p><a href="#12">12.在Java中创建线程有几种不同的方式？你喜欢哪一种？为什么？</a></p>
-<p>2019 - 12 -13</p>
-<p><a href="#13">13.概括的解释下线程的几种可用状态</a></p>
-<p><a href="#14">14.同步方法和同步代码块的区别是什么呢？</a></p>
-<p><a href="#15">15.在监视器（Monitor）的内部，是如何做线程同步的，程序应该做到哪种级别的同步？</a></p>
-<p>2019 -12 -17 </p>
-<p><a href="#16">16.什么是死锁（deadlock）？</a></p>
-<p><a href="#17">17.如何确保N个线程可以访问N个资源同时有不导致死锁？</a></p>
-<p><a href="#18">18.Java集合类框架的基本接口有哪些？</a></p>
-<p><a href="#19">19.为什么集合类没有实现Cloneable和Serializable？</a></p>
-<p><a href="#20">20.什么是迭代器（Iterator）？</a></p>
-<p><a href="#21">21.Iterator和ListIterator的区别是什么？</a></p>
-<hr>
-<h4 id="1-jdk，jre的区别是什么？jvm又是什么？"><a href="#1-jdk，jre的区别是什么？jvm又是什么？" class="headerlink" title="1.jdk，jre的区别是什么？jvm又是什么？"></a><span id="1">1.jdk，jre的区别是什么？jvm又是什么？</span></h4><blockquote>
-<p>JDK:　<code>Java Development ToolKit</code>(Java开发工具包)。JDK是整个JAVA的核心，<em>包括了Java运行环境（Java Runtime Envirnment），一堆Java工具（javac/java/jdb等）和Java基础的类库（即Java API 包括rt.jar）</em>。可以让开发者开发，编译，执行Java应用程序</p>
-<p>JRE:<code>Java Runtime Enviromental</code>(java运行时环境)。也就是我们说的JAVA平台，所有的Java程序都要在JRE下才能运行。包括JVM和JAVA核心类库和支持文件。<strong>与JDK相比，它不包含开发工具——编译器、调试器和其它工具。</strong></p>
-<p>JVM：<code>Java Virtual Mechinal</code>(JAVA虚拟机)。JVM是JRE的一部分，它是一个虚构出来的计算机，是通过在实际的计算机上仿真模拟各种计算机功能来实现的。</p>
-</blockquote>
-<h4 id="2-static关键字是什么意思？Java中是否可以覆盖（override）一个private或者是static的方法？"><a href="#2-static关键字是什么意思？Java中是否可以覆盖（override）一个private或者是static的方法？" class="headerlink" title="2.static关键字是什么意思？Java中是否可以覆盖（override）一个private或者是static的方法？"></a><span id="2">2.<code>static</code>关键字是什么意思？Java中是否可以覆盖（override）一个<code>private</code>或者是<code>static</code>的方法？</span></h4><blockquote>
-<p>在Java中变量的类型有类变量，成员变量，局部变量，用<code>static</code>修饰的变量即是类变量，他不属于类的具体实例，而是属于类的。</p>
-<p>Java中的<code>private</code>方法不能被覆盖，因为<code>private</code>修饰的变量或者方法只在当前类中可以访问，如果是其他的类继承当前类是不能访问到<code>private</code>变量或者方法的，因此当然不能覆盖。</p>
-<p>Java中的<code>static</code>方法也不能被覆盖，因为方法覆盖是基于运行时动态绑定的，而<code>static</code>方法是编译时静态绑定的。<code>static</code>方法跟类的任何实例都不相关，所以概念上不适用。</p>
-</blockquote>
-<h4 id="3-是否可以在static环境中访问非static变量？"><a href="#3-是否可以在static环境中访问非static变量？" class="headerlink" title="3.是否可以在static环境中访问非static变量？"></a><span id="3">3.是否可以在<code>static</code>环境中访问非<code>static</code>变量？</span></h4><blockquote>
-<p><code>static</code>变量在Java中是属于类的，他在所有的实例中的值都是一样的，当类被Java虚拟机载入的时候，会对<code>static</code>变量进行初始化。如果你的代码尝试不用实例来访问非<code>static</code>的变量，编译器会报错，因为这些变量还没有被创建出来，还没有跟任何实例绑定。所以不可以在<code>static</code>环境中访问非<code>static</code>变量</p>
-</blockquote>
-<h4 id="4-Java中支持的数据类型有哪些？什么是自动拆装箱？"><a href="#4-Java中支持的数据类型有哪些？什么是自动拆装箱？" class="headerlink" title="4.Java中支持的数据类型有哪些？什么是自动拆装箱？"></a><span id="4">4.Java中支持的数据类型有哪些？什么是自动拆装箱？</span></h4><blockquote>
-<p>Java中一共有两大类数据类型，一种是基本数据类型，一种是引用数据类型。其中基本数据类型有8种，它们分别是，<code>byte</code>,<code>short</code>,<code>int</code>,<code>long</code>,<code>float</code>,<code>double</code>,<code>boolean</code>,<code>char</code>，除了8种基本数据类型外，还有3种引用类型，它们分别是，类，接口，数组</p>
-<p>自动装箱是Java编译器在基本数据类型和对应的包装类型之间做得一个转化。比如: 把<code>int</code>转化为<code>Integer</code>，<code>double</code>转化为<code>Double</code>，等等。反之就是自动拆箱。</p>
-</blockquote>
-<h4 id="5-什么是Java虚拟机？为什么Java被称作是“平台无关的编程语言”？"><a href="#5-什么是Java虚拟机？为什么Java被称作是“平台无关的编程语言”？" class="headerlink" title="5.什么是Java虚拟机？为什么Java被称作是“平台无关的编程语言”？"></a><span id="5">5.什么是Java虚拟机？为什么Java被称作是“平台无关的编程语言”？</span></h4><blockquote>
-<p>Java虚拟机是一个可以执行Java字节码的虚拟机进程。Java源文件被编译成能被Java虚拟机执行的字节码文件。Java被设计成允许应用程序可以运行在任意的平台，而不需要程序员为每一个平台单独重写或者是重新编译。而这写能够实现，基本全靠Java虚拟机，Java虚拟机屏蔽了底层操作系统和硬件的差异，以此让Java编译后的字节码在Java虚拟机上运行的结果一致。值得注意的是，Java虽然是平台无关性的，但是Java虚拟机是平台有关的，正因为Java虚拟机平台有关性，才造就了Java语言的平台无关性。</p>
-</blockquote>
-<h4 id="6-Java中的方法覆盖（Overriding）和方法重载（Overload）是什么意思？"><a href="#6-Java中的方法覆盖（Overriding）和方法重载（Overload）是什么意思？" class="headerlink" title="6.Java中的方法覆盖（Overriding）和方法重载（Overload）是什么意思？"></a><span id="6">6.Java中的方法覆盖（Overriding）和方法重载（Overload）是什么意思？</span></h4><blockquote>
-<p>Java中的方法重载发生在同一个类里面，两个或者是多个方法的方法名相同但是参数不同的情况。与此相对，方法覆盖是说子类重新定义了父类的方法。方法覆盖必须有相同的方法名，参数列表和返回类型。覆盖者可能不会限制他所覆盖的方法的访问。</p>
-</blockquote>
-<h4 id="7-java中，什么是构造方法？什么是构造方法重载？什么是复制构造方法？"><a href="#7-java中，什么是构造方法？什么是构造方法重载？什么是复制构造方法？" class="headerlink" title="7.java中，什么是构造方法？什么是构造方法重载？什么是复制构造方法？"></a><span id="7">7.java中，什么是构造方法？什么是构造方法重载？什么是复制构造方法？</span></h4><blockquote>
-<p>当新对象对创建的时候，构造方法会被调用。每一个类都有构造方法。在程序员没有给类提供构造方法的情况下，Java编译器会为这个类创建一个默认的构造方法。Java中构造方法重载和方法重载很类似。可以为一个类创建多个构造方法。每一个构造方法必须有它自己唯一的参数列表。Java不支持像C++中那样的复制构造方法，因为如果你不自己写构造方法的情况下，Java不会创建默认的复制构造方法。</p>
-</blockquote>
-<h4 id="8-Java支持多继承吗？"><a href="#8-Java支持多继承吗？" class="headerlink" title="8.Java支持多继承吗？"></a><span id="8">8.Java支持多继承吗？</span></h4><blockquote>
-<p>Java中类不支持多继承，只支持单继承，即一个类只有一个父类。这是基于安全性的考虑，如果子类继承的多个父类里面有相同的方法或者属性，子类将不知道具体要继承哪个。而接口是可以多实现，接口的作用是用来扩展对象的功能，一个子接口实现多个父接口，因为接口只定义方法，而没有具体的逻辑实现，多实现也要重新实现方法。</p>
-</blockquote>
-<h4 id="9-接口和抽象类的区别是什么？"><a href="#9-接口和抽象类的区别是什么？" class="headerlink" title="9.接口和抽象类的区别是什么？"></a><span id="9">9.接口和抽象类的区别是什么？</span></h4><blockquote>
-<p>接口中的所有方法隐含的都是抽象的。而抽象类这可以同时包含抽象和非抽象的方法。类可以实现多个接口，但是只能继承一个抽象类。类可以不实现抽象类和接口声明的所有方法，当然，在这种情况下，类也必须的声明是抽象的。<strong>在jdk8之前</strong>，接口之中可以定义变量和方法，变量必须是<code>public</code>、<code>static</code>、<code>final</code>的，方法必须是<code>public</code>、<code>abstract</code>的。<strong>JDK8及以后</strong>，允许我们在接口中定义<code>static</code>方法和<code>default</code>方法，当定义一个实现类实现该接口后，由于<code>default</code>方法不是<code>abstract</code>的，所以可以在实现类中不重写。抽象类可以有<code>private</code>，<code>protected</code>和<code>public</code>等修饰符</p>
-</blockquote>
-<h4 id="10-什么是值传递和引用传递"><a href="#10-什么是值传递和引用传递" class="headerlink" title="10.什么是值传递和引用传递"></a><span id="10">10.什么是值传递和引用传递</span></h4><blockquote>
-<p>值传递（pass by value）：是指在调用函数时将实际参数复制一份传递到函数中，这样在函数中如果参数进行修改，将不会影响到实际参数</p>
-<p>引用传递（pass by reference）：是指在调用函数的时候将实际参数的地址直接传递到函数中，那么在函数中对参数的修改，将影响到实际参数。</p>
-<p>区别：值传递会创建副本，引用传递不会在Java中不管是基本数据类型还是引用类型，都是值传递！关于此点请看 <a href="http://blog.zhqy.xyz/articles/2019/10/28/1572216852597.html" target="_blank" rel="noopener">为什么java中只有值传递</a></p>
-</blockquote>
-<h4 id="11-进程和线程的区别是什么？"><a href="#11-进程和线程的区别是什么？" class="headerlink" title="11.进程和线程的区别是什么？"></a><span id="11">11.进程和线程的区别是什么？</span></h4><p>进程是执行着的程序，而线程是进程内部的一个执行序列。一个进程可以包含多个线程。线程又叫做轻量级进程。线程与进程的区别归纳：</p>
-<blockquote>
-<ul>
-<li><p>地址空间和其他资源：进程之间相互独立，同一进程的各线程间共享。某进程内的线程在其它进程不可见。</p>
-</li>
-<li><p>通信：进程间通信IPC，线程之间可以直接读取数据段（如全局变量）来进行通信——需要进程同步和互斥手段的辅助，以保证数据的一致性。</p>
-</li>
-<li><p>调度和切换：线程上下文切换比进程上下文切换要快得多。</p>
-</li>
-<li><p>在多线程OS中，进程不是一个可执行的实体。</p>
-</li>
-</ul>
-</blockquote>
-<h4 id="12-在Java中创建线程有几种不同的方式？你喜欢哪一种？为什么？"><a href="#12-在Java中创建线程有几种不同的方式？你喜欢哪一种？为什么？" class="headerlink" title="12.在Java中创建线程有几种不同的方式？你喜欢哪一种？为什么？"></a><span id="12">12.在Java中创建线程有几种不同的方式？你喜欢哪一种？为什么？</span></h4><blockquote>
-<p>有四种方式可以用来创建线程：</p>
-<ul>
-<li><p>继承<code>Thread</code>类,实现方法<code>run()</code>不可以抛异常 无返回值</p>
-</li>
-<li><p>实现<code>Runnable</code>接口,实现方法<code>run()</code>不可以抛异常 无返回值</p>
-</li>
-<li><p>实现<code>Callable&lt;T&gt;</code>接口,要覆盖的方法是<code>public &lt;T&gt; call()</code> 可以抛异常,可以有返回值</p>
-</li>
-<li><p>使用<code>Executor</code>接口的<code>ThreadPoolExecutor</code>来创建线程池我一般通过实现<code>Runnable</code>接口，因为这种方式避免了单继承的局限，一个类可以继承多个接口。</p>
-</li>
-</ul>
-</blockquote>
-<h4 id="13-概括的解释下线程的几种可用状态"><a href="#13-概括的解释下线程的几种可用状态" class="headerlink" title="13.概括的解释下线程的几种可用状态"></a><span id="13">13.概括的解释下线程的几种可用状态</span></h4><blockquote>
-<ul>
-<li><p>新建（new）：初始状态，线程被创建，没有调用<code>start()</code></p>
-</li>
-<li><p>就绪（Runnable）：线程调用了<code>start()</code>，此时位于可运行线程池中，等待线程被调度选中获取CPU的时间片。</p>
-</li>
-<li><p>运行（Running）：就绪状态的线程获得了CPU时间片，执行程序代码</p>
-</li>
-<li><p>阻塞（Blocked）：线程进入等待状态，线程因为某种原因，让出了CPU的使用权，停止运行，直到线程进入就绪状态，才有可能再次获得CPU时间片进入运行状态。</p>
-</li>
-<li><p>死亡（dead）：线程<code>run()</code>、<code>main()</code>方法执行完毕，或者因为异常退出了<code>run()</code>方法，则线程结束生命周期。</p>
-<p>  <strong>其中阻塞的情况分成三种</strong></p>
-</li>
-<li><p>等待阻塞：运行的线程执行了wait()，JVM会把当前线程放入等待队列</p>
-</li>
-<li><p>同步阻塞：运行的线程在获取对象的同步锁时，如果该同步锁被其他线程占用了，JVM会把当前线程放入锁池中</p>
-</li>
-<li><p>其他阻塞：运行的线程执行sleep(),join()或者发出IO请求时，JVM会把当前线程设置为阻塞状态，当sleep()执行完，join()线程终止，IO处理完毕线程再次恢复</p>
-</li>
-</ul>
-</blockquote>
-<h4 id="14-同步方法和同步代码块的区别是什么呢？"><a href="#14-同步方法和同步代码块的区别是什么呢？" class="headerlink" title="14.同步方法和同步代码块的区别是什么呢？"></a><span id="14">14.同步方法和同步代码块的区别是什么呢？</span></h4><blockquote>
-<p>同步方法默认用<code>this</code>或者当前类class对象作为锁。同步代码块可以选择以什么来加锁，比同步方法要更细腻度，我们可以选择只同步会发生同步问题的代码块而不是整个方法。同步方法使用关键字<code>synchronized</code>修饰方法，而同步代码块主要是修饰需要进行同步的代码，用<code>synchronized(object){代码内容}</code>进行修饰。</p>
-</blockquote>
-<h4 id="15-在监视器（Monitor）的内部，是如何做线程同步的，程序应该做到哪种级别的同步？"><a href="#15-在监视器（Monitor）的内部，是如何做线程同步的，程序应该做到哪种级别的同步？" class="headerlink" title="15.在监视器（Monitor）的内部，是如何做线程同步的，程序应该做到哪种级别的同步？"></a><span id="15">15.在监视器（Monitor）的内部，是如何做线程同步的，程序应该做到哪种级别的同步？</span></h4><blockquote>
-<p>监视器和锁在Java虚拟机中是一块使用的。监视器监视一块同步代码块，确保一次只有一个线程执行同步代码块。每一个监视器都和一个对象引用相关联。线程在获取锁之前不允许执行同步代码！</p>
-</blockquote>
-<h4 id="16-什么是死锁（deadlock）？"><a href="#16-什么是死锁（deadlock）？" class="headerlink" title="16.什么是死锁（deadlock）？"></a><span id="16">16.什么是死锁（deadlock）？</span></h4><blockquote>
-<p>所谓死锁就是指多个进程因为竞争资源而造成一种僵局（互相等待）。若无外力作用，这些进程都将无法向前推进。死锁产生的四个条件。</p>
-<ul>
-<li>互斥条件：进程要求对所分配的资源进行排他性控制，即在一段时间内，某个资源仅为一个进程所占有。此时如果有其他进程请求该资源，则请求进程只能等待。</li>
-<li>不剥夺条件：进程所获得资源在没有使用完毕之前，不能被其他进程强行夺走，即只能由获得该资源的进程自己释放（即主动释放）</li>
-<li>请求和保持条件：进程已经保持了至少一个资源，但又提出了新的资源请求，而该资源又被其他进程所占有，此时请求进程被阻塞。但对自己已获得资源保持不放。</li>
-<li>循环等待条件：存在一种进程资源的循环等待链，链中每一个进程以获得的资源同时被链中下一个进程所请求。</li>
-</ul>
-</blockquote>
-<h4 id="17-如何确保N个线程可以访问N个资源同时有不导致死锁？"><a href="#17-如何确保N个线程可以访问N个资源同时有不导致死锁？" class="headerlink" title="17.如何确保N个线程可以访问N个资源同时有不导致死锁？"></a><span id="17">17.如何确保N个线程可以访问N个资源同时有不导致死锁？</span></h4><blockquote>
-<p>预防死锁，预先破坏产生死锁的四个条件，线程互斥基本不可避免，所以主要有破坏请求和保持条件，破坏不剥夺条件和破坏循环等待条件。其中实现简单的就是破坏循环等待条件。这个可以通过指定加锁顺序，即让所有的线程按照相同的顺序获取资源的锁，不先获得顺序靠前的锁，就无法获得后续的锁。则先获得锁的线程不会请求后获得的锁的线程需要的资源，因为后获得锁的线程还没有获得先获得锁的线程未释放的锁，更无法占用先获得锁的线程还没获得的顺序靠后的锁。</p>
-</blockquote>
-<h4 id="18-Java集合类框架的基本接口有哪些？"><a href="#18-Java集合类框架的基本接口有哪些？" class="headerlink" title="18.Java集合类框架的基本接口有哪些？"></a><span id="18">18.Java集合类框架的基本接口有哪些？</span></h4><blockquote>
-<p>集合类接口指定了一组叫做元素的对象。集合类接口的每一种具体的实现类都可以选择以他自己的方式对元素进行保存和排序。有的集合类允许重复的键，有些不允许。<br>Java集合类里面最基本的接口有</p>
-<ul>
-<li>Collection：代表一组对象，每一个对象都是他的子元素。</li>
-<li>Set：不包含重复元素的Collection。</li>
-<li>List：有顺序的Collection，并且可以包含重复元素。</li>
-<li>Map：可以把键（key）映射到值（value）的对象，键不能重复。</li>
-</ul>
-</blockquote>
-<h4 id="19-为什么集合类没有实现Cloneable和Serializable？"><a href="#19-为什么集合类没有实现Cloneable和Serializable？" class="headerlink" title="19.为什么集合类没有实现Cloneable和Serializable？"></a><span id="19">19.为什么集合类没有实现Cloneable和Serializable？</span></h4><blockquote>
-<p>克隆（cloning）或者序列化（serialization）的语义和含义是跟具体的实现相关的。因此，应该由集合类的具体实现类决定如何被克隆或者是序列化！</p>
-</blockquote>
-<h4 id="20-什么是迭代器（Iterator）？"><a href="#20-什么是迭代器（Iterator）？" class="headerlink" title="20.什么是迭代器（Iterator）？"></a><span id="20">20.什么是迭代器（Iterator）？</span></h4><blockquote>
-<p>Iterator接口提供了很多对集合元素进行迭代的方法。每一个集合类都包含了可以返回迭代器实例的迭代方法。迭代器可以在迭代过程中删除底层集合的元素，但是不可以直接调用集合的remove(Object Obj)删除，可以通过迭代器的remove（）方法删除。</p>
-</blockquote>
-<h4 id="21-Iterator和ListIterator的区别是什么？"><a href="#21-Iterator和ListIterator的区别是什么？" class="headerlink" title="21.Iterator和ListIterator的区别是什么？"></a><span id="21">21.Iterator和ListIterator的区别是什么？</span></h4><blockquote>
-<p>Iterator可用来遍历Set和Listen集合，但是ListIterator只能用来遍历List。<br>Iterator对集合只能是前向遍历，ListIterator既可以前向也可以后向。<br>ListIterator实现了Iterator接口，并包含其他的功能，比如：增加元素，替换元素，获取前一个和后一个元素的索引，等等。</p>
-</blockquote>
-<h4 id=""><a href="#" class="headerlink" title=""></a><span id=""></span></h4>
-          
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2019/12/11/articles/2019/12/11/1576077816315.html/" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>

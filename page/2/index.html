@@ -387,36 +387,15 @@
 
       
         
-          
-            <p><img src="https://img.hacpai.com/bing/20180703.jpg?imageView2/1/w/960/h/540/interlace/1/q/100" alt=""></p>
+          <p><img src="https://img.hacpai.com/bing/20180703.jpg?imageView2/1/w/960/h/540/interlace/1/q/100" alt=""></p>
 <h3 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h3><p>昨天做了内网穿透后，成功通过我的服务器访问到了内网站点，今早准备登上服务器去完善东西的时候，突然发现，服务器磁盘满了。图示如下：</p>
-<p><img src="https://img.hacpai.com/file/2019/12/1-a6139406.png" alt="1.png"></p>
-<h3 id="分析问题"><a href="#分析问题" class="headerlink" title="分析问题"></a>分析问题</h3><p>正好前一阵看了Linux的磁盘管理命令，这次终于派上用场了（真心不希望呀  :joy:），好吧，先看看怎么回事吧。输入 <code>df -h</code>，结果如下：</p>
-<p><img src="https://img.hacpai.com/file/2019/12/2-11872adc.png" alt="2.png"></p>
-<p>看见 /dev/vda1 Used 50G , 瞬间惊了，这不就是我的系统盘嘛，这也真的太满了吧！！然后 <code>cd /</code>进入根目录开始排查是哪个文件占据了大量的空间。进入根目录后 执行<code>du -sh *</code>（这里也可用 <code>du -sh * | sort -rh</code>，让结果排序）。输出如下：</p>
-<p><img src="https://img.hacpai.com/file/2019/12/3-42bd6b37.png" alt="3.png"></p>
-<p>从输出中可以看到 <strong>var目录</strong> 使用了 47G，看见var这么大，这时心中就已经猜到肯定是某个服务在那里作祟。进入var目录看一下究竟是谁在那捣乱吧。</p>
-<p><img src="https://img.hacpai.com/file/2019/12/4-2ffefa58.png" alt="4.png"></p>
-<p>这里可以看到<strong>lib目录</strong>使用46G，好，接着深入，看看究竟怎么回事</p>
-<p><img src="https://img.hacpai.com/file/2019/12/5-5856a726.png" alt="5.png"></p>
-<p>进入lib后，再次执行 <code>du -sh *</code>,这时罪魁祸首已经出来了。docker引起的，为什么会这样呢。我的docker里面只运行了一个solo博客，怎么会这么大？？于是接着进入docker</p>
-<p><img src="https://img.hacpai.com/file/2019/12/6-04087ba0.png" alt="6.png"></p>
-<p>可以看到containers高达45g，这明显是容器的问题了，然后继续进入containers</p>
-<p><img src="https://img.hacpai.com/file/2019/12/7-a6672387.png" alt="7.png"></p>
-<p>看见beee7这个容器占了45g之多，然后进入该目录</p>
-<p><img src="https://img.hacpai.com/file/2019/12/8-be4d89a7.png" alt="8.png"></p>
-<p>执行 <code>du -sh *</code> 然后罪魁祸首就出现了，名为beee7这个文件占了整整45g，而这正是该容器应用的日志文件。这时候我们只是找到了磁盘占满是由于docker中的日志文件引起的。但是并不知道究竟是什么原因导致该应用一直输出日志。这时候由于日志文件太打，不能全部打开访问，我们就可以采用 <code>tail -n 行数 file</code>命令来提取日志文件的尾部多少行进一步的分析。</p>
-<h3 id="解决问题"><a href="#解决问题" class="headerlink" title="解决问题"></a>解决问题</h3><p>在分析完毕找到原因过后，我们就可以将日志文件清空了，这时可以用命令<code>cat /var/null&gt;file</code>.这里需要注意的是不能使用<code>rm -rf file</code> 删除日志文件，如果你执行这个命令删除文件后，通过<code>df -h</code>会发现磁盘空间并没有释放，原因是在Linux或者Unix系统中，通过<code>rm -rf</code>或者文件管理器删除文件，将会从文件系统的目录结构上解除链接（unlink）。如果文件是被打开的（有一个进程正在使用），那么进程将仍然可以读取该文件，磁盘空间也一直被占用。</p>
-<hr>
-<h3 id="如何预防"><a href="#如何预防" class="headerlink" title="如何预防"></a>如何预防</h3><p>虽然说这样做可以解决问题，那也只是治标不治本，难道下次再次发生这样的问题我又要来重复这样的工作吗？不，我懒，不愿意再做这样的事情了。所以我想让日志文件的大小受到限制，不让它有膨胀的机会。通过docker的相关文档，发现我们我们可以修改docker的配置来限制日志文件的大小。</p>
-<h4 id="全局配置"><a href="#全局配置" class="headerlink" title="全局配置"></a>全局配置</h4><p>新建/etc/docker/daemon.json，若有就不用新建了。添加log-dirver和log-opts参数，样例如下：<br><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">"log-driver"</span>:<span class="string">"json-file"</span>,</span><br><span class="line">  <span class="attr">"log-opts"</span>: &#123;<span class="attr">"max-size"</span>:<span class="string">"500m"</span>, <span class="attr">"max-file"</span>:<span class="string">"5"</span>&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>max-size=500m，意味着一个容器日志大小上限是500M，<br>max-file=5，意味着一个容器有五个日志，分别是id+.json、id+1.json、id+2.json等。</p>
-<p>这样配置过后，重启docker的守护线程。<strong>以后新建的容器都会有效</strong>，但是如果我不想删除现在的容器重新建立一个又该怎么办？</p>
-<h4 id="设置一个容器服务的日志大小上限"><a href="#设置一个容器服务的日志大小上限" class="headerlink" title="设置一个容器服务的日志大小上限"></a>设置一个容器服务的日志大小上限</h4><p>上述方法，日志文件迟早又会涨回来。要从根本上解决问题，需要限制容器服务的日志大小上限。这个通过配置容器docker-compose的max-size选项来实现</p>
-<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">logging:</span> </span><br><span class="line"><span class="attr">  driver:</span> <span class="string">“json-file”</span> </span><br><span class="line"><span class="attr">  options:</span> </span><br><span class="line"><span class="attr">    max-size:</span> <span class="string">“3g”</span></span><br></pre></td></tr></table></figure>
-<p>重启容器之后，其日志文件的大小就被限制在3GB，再也不用担心了。</p>
-
-          
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2019/12/10/articles/2019/12/10/1575960493018.html/" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -575,24 +554,15 @@
 
       
         
-          
-            <p> <img src="https://img.hacpai.com/bing/20181123.jpg?imageView2/1/w/960/h/540/interlace/1/q/100" alt=""></p>
-<h3 id="Why-do-this-？"><a href="#Why-do-this-？" class="headerlink" title="Why do this ？"></a>Why do this ？</h3><p>博客写好了之后也需要经常的去回顾，所以我也经常在手机上浏览自己的博客加深对知识的印象，可是每次阅读到最后的时候，那一排长长的地址的布局让人绝望，于是我就想能不能通过将长URL转换为短URL，使得页面更加的简练。<br><strong>让人难受的布局：</strong></p>
-<p><img src="https://img.hacpai.com/file/2019/12/深度截图选择区域20191206225434-0e7e0333.png" alt="深度截图选择区域20191206225434.png"></p>
-<p><strong>转换后的布局：</strong></p>
-<p><img src="https://img.hacpai.com/file/2019/12/深度截图选择区域20191206225609-c8372fcf.png" alt="深度截图选择区域20191206225609.png"></p>
-<h3 id="How-to-do？"><a href="#How-to-do？" class="headerlink" title="How to do？"></a>How to do？</h3><p>在早之前自己就准备弄一个短网址转换的工具（虽然网上有很多，但是自己写真的很想写！！！），这次博客这地址就让我直接动工了，然后直接查找相关的博客看看别人怎么实现的。这里参考了<a href="https://www.cnblogs.com/yuanjiangw/p/9791855.html" target="_blank" rel="noopener">短网址(short URL)系统的原理及其实现</a><br>刚开始本来是想写个前端页面输入长URL得到短URL，直接将转换后的短URL放在那个位置，但是自己真不太会，写来好丑。。。于是就想直接调用一个接口返回js，然后这个js去获取a标签的值，然后在将该值通过js原生ajax调用另一个接口得到转换后的短URL，再将URL写入a标签。</p>
-<h3 id="How-to-use"><a href="#How-to-use" class="headerlink" title="How to use"></a>How to use</h3><h4 id="（1）话不多说，可以直接直接用我搭的服务"><a href="#（1）话不多说，可以直接直接用我搭的服务" class="headerlink" title="（1）话不多说，可以直接直接用我搭的服务"></a>（1）话不多说，可以直接直接用我搭的服务</h4><p>给文章的签名档上的地址a标签一个<code>id=“url”</code>，然后调用我的服务返回一个js脚本即可。<br>代码示例如下：<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">地址：&lt;a href=<span class="string">"&#123;url&#125;"</span> target=<span class="string">"_blank"</span> id=<span class="string">"url"</span>&gt;&#123;url&#125;&lt;<span class="regexp">/a&gt;&lt;br&gt;</span></span><br><span class="line"><span class="regexp">&lt;script src="http:/</span><span class="regexp">/surl.zhqy.xyz/u</span>rl/js<span class="string">" charset="</span>utf<span class="number">-8</span><span class="string">"&gt;&lt;/script&gt;</span></span><br><span class="line"><span class="string">&lt;script&gt;setUrl();&lt;/script&gt;</span></span><br></pre></td></tr></table></figure></p>
-<p>图片示例如下：<br><img src="https://img.hacpai.com/file/2019/12/深度截图选择区域20191207083126-1a1a65e1.png" alt="深度截图选择区域20191207083126.png"></p>
-<h4 id="（2）拉取我的源代码，直接修改部署到自己的服务器"><a href="#（2）拉取我的源代码，直接修改部署到自己的服务器" class="headerlink" title="（2）拉取我的源代码，直接修改部署到自己的服务器"></a>（2）拉取我的源代码，直接修改部署到自己的服务器</h4><p>githup地址：<a href="https://github.com/geektomya/surl.git" target="_blank" rel="noopener">https://github.com/geektomya/surl.git</a><br>欢迎stars呀，顺便帮我看看代码风格，，感觉自己风格不太好:sob::pray:<br><img src="https://img.hacpai.com/file/2019/12/深度截图选择区域20191207084301-e3c15506.png" alt="深度截图选择区域20191207084301.png"></p>
-<h5 id="数据库配置"><a href="#数据库配置" class="headerlink" title="数据库配置"></a>数据库配置</h5><p><code>mysql</code>中新建数据库<code>surl</code>，字符集<code>utf8 -- UTF-8 Unicode</code>，排序规则<code>utf8_general_ci</code>然后运行doc中的数据库脚本</p>
-<h5 id="项目配置"><a href="#项目配置" class="headerlink" title="项目配置"></a>项目配置</h5><p><code>application.yml</code>中修改为你的数据库，然后在Message中修改<code>INDEX</code>，<code>PERURL</code>，<code>PERINJS</code>其中的<code>PERURL</code>修改为你的短URL的前缀（我这里后面用nginx监听这个服务，直接写了域名）<code>PERINJS</code>同理也可以写成<code>域名/url/</code>的形式，这里要注意 <code>/url/</code>后面的<code>/</code>一定不能少。</p>
-<h5 id="服务器配置"><a href="#服务器配置" class="headerlink" title="服务器配置"></a>服务器配置</h5><figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">upstream</span> shortUrl &#123;</span><br><span class="line">    <span class="attribute">server</span> localhost:<span class="number">8087</span>; <span class="comment"># 监听端口</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="section">server</span> &#123;</span><br><span class="line">    <span class="attribute">listen</span>       <span class="number">80</span>;</span><br><span class="line">    <span class="attribute">server_name</span> surl.zhqy.xyz; <span class="comment"># 域名</span></span><br><span class="line"></span><br><span class="line">    <span class="attribute">access_log</span> <span class="literal">off</span>;</span><br><span class="line"></span><br><span class="line">    <span class="attribute">location</span> / &#123;</span><br><span class="line">        <span class="attribute">proxy_pass</span> http://shortUrl<span class="variable">$request_uri</span>;</span><br><span class="line">        <span class="attribute">proxy_set_header</span>  Host <span class="variable">$host</span>:<span class="variable">$server_port</span>;</span><br><span class="line">        <span class="attribute">proxy_set_header</span>  X-Real-IP  <span class="variable">$remote_addr</span>;</span><br><span class="line">        <span class="attribute">client_max_body_size</span>  <span class="number">10m</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>当然这里你需要给你的域名一个新的二级域名解析到这里</p>
-<h5 id="solo配置"><a href="#solo配置" class="headerlink" title="solo配置"></a>solo配置</h5><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">地址：&lt;a href=<span class="string">"&#123;url&#125;"</span> target=<span class="string">"_blank"</span> id=<span class="string">"url"</span>&gt;&#123;url&#125;&lt;<span class="regexp">/a&gt;&lt;br&gt;</span></span><br><span class="line"><span class="regexp">&lt;script src="http:/</span><span class="regexp">/域名/u</span>rl/js<span class="string">" charset="</span>utf<span class="number">-8</span><span class="string">"&gt;&lt;/script&gt;</span></span><br><span class="line"><span class="string">&lt;script&gt;setUrl();&lt;/script&gt;</span></span><br></pre></td></tr></table></figure>
-<p>将域名修改为你的域名配置即可</p>
-
-          
+          <p> <img src="https://img.hacpai.com/bing/20181123.jpg?imageView2/1/w/960/h/540/interlace/1/q/100" alt=""></p>
+<h3 id="Why-do-this-？"><a href="#Why-do-this-？" class="headerlink" title="Why do this ？"></a>Why do this ？</h3><p>博客写好了之后也需要经常的去回顾，所以我也经常在手机上浏览自己的博客加深对知识的印象，可是每次阅读到最后的时候，那一排长长的地址的布局让人绝望，于是我就想能不能通过将长URL转换为短URL，使得页面更加的简练。</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2019/12/06/articles/2019/12/06/1575644210365.html/" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -751,15 +721,15 @@
 
       
         
-          
-            <p><img src="https://img.hacpai.com/bing/20180108.jpg?imageView2/1/w/960/h/540/interlace/1/q/100" alt=""></p>
+          <p><img src="https://img.hacpai.com/bing/20180108.jpg?imageView2/1/w/960/h/540/interlace/1/q/100" alt=""></p>
 <p>新的一天，开冲  :rocket:  :rocket:</p>
-<h3 id="题目描述"><a href="#题目描述" class="headerlink" title="题目描述"></a>题目描述</h3><p>给定一个字符串，请你找出其中不含有重复字符的 最长子串 的长度。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">示例 1:</span><br><span class="line">输入: &quot;abcabcbb&quot;</span><br><span class="line">输出: 3 </span><br><span class="line">解释: 因为无重复字符的最长子串是 &quot;abc&quot;，所以其长度为 3。</span><br><span class="line"></span><br><span class="line">示例 2:</span><br><span class="line">输入: &quot;bbbbb&quot;</span><br><span class="line">输出: 1</span><br><span class="line">解释: 因为无重复字符的最长子串是 &quot;b&quot;，所以其长度为 1。</span><br><span class="line"></span><br><span class="line">示例 3:</span><br><span class="line">输入: &quot;pwwkew&quot;</span><br><span class="line">输出: 3</span><br><span class="line">解释: 因为无重复字符的最长子串是 &quot;wke&quot;，所以其长度为 3。请注意，你的答案必须是 子串 的长度，&quot;pwke&quot; 是一个子序列，不是子串。</span><br></pre></td></tr></table></figure></p>
-<p>来源：力扣（LeetCode）<br>链接：<a href="https://leetcode-cn.com/problems/longest-substring-without-repeating-characters" target="_blank" rel="noopener">https://leetcode-cn.com/problems/longest-substring-without-repeating-characters</a></p>
-<h3 id="问题拆解"><a href="#问题拆解" class="headerlink" title="问题拆解"></a>问题拆解</h3><p>根据题目要求的最长子串，有一个基本的思路是遍历字符串，保存已经遍历过的字符到子串。每次遍历的时候首先判断该字符是否在已经遍历过的子串中，如果没有就将该字符串保存到已遍历集合。如果存在就获取已经遍历过的子串的长度，然后与之前的子串的最大长度做比较，取最大值做为当前的最大值，再清空已经遍历的集合。然后再从跟当前字符重复的字符开始遍历，最后遍历完后，返回已遍历的子串最大长度与已遍历的子串当前长度的最大值！我的代码如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">lengthOfLongestSubstring</span><span class="params">(String s)</span> </span>&#123;</span><br><span class="line">        <span class="comment">//用map是因为当字符重复后，需要从前一个该字符后重新遍历，所以从map遍历</span></span><br><span class="line">        Map&lt;Character,Integer&gt; map = <span class="keyword">new</span> HashMap&lt;Character,Integer&gt;();</span><br><span class="line">        <span class="keyword">char</span> sub[] = s.toCharArray();</span><br><span class="line">        <span class="keyword">int</span> result_length = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">int</span> j = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;sub.length;i++)&#123;</span><br><span class="line">            <span class="keyword">if</span>(map.containsKey(sub[i]))&#123;   </span><br><span class="line">                result_length = Math.max(map.size(),result_length);</span><br><span class="line">                j = map.get(sub[i]);</span><br><span class="line">                map.clear();</span><br><span class="line">                i=j;<span class="comment">//切换到被重复的前一个该字符</span></span><br><span class="line">            &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                map.put(sub[i],i);</span><br><span class="line">            &#125;       </span><br><span class="line">        &#125;   </span><br><span class="line">        <span class="keyword">return</span>  result_length = Math.max(map.size(),result_length);<span class="comment">//解决最长子串是最后一个满足条件的子串</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>这种方法虽然可以解决问题，但是可以发现，效率不太高，这里当我们发现了有重复的字符后，我们将遍历的当前位置指向了重复的前一个该字符后，这样导致了重复遍历。那么有没有一种方法，但发现有重复字符的时候可以不清除已遍历的所有字符，而是将重复的前一个该字符到之前的字符都删去。这时就可以不动当前遍历位置，从而继续遍历。方法肯定是有的，人们一般将这种方法称之为：滑动窗口法，解此题代码如下<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">lengthOfLongestSubstring</span><span class="params">(String s)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> n = s.length(), ans = <span class="number">0</span>;</span><br><span class="line">        Map&lt;Character, Integer&gt; map = <span class="keyword">new</span> HashMap&lt;&gt;(); <span class="comment">// current index of character</span></span><br><span class="line">        <span class="comment">// try to extend the range [i, j]</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>, i = <span class="number">0</span>; j &lt; n; j++) &#123;</span><br><span class="line">            <span class="keyword">if</span> (map.containsKey(s.charAt(j))) &#123;</span><br><span class="line">                i = Math.max(map.get(s.charAt(j)), i);</span><br><span class="line">            &#125;</span><br><span class="line">            ans = Math.max(ans, j - i + <span class="number">1</span>);</span><br><span class="line">            map.put(s.charAt(j), j + <span class="number">1</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> ans;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-
-          
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2019/12/01/articles/2019/12/01/1575198610185.html/" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>

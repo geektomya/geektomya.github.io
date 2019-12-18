@@ -88,20 +88,20 @@
 
 
 
-<meta name="description" content="了解jvm的过程就像从喜欢到恋爱的过程，刚开始懵懵懂懂，然后心生胆怯，最后沉迷于此。  Java虚拟机结构这里将会从class文件格式、JVM中的数据类型讲到JVM的运行时数据区 class文件格式“ Write once, run anywhere”，这句话对Java开发者来说都是无比的熟悉了。那么这种说法是怎么来的呢，为什么Java会有这样的口号呢？这其中的奥秘就在与class文件。在Jav">
+<meta name="description" content="了解jvm的过程就像从喜欢到恋爱的过程，刚开始懵懵懂懂，然后心生胆怯，最后沉迷于此。  Java虚拟机结构这里将会从class文件格式、JVM中的数据类型讲到JVM的运行时数据区">
 <meta name="keywords" content="JVM">
 <meta property="og:type" content="article">
 <meta property="og:title" content="JVM - Java虚拟机结构">
 <meta property="og:url" content="http://yoursite.com/2019/12/12//articles/2019/12/12/1576085235290.html/index.html">
 <meta property="og:site_name" content="YAO">
-<meta property="og:description" content="了解jvm的过程就像从喜欢到恋爱的过程，刚开始懵懵懂懂，然后心生胆怯，最后沉迷于此。  Java虚拟机结构这里将会从class文件格式、JVM中的数据类型讲到JVM的运行时数据区 class文件格式“ Write once, run anywhere”，这句话对Java开发者来说都是无比的熟悉了。那么这种说法是怎么来的呢，为什么Java会有这样的口号呢？这其中的奥秘就在与class文件。在Jav">
+<meta property="og:description" content="了解jvm的过程就像从喜欢到恋爱的过程，刚开始懵懵懂懂，然后心生胆怯，最后沉迷于此。  Java虚拟机结构这里将会从class文件格式、JVM中的数据类型讲到JVM的运行时数据区">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://img.hacpai.com/bing/20181222.jpg?imageView2/1/w/960/h/540/interlace/1/q/100">
 <meta property="og:image" content="https://img.hacpai.com/file/2019/12/QQ20180624150918-f5a7888e.png">
 <meta property="og:updated_time" content="2019-12-18T10:56:50.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="JVM - Java虚拟机结构">
-<meta name="twitter:description" content="了解jvm的过程就像从喜欢到恋爱的过程，刚开始懵懵懂懂，然后心生胆怯，最后沉迷于此。  Java虚拟机结构这里将会从class文件格式、JVM中的数据类型讲到JVM的运行时数据区 class文件格式“ Write once, run anywhere”，这句话对Java开发者来说都是无比的熟悉了。那么这种说法是怎么来的呢，为什么Java会有这样的口号呢？这其中的奥秘就在与class文件。在Jav">
+<meta name="twitter:description" content="了解jvm的过程就像从喜欢到恋爱的过程，刚开始懵懵懂懂，然后心生胆怯，最后沉迷于此。  Java虚拟机结构这里将会从class文件格式、JVM中的数据类型讲到JVM的运行时数据区">
 <meta name="twitter:image" content="https://img.hacpai.com/bing/20181222.jpg?imageView2/1/w/960/h/540/interlace/1/q/100">
 
 
@@ -392,6 +392,7 @@
 <p>了解jvm的过程就像从喜欢到恋爱的过程，刚开始懵懵懂懂，然后心生胆怯，最后沉迷于此。</p>
 <hr>
 <h3 id="Java虚拟机结构"><a href="#Java虚拟机结构" class="headerlink" title="Java虚拟机结构"></a>Java虚拟机结构</h3><p>这里将会从class文件格式、JVM中的数据类型讲到JVM的运行时数据区</p>
+<a id="more"></a>
 <h4 id="class文件格式"><a href="#class文件格式" class="headerlink" title="class文件格式"></a>class文件格式</h4><p>“ Write once, run anywhere”，这句话对Java开发者来说都是无比的熟悉了。那么这种说法是怎么来的呢，为什么Java会有这样的口号呢？这其中的奥秘就在与class文件。在Java中，源文件（.java）首先会被编译为字节码文件（.class），然后再将字节码文件通过jvm去执行。在字节码的格式中，精确定义了类与接口的表示形式，包括了在<strong>平台相关</strong>的目标文件格式中的一些细节上的惯例，列如字节序（byte ordering）等。</p>
 <blockquote>
 <p>这里请不要认为此处的<strong>平台相关的目标文件格式</strong>是指在特定平台编译出的class文件无法再其他平台中使用。相反，正是因为强制，明确的定义了本来会跟平台相关的细节，所以才达到了<strong>Java语言是平台无关的效果</strong>。</p>

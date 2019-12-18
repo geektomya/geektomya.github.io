@@ -88,13 +88,13 @@
 
 
 
-<meta name="description" content="“ 本文基于已经实现内网穿透的前提，例如外网服务器端口8090,已经映射到了某台内网服务器的80上 “ 多说这是撒？这里的内网外入是指什么？比如我在外网服务器上面有一个网站，该网站有一个页面，页面很简单，就只有一个输入框，当我们在这个输入框输入一个内网地址的后，按下访问后，就可以访问到内网中相应的资源。当然访问到内网地址的模式有很多，也不是说完全需要以网页输入内网地址的形式进行。这里想要表">
+<meta name="description" content="“ 本文基于已经实现内网穿透的前提，例如外网服务器端口8090,已经映射到了某台内网服务器的80上 “">
 <meta name="keywords" content="nginx,内网穿透">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Nginx与泛域名实现内网外入">
 <meta property="og:url" content="http://yoursite.com/2019/12/16//articles/2019/12/16/1576502421990.html/index.html">
 <meta property="og:site_name" content="YAO">
-<meta property="og:description" content="“ 本文基于已经实现内网穿透的前提，例如外网服务器端口8090,已经映射到了某台内网服务器的80上 “ 多说这是撒？这里的内网外入是指什么？比如我在外网服务器上面有一个网站，该网站有一个页面，页面很简单，就只有一个输入框，当我们在这个输入框输入一个内网地址的后，按下访问后，就可以访问到内网中相应的资源。当然访问到内网地址的模式有很多，也不是说完全需要以网页输入内网地址的形式进行。这里想要表">
+<meta property="og:description" content="“ 本文基于已经实现内网穿透的前提，例如外网服务器端口8090,已经映射到了某台内网服务器的80上 “">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://img.hacpai.com/bing/20171231.jpg?imageView2/1/w/960/h/540/interlace/1/q/100">
 <meta property="og:image" content="https://img.hacpai.com/file/2019/12/image-d04012e9.png">
@@ -102,7 +102,7 @@
 <meta property="og:updated_time" content="2019-12-16T13:27:13.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Nginx与泛域名实现内网外入">
-<meta name="twitter:description" content="“ 本文基于已经实现内网穿透的前提，例如外网服务器端口8090,已经映射到了某台内网服务器的80上 “ 多说这是撒？这里的内网外入是指什么？比如我在外网服务器上面有一个网站，该网站有一个页面，页面很简单，就只有一个输入框，当我们在这个输入框输入一个内网地址的后，按下访问后，就可以访问到内网中相应的资源。当然访问到内网地址的模式有很多，也不是说完全需要以网页输入内网地址的形式进行。这里想要表">
+<meta name="twitter:description" content="“ 本文基于已经实现内网穿透的前提，例如外网服务器端口8090,已经映射到了某台内网服务器的80上 “">
 <meta name="twitter:image" content="https://img.hacpai.com/bing/20171231.jpg?imageView2/1/w/960/h/540/interlace/1/q/100">
 
 
@@ -391,6 +391,7 @@
       
         <p><img src="https://img.hacpai.com/bing/20171231.jpg?imageView2/1/w/960/h/540/interlace/1/q/100" alt=""></p>
 <p>   <em>“ 本文基于已经实现内网穿透的前提，例如外网服务器端口8090,已经映射到了某台内网服务器的80上 “</em></p>
+<a id="more"></a>
 <h3 id="多说"><a href="#多说" class="headerlink" title="多说"></a>多说</h3><h4 id="这是撒？"><a href="#这是撒？" class="headerlink" title="这是撒？"></a>这是撒？</h4><p>这里的内网外入是指什么？比如我在外网服务器上面有一个网站，该网站有一个页面，页面很简单，就只有一个输入框，当我们在这个输入框输入一个内网地址的后，按下访问后，就可以访问到内网中相应的资源。当然访问到内网地址的模式有很多，也不是说完全需要以网页输入内网地址的形式进行。这里想要表达的仅仅是：<strong>我们可以输入某个已经穿透的内网中的任意地址然后获取相应的服务</strong>。在做这个之前也问过一些人，可能因为表述问题很多人给我推荐的是如何实现内网穿透，然后某个推荐：使用<strong>lua+nginx</strong>，我觉得挺不错的。在了解这个东西后才发现又是一片新大陆，用这个肯定能实现我想要的东西。但是心里总觉得用lua+nginx做这个是不是有点小题大做了，还要去学习哈lua，还要再给nginx添加lua的模块，不，我选择懒  :expressionless:，于是就开始瞎捉摸。不过好在经过无数次改配置中，直接通过nginx的配置文件外实现了想要的功能。</p>
 <h4 id="我的思路！"><a href="#我的思路！" class="headerlink" title="我的思路！"></a>我的思路！</h4><p>最开始我的第一想法是通过域名带个值为内网地址的url参数，然后通过nginx捕获，再实现转发，但是经过一系列操作后我发现这种方式最后获取到的只有目标网站的html，没有其他静态资源。几经尝试无果后放弃！</p>
 <p>然后还有想法是通过自定义请求头，将要访问的地址放入到请求头中访问，然后nginx获取，但是这种方式在写前端的时候折戟了，对于只会原生ajax请求的我，面对自定义请求头后的跨域问题一脸懵逼！于是再度放弃！😰   :sleepy:</p>

@@ -88,13 +88,13 @@
 
 
 
-<meta name="description" content="问题昨天做了内网穿透后，成功通过我的服务器访问到了内网站点，今早准备登上服务器去完善东西的时候，突然发现，服务器磁盘满了。图示如下：  分析问题正好前一阵看了Linux的磁盘管理命令，这次终于派上用场了（真心不希望呀  :joy:），好吧，先看看怎么回事吧。输入 df -h，结果如下：  看见 /dev/vda1 Used 50G , 瞬间惊了，这不就是我的系统盘嘛，这也真的太满了吧！！然后 c">
+<meta name="description" content="问题昨天做了内网穿透后，成功通过我的服务器访问到了内网站点，今早准备登上服务器去完善东西的时候，突然发现，服务器磁盘满了。图示如下：">
 <meta name="keywords" content="Linux,docker,Exception">
 <meta property="og:type" content="article">
 <meta property="og:title" content="记一次docker引起的服务器磁盘占满的问题">
 <meta property="og:url" content="http://yoursite.com/2019/12/10//articles/2019/12/10/1575960493018.html/index.html">
 <meta property="og:site_name" content="YAO">
-<meta property="og:description" content="问题昨天做了内网穿透后，成功通过我的服务器访问到了内网站点，今早准备登上服务器去完善东西的时候，突然发现，服务器磁盘满了。图示如下：  分析问题正好前一阵看了Linux的磁盘管理命令，这次终于派上用场了（真心不希望呀  :joy:），好吧，先看看怎么回事吧。输入 df -h，结果如下：  看见 /dev/vda1 Used 50G , 瞬间惊了，这不就是我的系统盘嘛，这也真的太满了吧！！然后 c">
+<meta property="og:description" content="问题昨天做了内网穿透后，成功通过我的服务器访问到了内网站点，今早准备登上服务器去完善东西的时候，突然发现，服务器磁盘满了。图示如下：">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://img.hacpai.com/bing/20180703.jpg?imageView2/1/w/960/h/540/interlace/1/q/100">
 <meta property="og:image" content="https://img.hacpai.com/file/2019/12/1-a6139406.png">
@@ -108,7 +108,7 @@
 <meta property="og:updated_time" content="2019-12-12T13:57:58.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="记一次docker引起的服务器磁盘占满的问题">
-<meta name="twitter:description" content="问题昨天做了内网穿透后，成功通过我的服务器访问到了内网站点，今早准备登上服务器去完善东西的时候，突然发现，服务器磁盘满了。图示如下：  分析问题正好前一阵看了Linux的磁盘管理命令，这次终于派上用场了（真心不希望呀  :joy:），好吧，先看看怎么回事吧。输入 df -h，结果如下：  看见 /dev/vda1 Used 50G , 瞬间惊了，这不就是我的系统盘嘛，这也真的太满了吧！！然后 c">
+<meta name="twitter:description" content="问题昨天做了内网穿透后，成功通过我的服务器访问到了内网站点，今早准备登上服务器去完善东西的时候，突然发现，服务器磁盘满了。图示如下：">
 <meta name="twitter:image" content="https://img.hacpai.com/bing/20180703.jpg?imageView2/1/w/960/h/540/interlace/1/q/100">
 
 
@@ -397,6 +397,7 @@
       
         <p><img src="https://img.hacpai.com/bing/20180703.jpg?imageView2/1/w/960/h/540/interlace/1/q/100" alt=""></p>
 <h3 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h3><p>昨天做了内网穿透后，成功通过我的服务器访问到了内网站点，今早准备登上服务器去完善东西的时候，突然发现，服务器磁盘满了。图示如下：</p>
+<a id="more"></a>
 <p><img src="https://img.hacpai.com/file/2019/12/1-a6139406.png" alt="1.png"></p>
 <h3 id="分析问题"><a href="#分析问题" class="headerlink" title="分析问题"></a>分析问题</h3><p>正好前一阵看了Linux的磁盘管理命令，这次终于派上用场了（真心不希望呀  :joy:），好吧，先看看怎么回事吧。输入 <code>df -h</code>，结果如下：</p>
 <p><img src="https://img.hacpai.com/file/2019/12/2-11872adc.png" alt="2.png"></p>
