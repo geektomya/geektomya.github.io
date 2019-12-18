@@ -88,13 +88,13 @@
 
 
 
-<meta name="description" content="前言：我为什么要去学这些东西呢？ 以前你问我MVC是什么，相信我肯定可以回答出（Model—View—Controller）然后,然后我就什么就不知道了….这其中涉及到哪些思想，哪些具体的东西，我是一概不知的。">
+<meta name="description" content="前言：我为什么要去学这些东西呢？ 以前你问我MVC是什么，相信我肯定可以回答出（Model—View—Controller）然后,然后我就什么就不知道了….这其中涉及到哪些思想，哪些具体的东西，我是一概不知的。 然后最开始接触javaWeb的时候撸了一些jsp后，写项目直接用了springboot，正所谓springboot一时爽，一直springboot一直爽。但是当我后面接触一个struts2">
 <meta name="keywords" content="Servlet">
 <meta property="og:type" content="article">
 <meta property="og:title" content="MVC-Servlet">
 <meta property="og:url" content="http://yoursite.com/2019/03/18/MVC-Servlet/index.html">
 <meta property="og:site_name" content="YAO">
-<meta property="og:description" content="前言：我为什么要去学这些东西呢？ 以前你问我MVC是什么，相信我肯定可以回答出（Model—View—Controller）然后,然后我就什么就不知道了….这其中涉及到哪些思想，哪些具体的东西，我是一概不知的。">
+<meta property="og:description" content="前言：我为什么要去学这些东西呢？ 以前你问我MVC是什么，相信我肯定可以回答出（Model—View—Controller）然后,然后我就什么就不知道了….这其中涉及到哪些思想，哪些具体的东西，我是一概不知的。 然后最开始接触javaWeb的时候撸了一些jsp后，写项目直接用了springboot，正所谓springboot一时爽，一直springboot一直爽。但是当我后面接触一个struts2">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://yoursite.com/2019/03/18/MVC-Servlet/1.jpg">
 <meta property="og:image" content="http://yoursite.com/2019/03/18/MVC-Servlet/2.png">
@@ -110,10 +110,10 @@
 <meta property="og:image" content="http://yoursite.com/2019/03/18/MVC-Servlet/12.png">
 <meta property="og:image" content="http://yoursite.com/2019/03/18/MVC-Servlet/13.png">
 <meta property="og:image" content="http://yoursite.com/2019/03/18/MVC-Servlet/14.png">
-<meta property="og:updated_time" content="2019-04-11T07:42:45.000Z">
+<meta property="og:updated_time" content="2019-12-13T08:15:26.944Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="MVC-Servlet">
-<meta name="twitter:description" content="前言：我为什么要去学这些东西呢？ 以前你问我MVC是什么，相信我肯定可以回答出（Model—View—Controller）然后,然后我就什么就不知道了….这其中涉及到哪些思想，哪些具体的东西，我是一概不知的。">
+<meta name="twitter:description" content="前言：我为什么要去学这些东西呢？ 以前你问我MVC是什么，相信我肯定可以回答出（Model—View—Controller）然后,然后我就什么就不知道了….这其中涉及到哪些思想，哪些具体的东西，我是一概不知的。 然后最开始接触javaWeb的时候撸了一些jsp后，写项目直接用了springboot，正所谓springboot一时爽，一直springboot一直爽。但是当我后面接触一个struts2">
 <meta name="twitter:image" content="http://yoursite.com/2019/03/18/MVC-Servlet/1.jpg">
 
 
@@ -334,8 +334,8 @@
 		  
   <span class="post-updated">
     &nbsp; | &nbsp; 更新于
-    <time itemprop="dateUpdated" datetime="2019-04-11T15:42:45+08:00" content="2019-04-11">
-      2019-04-11
+    <time itemprop="dateUpdated" datetime="2019-12-13T16:15:26+08:00" content="2019-12-13">
+      2019-12-13
     </time>
   </span>
 
@@ -385,7 +385,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  17,227
+                  17,213
                 </span>
               
 
@@ -424,8 +424,7 @@
       
         <h1 id="前言："><a href="#前言：" class="headerlink" title="前言："></a>前言：</h1><p>我为什么要去学这些东西呢？</p>
 <p>以前你问我MVC是什么，相信我肯定可以回答出（Model—View—Controller）然后,然后我就什么就不知道了….这其中涉及到哪些思想，哪些具体的东西，我是一概不知的。</p>
-<a id="more"></a>
-<p>然后最开始接触javaWeb的时候撸了一些jsp后，写项目直接用了springboot，正所谓<em>springboot一时爽，一直springboot一直爽</em>。但是当我后面接触一个struts2的项目时我突然发现写Filter和interceptor后，完全不明白为什么要这么写，为什么这样就可以通过呢？那样就不可以呢？它究竟是通过什么来实现的呢？然后还有写完这些还要去配置web.xml（或许连xml文件都不是很看得懂）真的感觉很懵逼。突然就觉得自己好像什么都不会。然后恰逢看书时看到一句话：javaee的核心设计模式就是MVC，框架只是一种简单的应用。这使我发现我之前掌握的东西是真的很有问题的，于是我就开始了我的弥补之路。</p>
+<p>然后最开始接触javaWeb的时候撸了一些jsp后，写项目直接用了springboot，正所谓<em>springboot一时爽，一直springboot一直爽</em>。但是当我后面接触一个struts2的项目时我突然发现写Filter和interceptor后，完全不明白为什么要这么写，为什么这样就可以通过呢？那样就不可以呢？它究竟是通过什么来实现的呢？然后还有写完这些还要去配置web.xml（或许连xml文件都不是很看得懂）真的感觉很懵逼。突然就觉得自己好像什么都不会。然后恰逢看书时看到一句话：javaee的核心设计模式就是MVC，框架只是一种简单的应用。我觉得很有道理，于是我就开始了我的弥补之路。</p>
 <h1 id="MVC"><a href="#MVC" class="headerlink" title="MVC"></a>MVC</h1><p>Java EE中标准的MVC设计模式如下图</p>
 <p><img src="/2019/03/18/MVC-Servlet/1.jpg" alt=""></p>
 <p>在标准的MVC设计模式中，用户一旦发出请求后会将所有的请求交给控制层处理，然后再由控制层调用模型层中的模型组件，并通过这些组件进行持久层的访问，再将所有结果保存在JavaBean中，最终由JSP和JavaBean一起完成页面的显示。虽然在不同的开发架构中会存在一些差别，但是只要掌握了这个标准，就可以很容易的上手其他的框架。</p>
@@ -1392,7 +1391,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">25</span>
+                  <span class="site-state-item-count">32</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -1414,7 +1413,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">18</span>
+                  <span class="site-state-item-count">27</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -1501,7 +1500,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">55.3k</span>
+    <span title="Site words total count">68.1k</span>
   
 </div>
 

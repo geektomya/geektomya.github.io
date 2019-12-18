@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+<script>
+    (function(){
+        if(''){
+            if (prompt('请输入文章密码') !== ''){
+                alert('密码错误！');
+                history.back();
+            }
+        }
+    })();
+</script>
+</script>
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.ico?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.ico?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="nginx,内网穿透," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="“ 本文基于已经实现内网穿透的前提，例如外网服务器端口8090,已经映射到了某台内网服务器的80上 “ 多说这是撒？这里的内网外入是指什么？比如我在外网服务器上面有一个网站，该网站有一个页面，页面很简单，就只有一个输入框，当我们在这个输入框输入一个内网地址的后，按下访问后，就可以访问到内网中相应的资源。当然访问到内网地址的模式有很多，也不是说完全需要以网页输入内网地址的形式进行。这里想要表">
+<meta name="keywords" content="nginx,内网穿透">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Nginx与泛域名实现内网外入">
+<meta property="og:url" content="http://yoursite.com/2019/12/16//articles/2019/12/16/1576502421990.html/index.html">
+<meta property="og:site_name" content="YAO">
+<meta property="og:description" content="“ 本文基于已经实现内网穿透的前提，例如外网服务器端口8090,已经映射到了某台内网服务器的80上 “ 多说这是撒？这里的内网外入是指什么？比如我在外网服务器上面有一个网站，该网站有一个页面，页面很简单，就只有一个输入框，当我们在这个输入框输入一个内网地址的后，按下访问后，就可以访问到内网中相应的资源。当然访问到内网地址的模式有很多，也不是说完全需要以网页输入内网地址的形式进行。这里想要表">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://img.hacpai.com/bing/20171231.jpg?imageView2/1/w/960/h/540/interlace/1/q/100">
+<meta property="og:image" content="https://img.hacpai.com/file/2019/12/image-d04012e9.png">
+<meta property="og:image" content="https://img.hacpai.com/file/2019/12/image-0c40ed01.png">
+<meta property="og:updated_time" content="2019-12-16T13:27:13.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Nginx与泛域名实现内网外入">
+<meta name="twitter:description" content="“ 本文基于已经实现内网穿透的前提，例如外网服务器端口8090,已经映射到了某台内网服务器的80上 “ 多说这是撒？这里的内网外入是指什么？比如我在外网服务器上面有一个网站，该网站有一个页面，页面很简单，就只有一个输入框，当我们在这个输入框输入一个内网地址的后，按下访问后，就可以访问到内网中相应的资源。当然访问到内网地址的模式有很多，也不是说完全需要以网页输入内网地址的形式进行。这里想要表">
+<meta name="twitter:image" content="https://img.hacpai.com/bing/20171231.jpg?imageView2/1/w/960/h/540/interlace/1/q/100">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/12/16//articles/2019/12/16/1576502421990.html/"/>
+
+
+
+
+
+  <title>Nginx与泛域名实现内网外入 | YAO</title>
+  
+
+
+
+
+
+
+
+
+  
+  
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">YAO</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Something I Like .</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/16/articles/2019/12/16/1576502421990.html/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="HY">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="YAO">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Nginx与泛域名实现内网外入</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-16T21:20:22+08:00">
+                2019-12-16
+              </time>
+            
+
+            
+
+            
+          </span>
+		  
+		  
+		  
+  <span class="post-updated">
+    &nbsp; | &nbsp; 更新于
+    <time itemprop="dateUpdated" datetime="2019-12-16T21:27:13+08:00" content="2019-12-16">
+      2019-12-16
+    </time>
+  </span>
+
+
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  1,753
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  6
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><img src="https://img.hacpai.com/bing/20171231.jpg?imageView2/1/w/960/h/540/interlace/1/q/100" alt=""></p>
+<p>   <em>“ 本文基于已经实现内网穿透的前提，例如外网服务器端口8090,已经映射到了某台内网服务器的80上 “</em></p>
+<h3 id="多说"><a href="#多说" class="headerlink" title="多说"></a>多说</h3><h4 id="这是撒？"><a href="#这是撒？" class="headerlink" title="这是撒？"></a>这是撒？</h4><p>这里的内网外入是指什么？比如我在外网服务器上面有一个网站，该网站有一个页面，页面很简单，就只有一个输入框，当我们在这个输入框输入一个内网地址的后，按下访问后，就可以访问到内网中相应的资源。当然访问到内网地址的模式有很多，也不是说完全需要以网页输入内网地址的形式进行。这里想要表达的仅仅是：<strong>我们可以输入某个已经穿透的内网中的任意地址然后获取相应的服务</strong>。在做这个之前也问过一些人，可能因为表述问题很多人给我推荐的是如何实现内网穿透，然后某个推荐：使用<strong>lua+nginx</strong>，我觉得挺不错的。在了解这个东西后才发现又是一片新大陆，用这个肯定能实现我想要的东西。但是心里总觉得用lua+nginx做这个是不是有点小题大做了，还要去学习哈lua，还要再给nginx添加lua的模块，不，我选择懒  :expressionless:，于是就开始瞎捉摸。不过好在经过无数次改配置中，直接通过nginx的配置文件外实现了想要的功能。</p>
+<h4 id="我的思路！"><a href="#我的思路！" class="headerlink" title="我的思路！"></a>我的思路！</h4><p>最开始我的第一想法是通过域名带个值为内网地址的url参数，然后通过nginx捕获，再实现转发，但是经过一系列操作后我发现这种方式最后获取到的只有目标网站的html，没有其他静态资源。几经尝试无果后放弃！</p>
+<p>然后还有想法是通过自定义请求头，将要访问的地址放入到请求头中访问，然后nginx获取，但是这种方式在写前端的时候折戟了，对于只会原生ajax请求的我，面对自定义请求头后的跨域问题一脸懵逼！于是再度放弃！😰   :sleepy:</p>
+<p>然后我又开始想，既然参数，请求头都不行的话，那么我就直接使用域名（<strong>内网地址+外网域名的形式</strong>），然后在nginx中实现捕获内网地址，再通过变量将捕获到的地址保存，最后通过代理到该变量的值的地址上！</p>
+<h3 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h3><h4 id="1-实现内网外入"><a href="#1-实现内网外入" class="headerlink" title="1.实现内网外入"></a>1.实现内网外入</h4><p>因为要实现内网外入，所以首先第一步肯定是实现内网穿透，现在实现内网穿透的工具有很多，比如花生壳呀什么的，但是不太建议这种。如果有需要我建议直接去github拉一个，这里推荐一个<a href="https://github.com/geektomya/netagent" target="_blank" rel="noopener">netagent</a>，这是之前在b3log仓库里面发现的，b3log的现在失效了，贴了一个我fork的。这个工具比较小巧，还是比较好用的。如果技术够好的话，那就直接自己写一个吧～～。</p>
+<h4 id="2-泛域名解析"><a href="#2-泛域名解析" class="headerlink" title="2.泛域名解析"></a>2.泛域名解析</h4><p>因为我们需要通过<code>内网地址+域名</code>这种形式来访问，所以那么 <code>内网地址+域名</code>本身应该就是一个域名，这样才能确保到达我的服务器。而我们不知道用户将要请求什么内网地址，所以这里我们需要在你的域名提供商提供商那里将你的域名实现<strong>泛域名解析</strong>。比如我的域名是<code>zhqy.xyz</code>，那么在经过泛域名解析后，就可以输入类似于<code>172.22.4.2.zhqy.xyz</code>这样的域名到达我的服务器，然后我服务器在对该域名进行正则匹配提取目的地址。</p>
+<h4 id="3-提取目的地址与访问"><a href="#3-提取目的地址与访问" class="headerlink" title="3.提取目的地址与访问"></a>3.提取目的地址与访问</h4><p>当请求到达服务器后，就需要对请求进行判断是不是想要内网外入的请求，如果是内网外入的请求就将内网目的地址提取出来，然后进行后续操作，这里服务器的nginx配置如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">server &#123;</span><br><span class="line"></span><br><span class="line">	#监听80端口</span><br><span class="line">        listen       80;</span><br><span class="line"></span><br><span class="line">	#这里进行泛域名匹配，确保所有的以 .zhqy.xyz 结尾的域名都可以解析到本机，需要配合域名服务商进行泛域名解析</span><br><span class="line">        server_name  ~^(.+)\.zhqy\.xyz$; </span><br><span class="line"></span><br><span class="line">        #提取域名 *.zhqy.xyz 的前一部分存入$cqupt</span><br><span class="line">        set $cqupt $1;</span><br><span class="line"></span><br><span class="line">	</span><br><span class="line">        location /&#123;</span><br><span class="line">        # echo &quot;cqupt: $cqupt&quot;;  可以此语句验证是否捕获匹配的域名</span><br><span class="line"></span><br><span class="line">	#跳转到已经经过内网穿透的端口去访问</span><br><span class="line">        proxy_pass http://127.0.0.1:8090; </span><br><span class="line">        proxy_redirect off;</span><br><span class="line">          </span><br><span class="line"> 	#这里将捕获到的地址存入host，然后在穿透的主机上直接重定向到 $host即可</span><br><span class="line">        proxy_set_header   Host    $cqupt; </span><br><span class="line">        proxy_set_header   X-Real-IP   $remote_addr;</span><br><span class="line">        proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>这里因为我不是穿透的80端口，所以<code>proxy_pass</code>的时候要先去8090端口，然后在内网主机中nginx对请求请求代理到<code>$host</code>就可以了。这里需要注意的是，内网地址为域名的时候，你要先指定内网的DNS，这样才能正常访问到。内网主机的nginx配置如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">#这里填写内网中映射的端口</span><br><span class="line">       listen       80;</span><br><span class="line"></span><br><span class="line">       #这是添加DNS，其中第一个就是内网服务器的DNS</span><br><span class="line">       resolver 202.202.32.33 114.114.114.114 8.8.8.8 valid=3600s;</span><br><span class="line"></span><br><span class="line">       location / &#123;</span><br><span class="line">     	proxy_pass http://$host;</span><br><span class="line">    proxy_redirect off;</span><br><span class="line">		proxy_set_header   Host    $host;</span><br><span class="line">	proxy_set_header   X-Real-IP   $remote_addr;</span><br><span class="line">	proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;</span><br><span class="line">       &#125;</span><br></pre></td></tr></table></figure></p>
+<p>这里如果你是穿透的外网服务器的80端口，那么就只需要在上面的第一个nginx配置中添加一句 <code>resolve DNS</code>的语句，然后将<code>proxy_pass</code>中的地址改为你的目的地址就可以，这样就不用做后面的内网服务器nginx这一步操作了。</p>
+<h4 id="效果演示"><a href="#效果演示" class="headerlink" title="效果演示"></a>效果演示</h4><p>在配好所有的东西后，我们就可以通过我们的方法’畅游‘内网世界了。比如我现在有一个内网地址<code>172.22.4.2</code>，先通过内网中的机器正常的访问，结果如下：<br><img src="https://img.hacpai.com/file/2019/12/image-d04012e9.png" alt="image.png"><br>然后通过我们的内网外入来访问，结果如下：<br><img src="https://img.hacpai.com/file/2019/12/image-0c40ed01.png" alt="image.png"></p>
+<p>就这样通过一顿操作后，就终于实现了所谓的内网外入了！！！</p>
+<h3 id="写在最后"><a href="#写在最后" class="headerlink" title="写在最后"></a>写在最后</h3><p>经过上述配置已经简单的实现了一个内网外入的功能，但是有一点值得注意的就是<code>安全</code>问题了。既然别人屏蔽了内网中的站点，那么我们对内网开了一个口子总归是不好的。在这份配置文件中还有很多值得去完善的问题，例如禁止抓跑，爬取呀什么的，还有应当对内网地址确定一个白名单，哪些是可以通过访问的，哪些是一定不能通过外网访问的。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/nginx/" rel="tag"><i class="fa fa-tag"></i> nginx</a>
+          
+            <a href="/tags/内网穿透/" rel="tag"><i class="fa fa-tag"></i> 内网穿透</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/12/12/articles/2019/12/12/1576085235290.html/" rel="next" title="JVM - Java虚拟机结构">
+                <i class="fa fa-chevron-left"></i> JVM - Java虚拟机结构
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/12/18/articles/2019/12/18/1576664538449.html/" rel="prev" title="JVM - 走进方法区的前世今生">
+                JVM - 走进方法区的前世今生 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  <div class="post-spread">
+      
+        
+                                <div class="-mob-share-ui-button -mob-share-open">分享</div>
+                                <div class="-mob-share-ui" style="display: none">
+                                    <ul class="-mob-share-list">
+                                        <li class="-mob-share-weibo"><p>新浪微博</p></li>
+                                        <li class="-mob-share-tencentweibo"><p>腾讯微博</p></li>
+                                        <li class="-mob-share-qzone"><p>QQ空间</p></li>
+                                        <li class="-mob-share-qq"><p>QQ好友</p></li>
+                                        <li class="-mob-share-weixin"><p>微信</p></li>
+                                        <li class="-mob-share-douban"><p>豆瓣</p></li>
+                                    </ul>
+                                    <div class="-mob-share-close">取消</div>
+                                </div>
+                                <div class="-mob-share-ui-bg"></div>
+                                <script id="-mob-share" src="http://f1.webshare.mob.com/code/mob-share.js?appkey=262488aa81530"></script>
+
+								
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.png"
+                alt="HY" />
+            
+              <p class="site-author-name" itemprop="name">HY</p>
+              <p class="site-description motion-element" itemprop="description">A man is only as good as what he loves.</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">32</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">27</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/yqh74110" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:yaoqiuhong@outlook.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=298 height=52 src="//music.163.com/outchain/player?type=2&id=1334259177&auto=0&height=32"></iframe>		
+<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=298 height=52 src="//music.163.com/outchain/player?type=2&id=436147067&auto=0&height=32"></iframe>	  
+<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=298 height=52 src="//music.163.com/outchain/player?type=2&id=32431822&auto=0&height=32"></iframe>
+
+          
+
+        </div>
+		
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#多说"><span class="nav-number">1.</span> <span class="nav-text">多说</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#这是撒？"><span class="nav-number">1.1.</span> <span class="nav-text">这是撒？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#我的思路！"><span class="nav-number">1.2.</span> <span class="nav-text">我的思路！</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#实现"><span class="nav-number">2.</span> <span class="nav-text">实现</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-实现内网外入"><span class="nav-number">2.1.</span> <span class="nav-text">1.实现内网外入</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-泛域名解析"><span class="nav-number">2.2.</span> <span class="nav-text">2.泛域名解析</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-提取目的地址与访问"><span class="nav-number">2.3.</span> <span class="nav-text">3.提取目的地址与访问</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#效果演示"><span class="nav-number">2.4.</span> <span class="nav-text">效果演示</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#写在最后"><span class="nav-number">3.</span> <span class="nav-text">写在最后</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">HY</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+      <span class="post-meta-item-text">Site words total count&#58;</span>
+    
+    <span title="Site words total count">68.1k</span>
+  
+</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  <!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/src/love.js"></script>
+</body>
+</html>

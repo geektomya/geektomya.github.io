@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+<script>
+    (function(){
+        if(''){
+            if (prompt('请输入文章密码') !== ''){
+                alert('密码错误！');
+                history.back();
+            }
+        }
+    })();
+</script>
+</script>
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.ico?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.ico?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="JVM," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="了解jvm的过程就像从喜欢到恋爱的过程，刚开始懵懵懂懂，然后心生胆怯，最后沉迷于此。  Java虚拟机结构这里将会从class文件格式、JVM中的数据类型讲到JVM的运行时数据区 class文件格式“ Write once, run anywhere”，这句话对Java开发者来说都是无比的熟悉了。那么这种说法是怎么来的呢，为什么Java会有这样的口号呢？这其中的奥秘就在与class文件。在Jav">
+<meta name="keywords" content="JVM">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JVM - Java虚拟机结构">
+<meta property="og:url" content="http://yoursite.com/2019/12/12//articles/2019/12/12/1576085235290.html/index.html">
+<meta property="og:site_name" content="YAO">
+<meta property="og:description" content="了解jvm的过程就像从喜欢到恋爱的过程，刚开始懵懵懂懂，然后心生胆怯，最后沉迷于此。  Java虚拟机结构这里将会从class文件格式、JVM中的数据类型讲到JVM的运行时数据区 class文件格式“ Write once, run anywhere”，这句话对Java开发者来说都是无比的熟悉了。那么这种说法是怎么来的呢，为什么Java会有这样的口号呢？这其中的奥秘就在与class文件。在Jav">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://img.hacpai.com/bing/20181222.jpg?imageView2/1/w/960/h/540/interlace/1/q/100">
+<meta property="og:image" content="https://img.hacpai.com/file/2019/12/QQ20180624150918-f5a7888e.png">
+<meta property="og:updated_time" content="2019-12-18T10:56:50.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="JVM - Java虚拟机结构">
+<meta name="twitter:description" content="了解jvm的过程就像从喜欢到恋爱的过程，刚开始懵懵懂懂，然后心生胆怯，最后沉迷于此。  Java虚拟机结构这里将会从class文件格式、JVM中的数据类型讲到JVM的运行时数据区 class文件格式“ Write once, run anywhere”，这句话对Java开发者来说都是无比的熟悉了。那么这种说法是怎么来的呢，为什么Java会有这样的口号呢？这其中的奥秘就在与class文件。在Jav">
+<meta name="twitter:image" content="https://img.hacpai.com/bing/20181222.jpg?imageView2/1/w/960/h/540/interlace/1/q/100">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/12/12//articles/2019/12/12/1576085235290.html/"/>
+
+
+
+
+
+  <title>JVM - Java虚拟机结构 | YAO</title>
+  
+
+
+
+
+
+
+
+
+  
+  
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">YAO</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Something I Like .</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/12/articles/2019/12/12/1576085235290.html/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="HY">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="YAO">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">JVM - Java虚拟机结构</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-12T01:27:15+08:00">
+                2019-12-12
+              </time>
+            
+
+            
+
+            
+          </span>
+		  
+		  
+		  
+  <span class="post-updated">
+    &nbsp; | &nbsp; 更新于
+    <time itemprop="dateUpdated" datetime="2019-12-18T18:56:50+08:00" content="2019-12-18">
+      2019-12-18
+    </time>
+  </span>
+
+
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  2,995
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  11
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><img src="https://img.hacpai.com/bing/20181222.jpg?imageView2/1/w/960/h/540/interlace/1/q/100" alt=""></p>
+<p>了解jvm的过程就像从喜欢到恋爱的过程，刚开始懵懵懂懂，然后心生胆怯，最后沉迷于此。</p>
+<hr>
+<h3 id="Java虚拟机结构"><a href="#Java虚拟机结构" class="headerlink" title="Java虚拟机结构"></a>Java虚拟机结构</h3><p>这里将会从class文件格式、JVM中的数据类型讲到JVM的运行时数据区</p>
+<h4 id="class文件格式"><a href="#class文件格式" class="headerlink" title="class文件格式"></a>class文件格式</h4><p>“ Write once, run anywhere”，这句话对Java开发者来说都是无比的熟悉了。那么这种说法是怎么来的呢，为什么Java会有这样的口号呢？这其中的奥秘就在与class文件。在Java中，源文件（.java）首先会被编译为字节码文件（.class），然后再将字节码文件通过jvm去执行。在字节码的格式中，精确定义了类与接口的表示形式，包括了在<strong>平台相关</strong>的目标文件格式中的一些细节上的惯例，列如字节序（byte ordering）等。</p>
+<blockquote>
+<p>这里请不要认为此处的<strong>平台相关的目标文件格式</strong>是指在特定平台编译出的class文件无法再其他平台中使用。相反，正是因为强制，明确的定义了本来会跟平台相关的细节，所以才达到了<strong>Java语言是平台无关的效果</strong>。</p>
+</blockquote>
+<p>也就是说Java语言的确是平台无关的。但这种平台无关性，正是由于class文件的平台有关有JVM的平台有关造就的。</p>
+<h4 id="数据类型"><a href="#数据类型" class="headerlink" title="数据类型"></a>数据类型</h4><p>同Java语言中的数据类型相似，JVM可以操作的数据类型也分为两大类：原始类型（primitive type，也经常被翻译成原生类型或者基本类型）和引用类型。与之对应，也存在原始值（primitive value）和引用值(reference value)两种类型的数值。他们可用于变量赋值，参数传递，方法返回和运算操作。</p>
+<blockquote>
+<p>Java虚拟机希望可能多的类型检查能在程序运行之前完成，换句话说，编译器应当在编译期间尽最大的努力完成尽可能的类型检查，使得虚拟机在运行期间无需进行这些操作，原始类型的值不需要通过特殊标记或额外识别手段来在运行期确定他们的实际数据类型，也无需刻意见他们与引用类型的值区分开。虚拟机的字节码指令本身就可以确定他的指令操作数的类型是什么，所以可以利用这种特性直接确定操作数的数值类型。<br>Java虚拟值是直接支持对象的。这里的对象可以是指动态分配的某个类的实例，也可以是指某个数组。虚拟机中使用<code>reference</code>类型来表示某个对象的引用。关于<code>reference</code>类型的值，你可以想象成指向对象的指针。没一个对象都可能存在多个指向它的引用，对象的操作，传递和检查都通过引用它的<code>reference</code>类型的值来进行。</p>
+</blockquote>
+<p>这里的reference类型与int、long、double等类型是同一层次的概念。<code>reference</code>是前面提到过的引用类型（reference type）的一种。而int、long、double等则是前面提到过的原始类型（primitive type）的一种。前者是具体的数据类型，后者是某种数据类型的统称。</p>
+<h5 id="原始类型与值"><a href="#原始类型与值" class="headerlink" title="原始类型与值"></a>原始类型与值</h5><p>Java虚拟机所支持的原始数据类型包括数值类型，boolean类型和returnAddress类型。<br><strong>数值类型</strong><br>byte、short、int、long、float、double、char。<br><strong>boolean类型</strong><br>虽然虚拟机中定义了这种类型，但是却没有提供专门操作boolean的字节码指令，Java语言表达式所操作的boolean值在编译之后都是用虚拟机中的int数据类型来代替。Java虚拟机直接支持boolean类型的数组。boolean类型数组的访问和修改共用byte数组的<code>baload</code>和<code>bastore</code>指令。在Oracle的虚拟机实现中。Java语言中的boolean数组将会被编译层Java虚拟机的byte数组，每个元素占8位。不管是用int表示还是byte，，虚拟机都会将映射后的true用1来表示。false用0来表示。<br><strong>returnAddress</strong><br>returnAddress类型是指向某个操作码的指针，此操作码与Java虚拟机指令相对应。在虚拟机所有支持的原始类型中，只有returnAddress类型是不能直接与Java语言的数据类型相对应。</p>
+<h5 id="引用类型与值"><a href="#引用类型与值" class="headerlink" title="引用类型与值"></a>引用类型与值</h5><p>Java中有三种引用类型，类类型（class type）、数组类型（array type和接口类型（interface type）。这些引用类型的值分别指向动态创建的类实例，数组实例和实现了某个接口的类实例或数组实例。在引用类型中还有一个特殊的值null，当一个引用不指向任何对象的时候，他的值就用null来表示。一个为null的引用，起初并不具备任何实际的运行期类型。但它可以转换为任意的引用类型。引用类型的默认值就是null。<br>Java虚拟机规范并没有规定null在虚拟机实现应该怎么用编码来表示。</p>
+<h4 id="运行时数据区"><a href="#运行时数据区" class="headerlink" title="运行时数据区"></a>运行时数据区</h4><blockquote>
+<p>Java虚拟机定义了若干种程序运行期间会使用到的运行时数据区，其中有一些会随着虚拟机的启动而创建，随着虚拟机的退出而销毁。另外一些则则是与线程一一对应的，这些与线程对应的数据区域会随着线程开始和结束而创建和销毁。</p>
+</blockquote>
+<p>Java运行时数据区图示如下：</p>
+<p><img src="https://img.hacpai.com/file/2019/12/QQ20180624150918-f5a7888e.png" alt="QQ20180624150918.png"></p>
+<h5 id="程序计数器（Program-Counter-Register）"><a href="#程序计数器（Program-Counter-Register）" class="headerlink" title="程序计数器（Program Counter Register）"></a>程序计数器（Program Counter Register）</h5><p>Java虚拟机可以支持多条线程同时执行，每一条Java虚拟机线程都有自己的程序计数器。在任意的时刻，一个Java虚拟机线程只会执行一个方法的代码，这个正在被执行的方法被称为当前方法，因此为了能够在切换线程后能恢复到正确的执行位置，每条线程都需要有一个独立的程序计数器，各条程序计数器之间互不影响，独立存储。我们层这类内存区域为“线程”私有的。如果这个方法不是<code>native</code>的，那么PC寄存器就保存Java虚拟机正在执行的字节码指令的地址。如果该方法是<code>native</code>的，那PC寄存器的值是空（Undefined）。PC寄存器的容量至少应该保存一个returnAddress类型的数据或者一个与平台相关的本地指针的值。此内存区域是唯一一个在Java虚拟机规范中没有规定任何OutOfMemoryError的区域。</p>
+<h5 id="Java虚拟机栈（Java-Virtual-Machine-Stack）"><a href="#Java虚拟机栈（Java-Virtual-Machine-Stack）" class="headerlink" title="Java虚拟机栈（Java Virtual Machine Stack）"></a>Java虚拟机栈（Java Virtual Machine Stack）</h5><p>每一台哦Java虚拟机线程都有自己私有的Java虚拟机栈，这个栈与线程同时创建，用于存储栈帧（Frame），Java虚拟机栈的作用与传统语言中的栈非常相似，用于存储局部变量与一些尚未计算好的结果，另外，他在方法的调用和返回中也扮演了重要的角色，因为除了栈帧的出栈与入栈之外，Java虚拟机不会再受其他因素影响，所以栈帧可以在堆中分配（从虚拟机的实现来看），Java虚拟机栈所使用的内存不需要是连续的。<br>更多详细内容请移步<a href="http://blog.zhqy.xyz/articles/2019/12/18/1576602859227.html" target="_blank" rel="noopener">详解jvm中的Java虚拟机栈</a></p>
+<h5 id="本地方法栈（Native-Method-Stack）"><a href="#本地方法栈（Native-Method-Stack）" class="headerlink" title="本地方法栈（Native Method Stack）"></a>本地方法栈（Native Method Stack）</h5><p>Java虚拟机实现可能会用到传统的栈（通常称为C Stack）来支持本地方法（除了Java以为其他方法编写的方法）的执行，这个栈就是本地方法栈。与Java虚拟机栈的功能类似，只不过一个是为了Java方法而服务的，一个是为了本地方法服务的。<br>在Java虚拟机规范中有提到，Java虚拟机实现应当提供给程序员或者最终用户调节本地方法栈初始容量的手段，对于长度可动态变化的本地方法栈而言，则应当提供调节其最大最小容量的手段。<br>另外值得一提的是，HotSpot虚拟机将 Java虚拟机栈和本地方法栈的实现合并在一起！</p>
+<h5 id="Java-堆"><a href="#Java-堆" class="headerlink" title="Java 堆"></a>Java 堆</h5><blockquote>
+<p>这里请注意不要<strong>混淆</strong>，<code>Stack</code>，<code>Heap</code>和<code>JVM Stack</code>，<code>Java Heap</code>的概念。Java虚拟机的实现本质上是由其他语言所编写的应用程序，Java语言程序里分配在<code>Java Stack</code>中的数据，从实现虚拟机的程序角度来看则可能分配在Heap之中。</p>
+</blockquote>
+<p>在Java虚拟机中。堆（Heap）是可供各个线程共享的运行时内存区域。也是提供<strong>几乎所有</strong>类实例和对象分配内存的区域。</p>
+<blockquote>
+<p>这里在Java虚拟机规范中描述的是，所有类实例和数组分配的内存的区域。但是随着JIT编译器的发展与逃逸分析技术日益陈述，栈上分配，标量替换等优化技术将会导致一些微妙的变化发生，所有的对象都分配在堆上也渐渐变得不那么绝对了。<br>Java堆在虚拟机启动的时候就被创建，他存储了动态内存管理系统（automatic storage management system），也就是常说的garbage collector（垃圾收集器）所管理的对象。Java堆的容量可以是固定的，也可以是随着程序执行的需求动态扩展，并在不需要过多空间是自动回收。Java堆所使用的内存同样不要求是连续的。当实际所需要的堆超过了能提供的最大容量时，系统会抛出一个<strong>OutOfMemoryError</strong>。<br>从内存回收的角度来看，由于现在的收集器采用分代收集算法，所以Java堆还可以细分为：新生代和老年代，再细致一点的有<strong>Eden</strong>空间，<strong>From Survivor</strong>空间，<strong>To Survivor</strong>空间等<br>从内存分配的角度来看，线程共享的Java堆中可能划分中多个线程私有的<strong>分配缓冲区（Thread Local Allocation Buffer，TLAB）</strong>。</p>
+</blockquote>
+<h5 id="方法区"><a href="#方法区" class="headerlink" title="方法区"></a>方法区</h5><p>方法区（Method Area）与Java堆一样，是各个线程共享的内存区域，它用于存储已被虚拟机加载的类信息，常量，静态变量，即时编译器所产生的本地代码数据等。<br>更多内容请穿越至<a href="http://blog.zhqy.xyz/articles/2019/12/18/1576664538449.html" target="_blank" rel="noopener">走进方法区的前世今生</a></p>
+<h5 id="运行时常量池"><a href="#运行时常量池" class="headerlink" title="运行时常量池"></a>运行时常量池</h5><p>运行时常量池（runtime constant pool）是class文件中每一个类或接口的<strong>常量池表</strong>（constant_pool table）的运行时表现，它包括了若干种不同的常量，从编译期可知的数字字面量到必须在运行时期解析后才能获得的方法或字段引用。每一个运行时常量池都在Java虚拟机的方法区中分配，在加载类和接口到虚拟机后，就创建对应的运行时常量池。在创建类和接口的运行时常量池时，可能会发生如下异常。</p>
+<ul>
+<li>当创建类或接口的时候，如果构造运行时常量池所需要的内存空间超过了方法区所能提供的最大值，那么Java虚拟机将会抛出OutOfMemoryError异常。</li>
+</ul>
+<p>以上就是关于Java虚拟机结构的一些内容了，需要注意的是，运行时数据区就是我们常说的<strong>Java内存结构（JVM内存结构）</strong>，而不是<strong>Java内存模型</strong>，更不是<strong>jvm内存模型（根本没有这个概念）</strong>。除此之外还有一个概念叫做<strong>Java对象模型</strong>，如果你对这几个东西还不甚了解的话，可以看下<a href="https://www.hollischuang.com/archives/2509" target="_blank" rel="noopener">JVM内存结构 VS Java内存模型 VS Java对象模型</a>。</p>
+<hr>
+<p>本文参考：<br>《深入理解Java虚拟机》<br>《Java虚拟机规范（Java SE 8 版）》</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/JVM/" rel="tag"><i class="fa fa-tag"></i> JVM</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/12/11/articles/2019/12/11/1576077816315.html/" rel="next" title="Java面试常见问题整理">
+                <i class="fa fa-chevron-left"></i> Java面试常见问题整理
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/12/16/articles/2019/12/16/1576502421990.html/" rel="prev" title="Nginx与泛域名实现内网外入">
+                Nginx与泛域名实现内网外入 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  <div class="post-spread">
+      
+        
+                                <div class="-mob-share-ui-button -mob-share-open">分享</div>
+                                <div class="-mob-share-ui" style="display: none">
+                                    <ul class="-mob-share-list">
+                                        <li class="-mob-share-weibo"><p>新浪微博</p></li>
+                                        <li class="-mob-share-tencentweibo"><p>腾讯微博</p></li>
+                                        <li class="-mob-share-qzone"><p>QQ空间</p></li>
+                                        <li class="-mob-share-qq"><p>QQ好友</p></li>
+                                        <li class="-mob-share-weixin"><p>微信</p></li>
+                                        <li class="-mob-share-douban"><p>豆瓣</p></li>
+                                    </ul>
+                                    <div class="-mob-share-close">取消</div>
+                                </div>
+                                <div class="-mob-share-ui-bg"></div>
+                                <script id="-mob-share" src="http://f1.webshare.mob.com/code/mob-share.js?appkey=262488aa81530"></script>
+
+								
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.png"
+                alt="HY" />
+            
+              <p class="site-author-name" itemprop="name">HY</p>
+              <p class="site-description motion-element" itemprop="description">A man is only as good as what he loves.</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">32</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">27</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/yqh74110" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:yaoqiuhong@outlook.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=298 height=52 src="//music.163.com/outchain/player?type=2&id=1334259177&auto=0&height=32"></iframe>		
+<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=298 height=52 src="//music.163.com/outchain/player?type=2&id=436147067&auto=0&height=32"></iframe>	  
+<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=298 height=52 src="//music.163.com/outchain/player?type=2&id=32431822&auto=0&height=32"></iframe>
+
+          
+
+        </div>
+		
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Java虚拟机结构"><span class="nav-number">1.</span> <span class="nav-text">Java虚拟机结构</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#class文件格式"><span class="nav-number">1.1.</span> <span class="nav-text">class文件格式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#数据类型"><span class="nav-number">1.2.</span> <span class="nav-text">数据类型</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#原始类型与值"><span class="nav-number">1.2.1.</span> <span class="nav-text">原始类型与值</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#引用类型与值"><span class="nav-number">1.2.2.</span> <span class="nav-text">引用类型与值</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#运行时数据区"><span class="nav-number">1.3.</span> <span class="nav-text">运行时数据区</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#程序计数器（Program-Counter-Register）"><span class="nav-number">1.3.1.</span> <span class="nav-text">程序计数器（Program Counter Register）</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Java虚拟机栈（Java-Virtual-Machine-Stack）"><span class="nav-number">1.3.2.</span> <span class="nav-text">Java虚拟机栈（Java Virtual Machine Stack）</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#本地方法栈（Native-Method-Stack）"><span class="nav-number">1.3.3.</span> <span class="nav-text">本地方法栈（Native Method Stack）</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Java-堆"><span class="nav-number">1.3.4.</span> <span class="nav-text">Java 堆</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#方法区"><span class="nav-number">1.3.5.</span> <span class="nav-text">方法区</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#运行时常量池"><span class="nav-number">1.3.6.</span> <span class="nav-text">运行时常量池</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">HY</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+      <span class="post-meta-item-text">Site words total count&#58;</span>
+    
+    <span title="Site words total count">68.1k</span>
+  
+</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  <!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/src/love.js"></script>
+</body>
+</html>
