@@ -275,6 +275,186 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/02/articles/2020/02/02/1580655282159.html/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="HY">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="YAO">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/02/02/articles/2020/02/02/1580655282159.html/" itemprop="url">回文日 | 绕不开的回文数</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-02-02T22:54:42+08:00">
+                2020-02-02
+              </time>
+            
+
+            
+
+            
+          </span>
+		  
+		  
+		  
+  <span class="post-updated">
+    &nbsp; | &nbsp; 更新于
+    <time itemprop="dateUpdated" datetime="2020-02-02T23:52:42+08:00" content="2020-02-02">
+      2020-02-02
+    </time>
+  </span>
+
+
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  706
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  3
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p><img src="http://image.photocnc.com/aoaodcom/2019-07/20/201907200302115513.jpg.h700.jpg" alt=""></p>
+<h3 id="回文数？"><a href="#回文数？" class="headerlink" title="回文数？"></a>回文数？</h3><p>“回文”是指正读反读都能读通的句子，它是古今中外都有的一种修辞方式和文字游戏，如“我为人人，人人为我”等。在数学中也有这样一类数字有这样的特征，成为回文数（palindrome number）。</p>
+<p>回文数在数学领域备受关注。一个典型的问题就是，寻找那些具有某种特性，并且符合回文特征的数。例如：</p>
+<ul>
+<li>回文素数：2, 3, 5, 7, 11, 101, 131, 151,…</li>
+<li>回文完全平方数：0, 1, 4, 9, 121, 484, 676, 10201, 12321,…</li>
+</ul>
+<p>一个猜想：任何一个自然数与它的倒序数相加，所得的和再与和的倒序数相加，……如此反复进行下去，经过有限次步骤后，最后必定能得到一个回文数（196除外）。因为196这个数，按照上述变换规则重复了数十万次，仍未得到回文数。但是人们既不能肯定运算下去永远得不到回文数，也不知道需要再运算多少步才能最终得到回文数。</p>
+<h3 id="如何判断一个数是否为回文数？"><a href="#如何判断一个数是否为回文数？" class="headerlink" title="如何判断一个数是否为回文数？"></a>如何判断一个数是否为回文数？</h3><ul>
+<li>将这串数字逆序，然后判断逆序后的数字是否和正序后的数字完全一样，如果完全一样，就是回文。</li>
+<li><p>进行逐位判断。首先该整数的首位数字和末尾数字进行比较，判断是否相等，若不等，则不是回文数；若相等，则删除左右两位数，然后再判断首尾，如此循环直至得出结论。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">/*</span><br><span class="line">*进行逐位判断。首先该整数的首位数字和末尾数字进行比较，判断是否相等，若不等，则不是回文数；</span><br><span class="line">* 若相等，则删除左右两位数，再取首位数字和未尾数字进行比较，只等比较结束为止。若相等，则是回文数；反之  则不是。</span><br><span class="line">*/</span><br><span class="line">    public static boolean palindrome(int num)&#123;</span><br><span class="line">		if(num &lt; 0)&#123;</span><br><span class="line"> 			System.out.println(num + &quot; is not Palindrome Number !&quot;); </span><br><span class="line">			return false;</span><br><span class="line">		&#125;</span><br><span class="line">		int lenth = 1;</span><br><span class="line">		while(num / lenth &gt;= 10)&#123; 		//判断位数</span><br><span class="line">		lenth *= 10;</span><br><span class="line">		&#125;</span><br><span class="line">		while(num &gt; 0)&#123;</span><br><span class="line">			int right = num % 10; 		//取数的尾数</span><br><span class="line">			int left = num / lenth;		//取数的首位</span><br><span class="line">			if(left != right)&#123;</span><br><span class="line">				System.out.println(num + &quot; is not Palindrome Number !&quot;);</span><br><span class="line">				return false;</span><br><span class="line">			&#125;</span><br><span class="line">			num = num % lenth / 10;		//除掉首尾两位数字，剩余中间的</span><br><span class="line">			lenth = lenth / 100;  		//相应长度也减少2位</span><br><span class="line"> 		&#125;</span><br><span class="line">		System.out.println(num + &quot; is Palindrome Number !&quot;);</span><br><span class="line">		return true;</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>将数值转换成字符串判断</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">public static boolean palindrome(int num)&#123;</span><br><span class="line">		if(num &lt; 0)&#123;</span><br><span class="line"> 			System.out.println(num + &quot; is not Palindrome Number !&quot;); </span><br><span class="line">			return false;</span><br><span class="line">		&#125;</span><br><span class="line">		String a=String.valueOf(num);</span><br><span class="line">    		for(int i=0;i&lt;a.length()/2;i++) &#123;</span><br><span class="line">			if(a.charAt(i)!=a.charAt(a.length()-i-1)) &#123;</span><br><span class="line">				System.out.println(num + &quot; is not Palindrome Number !&quot;);</span><br><span class="line">				&#125;else &#123;</span><br><span class="line">				System.out.println(num + &quot; is Palindrome Number !&quot;);</span><br><span class="line">				&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>利用堆栈来判断</p>
+</li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/01/articles/2020/02/01/1580569514532.html/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -808,175 +988,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/12/articles/2019/12/12/1576085235290.html/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="HY">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="YAO">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/12/12/articles/2019/12/12/1576085235290.html/" itemprop="url">JVM - Java虚拟机结构</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-12T01:27:15+08:00">
-                2019-12-12
-              </time>
-            
-
-            
-
-            
-          </span>
-		  
-		  
-		  
-  <span class="post-updated">
-    &nbsp; | &nbsp; 更新于
-    <time itemprop="dateUpdated" datetime="2019-12-18T18:56:50+08:00" content="2019-12-18">
-      2019-12-18
-    </time>
-  </span>
-
-
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">字数统计&#58;</span>
-                
-                <span title="字数统计">
-                  2,995
-                </span>
-              
-
-              
-                <span class="post-meta-divider">|</span>
-              
-
-              
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-clock-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
-                
-                <span title="阅读时长">
-                  11
-                </span>
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p><img src="https://img.hacpai.com/bing/20181222.jpg?imageView2/1/w/960/h/540/interlace/1/q/100" alt=""></p>
-<p>了解jvm的过程就像从喜欢到恋爱的过程，刚开始懵懵懂懂，然后心生胆怯，最后沉迷于此。</p>
-<hr>
-<h3 id="Java虚拟机结构"><a href="#Java虚拟机结构" class="headerlink" title="Java虚拟机结构"></a>Java虚拟机结构</h3><p>这里将会从class文件格式、JVM中的数据类型讲到JVM的运行时数据区</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2019/12/12/articles/2019/12/12/1576085235290.html/" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1031,7 +1042,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">33</span>
+                  <span class="site-state-item-count">34</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -1124,7 +1135,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">70.5k</span>
+    <span title="Site words total count">71.2k</span>
   
 </div>
 
