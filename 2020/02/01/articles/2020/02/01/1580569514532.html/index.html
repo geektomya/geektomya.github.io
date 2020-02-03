@@ -88,13 +88,13 @@
 
 
 
-<meta name="description" content="本文是对极客时间《MySQL实战45讲》的一个学习归纳 问题1.MySQL的架构图是如何的？2.为什么不建议开启查询缓存？如何按需使用查询缓存？3.什么是 binlog和redo log？为什么需要两个日志？他们有什么区别？4. crash-safe是指什么？5.为什么需要redolog?6.MySQL中什么是两阶段提交？7.为什么不删除binlog只保留redolog？8.为什么binlog不">
+<meta name="description" content="本文是对极客时间《MySQL实战45讲》的一个学习归纳 问题1.MySQL的架构图是如何的？2.为什么不建议开启查询缓存？如何按需使用查询缓存？3.什么是 binlog和redo log？为什么需要两个日志？他们有什么区别？4. crash-safe是指什么？5.为什么需要redolog?">
 <meta name="keywords" content="MySQL">
 <meta property="og:type" content="article">
 <meta property="og:title" content="MySQL实战 | 总结">
 <meta property="og:url" content="http://yoursite.com/2020/02/01//articles/2020/02/01/1580569514532.html/index.html">
 <meta property="og:site_name" content="YAO">
-<meta property="og:description" content="本文是对极客时间《MySQL实战45讲》的一个学习归纳 问题1.MySQL的架构图是如何的？2.为什么不建议开启查询缓存？如何按需使用查询缓存？3.什么是 binlog和redo log？为什么需要两个日志？他们有什么区别？4. crash-safe是指什么？5.为什么需要redolog?6.MySQL中什么是两阶段提交？7.为什么不删除binlog只保留redolog？8.为什么binlog不">
+<meta property="og:description" content="本文是对极客时间《MySQL实战45讲》的一个学习归纳 问题1.MySQL的架构图是如何的？2.为什么不建议开启查询缓存？如何按需使用查询缓存？3.什么是 binlog和redo log？为什么需要两个日志？他们有什么区别？4. crash-safe是指什么？5.为什么需要redolog?">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://img.hacpai.com/bing/20181227.jpg?imageView2/1/w/960/h/540/interlace/1/q/100">
 <meta property="og:image" content="https://img.hacpai.com/file/2020/02/image-49518eff.png">
@@ -102,7 +102,7 @@
 <meta property="og:updated_time" content="2020-02-01T15:40:11.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="MySQL实战 | 总结">
-<meta name="twitter:description" content="本文是对极客时间《MySQL实战45讲》的一个学习归纳 问题1.MySQL的架构图是如何的？2.为什么不建议开启查询缓存？如何按需使用查询缓存？3.什么是 binlog和redo log？为什么需要两个日志？他们有什么区别？4. crash-safe是指什么？5.为什么需要redolog?6.MySQL中什么是两阶段提交？7.为什么不删除binlog只保留redolog？8.为什么binlog不">
+<meta name="twitter:description" content="本文是对极客时间《MySQL实战45讲》的一个学习归纳 问题1.MySQL的架构图是如何的？2.为什么不建议开启查询缓存？如何按需使用查询缓存？3.什么是 binlog和redo log？为什么需要两个日志？他们有什么区别？4. crash-safe是指什么？5.为什么需要redolog?">
 <meta name="twitter:image" content="https://img.hacpai.com/bing/20181227.jpg?imageView2/1/w/960/h/540/interlace/1/q/100">
 
 
@@ -391,7 +391,9 @@
       
         <p><img src="https://img.hacpai.com/bing/20181227.jpg?imageView2/1/w/960/h/540/interlace/1/q/100" alt=""></p>
 <p>本文是对极客时间《MySQL实战45讲》的一个学习归纳</p>
-<h3 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h3><p><a href="#1">1.MySQL的架构图是如何的？</a><br><a href="#2">2.为什么不建议开启查询缓存？如何按需使用查询缓存？</a><br><a href="#3">3.什么是 binlog和redo log？为什么需要两个日志？他们有什么区别？</a><br><a href="#4">4. crash-safe是指什么？</a><br><a href="#5">5.为什么需要redolog?</a><br><a href="#6">6.MySQL中什么是两阶段提交？</a><br><a href="#7">7.为什么不删除binlog只保留redolog？</a><br><a href="#8">8.为什么binlog不能做到crash-safe?</a><br><a href="#9">9.为什么redolog要在prepare阶段就落盘?</a><br><a href="#10">10.ACID是指什么？</a><br><a href="#11">11.事务隔离级别有哪些？分别是什么意思？</a><br><a href="#12">12.</a><br><a href="#13">13.</a><br><a href="#14">14.</a></p>
+<h3 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h3><p><a href="#1">1.MySQL的架构图是如何的？</a><br><a href="#2">2.为什么不建议开启查询缓存？如何按需使用查询缓存？</a><br><a href="#3">3.什么是 binlog和redo log？为什么需要两个日志？他们有什么区别？</a><br><a href="#4">4. crash-safe是指什么？</a><br><a href="#5">5.为什么需要redolog?</a></p>
+<a id="more"></a>
+<p><a href="#6">6.MySQL中什么是两阶段提交？</a><br><a href="#7">7.为什么不删除binlog只保留redolog？</a><br><a href="#8">8.为什么binlog不能做到crash-safe?</a><br><a href="#9">9.为什么redolog要在prepare阶段就落盘?</a><br><a href="#10">10.ACID是指什么？</a><br><a href="#11">11.事务隔离级别有哪些？分别是什么意思？</a><br><a href="#12">12.</a><br><a href="#13">13.</a><br><a href="#14">14.</a></p>
 <h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><h4 id="1-MySQL的架构图是如何的？"><a href="#1-MySQL的架构图是如何的？" class="headerlink" title="1.MySQL的架构图是如何的？"></a><span id="1">1.MySQL的架构图是如何的？</span></h4><p>从大体上来说，MySQL可以分为Server层和存储引擎层两部分。</p>
 <p>Server 层包括连接器、查询缓存、分析器、优化器、执行器等，涵盖 MySQL 的大多数核<br>心服务功能，以及所有的内置函数（如日期、时间、数学和加密函数等），所有跨存储引<br>擎的功能都在这一层实现，比如存储过程、触发器、视图等。</p>
 <p>而存储引擎层负责数据的存储和提取。其架构模式是插件式的，支持 InnoDB、<br>MyISAM、Memory 等多个存储引擎。现在最常用的存储引擎是 InnoDB，它从 MySQL<br>5.5.5 版本开始成为了默认存储引擎。</p>
