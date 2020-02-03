@@ -387,8 +387,7 @@
 
       
         
-          
-            <p><img src="http://image.photocnc.com/aoaodcom/2019-07/20/201907200302115513.jpg.h700.jpg" alt=""></p>
+          <p><img src="http://image.photocnc.com/aoaodcom/2019-07/20/201907200302115513.jpg.h700.jpg" alt=""></p>
 <h3 id="回文数？"><a href="#回文数？" class="headerlink" title="回文数？"></a>回文数？</h3><p>“回文”是指正读反读都能读通的句子，它是古今中外都有的一种修辞方式和文字游戏，如“我为人人，人人为我”等。在数学中也有这样一类数字有这样的特征，成为回文数（palindrome number）。</p>
 <p>回文数在数学领域备受关注。一个典型的问题就是，寻找那些具有某种特性，并且符合回文特征的数。例如：</p>
 <ul>
@@ -396,19 +395,13 @@
 <li>回文完全平方数：0, 1, 4, 9, 121, 484, 676, 10201, 12321,…</li>
 </ul>
 <p>一个猜想：任何一个自然数与它的倒序数相加，所得的和再与和的倒序数相加，……如此反复进行下去，经过有限次步骤后，最后必定能得到一个回文数（196除外）。因为196这个数，按照上述变换规则重复了数十万次，仍未得到回文数。但是人们既不能肯定运算下去永远得不到回文数，也不知道需要再运算多少步才能最终得到回文数。</p>
-<h3 id="如何判断一个数是否为回文数？"><a href="#如何判断一个数是否为回文数？" class="headerlink" title="如何判断一个数是否为回文数？"></a>如何判断一个数是否为回文数？</h3><ul>
-<li>将这串数字逆序，然后判断逆序后的数字是否和正序后的数字完全一样，如果完全一样，就是回文。</li>
-<li><p>进行逐位判断。首先该整数的首位数字和末尾数字进行比较，判断是否相等，若不等，则不是回文数；若相等，则删除左右两位数，然后再判断首尾，如此循环直至得出结论。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">/*</span><br><span class="line">*进行逐位判断。首先该整数的首位数字和末尾数字进行比较，判断是否相等，若不等，则不是回文数；</span><br><span class="line">* 若相等，则删除左右两位数，再取首位数字和未尾数字进行比较，只等比较结束为止。若相等，则是回文数；反之  则不是。</span><br><span class="line">*/</span><br><span class="line">    public static boolean palindrome(int num)&#123;</span><br><span class="line">		if(num &lt; 0)&#123;</span><br><span class="line"> 			System.out.println(num + &quot; is not Palindrome Number !&quot;); </span><br><span class="line">			return false;</span><br><span class="line">		&#125;</span><br><span class="line">		int lenth = 1;</span><br><span class="line">		while(num / lenth &gt;= 10)&#123; 		//判断位数</span><br><span class="line">		lenth *= 10;</span><br><span class="line">		&#125;</span><br><span class="line">		while(num &gt; 0)&#123;</span><br><span class="line">			int right = num % 10; 		//取数的尾数</span><br><span class="line">			int left = num / lenth;		//取数的首位</span><br><span class="line">			if(left != right)&#123;</span><br><span class="line">				System.out.println(num + &quot; is not Palindrome Number !&quot;);</span><br><span class="line">				return false;</span><br><span class="line">			&#125;</span><br><span class="line">			num = num % lenth / 10;		//除掉首尾两位数字，剩余中间的</span><br><span class="line">			lenth = lenth / 100;  		//相应长度也减少2位</span><br><span class="line"> 		&#125;</span><br><span class="line">		System.out.println(num + &quot; is Palindrome Number !&quot;);</span><br><span class="line">		return true;</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>将数值转换成字符串判断</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">public static boolean palindrome(int num)&#123;</span><br><span class="line">		if(num &lt; 0)&#123;</span><br><span class="line"> 			System.out.println(num + &quot; is not Palindrome Number !&quot;); </span><br><span class="line">			return false;</span><br><span class="line">		&#125;</span><br><span class="line">		String a=String.valueOf(num);</span><br><span class="line">    		for(int i=0;i&lt;a.length()/2;i++) &#123;</span><br><span class="line">			if(a.charAt(i)!=a.charAt(a.length()-i-1)) &#123;</span><br><span class="line">				System.out.println(num + &quot; is not Palindrome Number !&quot;);</span><br><span class="line">				&#125;else &#123;</span><br><span class="line">				System.out.println(num + &quot; is Palindrome Number !&quot;);</span><br><span class="line">				&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>利用堆栈来判断</p>
-</li>
-</ul>
-
-          
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2020/02/02/articles/2020/02/02/1580655282159.html/" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
