@@ -1,0 +1,926 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+<script>
+    (function(){
+        if(''){
+            if (prompt('请输入文章密码') !== ''){
+                alert('密码错误！');
+                history.back();
+            }
+        }
+    })();
+</script>
+</script>
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.ico?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.ico?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Interview," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="问题计算机网络方面1.你了解http吗？2.http是无状态的，那么怎么让它变得有状态？3.如果后台服务器有多台，如何保存session？4.http的报文格式？5.http的请求头可以有中文吗？？6.编码和乱码的区别？">
+<meta name="keywords" content="Interview">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CVTE | 20200203">
+<meta property="og:url" content="http://yoursite.com/2020/02/03//articles/2020/02/03/1580739885627.html/index.html">
+<meta property="og:site_name" content="YAO">
+<meta property="og:description" content="问题计算机网络方面1.你了解http吗？2.http是无状态的，那么怎么让它变得有状态？3.如果后台服务器有多台，如何保存session？4.http的报文格式？5.http的请求头可以有中文吗？？6.编码和乱码的区别？">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2020-02-04T16:16:05.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="CVTE | 20200203">
+<meta name="twitter:description" content="问题计算机网络方面1.你了解http吗？2.http是无状态的，那么怎么让它变得有状态？3.如果后台服务器有多台，如何保存session？4.http的报文格式？5.http的请求头可以有中文吗？？6.编码和乱码的区别？">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/02/03//articles/2020/02/03/1580739885627.html/"/>
+
+
+
+
+
+  <title>CVTE | 20200203 | YAO</title>
+  
+
+
+
+
+
+
+
+
+  
+  
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">YAO</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Something I Like .</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/03/articles/2020/02/03/1580739885627.html/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="HY">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="YAO">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">CVTE | 20200203</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-02-03T22:24:45+08:00">
+                2020-02-03
+              </time>
+            
+
+            
+
+            
+          </span>
+		  
+		  
+		  
+  <span class="post-updated">
+    &nbsp; | &nbsp; 更新于
+    <time itemprop="dateUpdated" datetime="2020-02-05T00:16:05+08:00" content="2020-02-05">
+      2020-02-05
+    </time>
+  </span>
+
+
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  4,333
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  15
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h3><h4 id="计算机网络方面"><a href="#计算机网络方面" class="headerlink" title="计算机网络方面"></a>计算机网络方面</h4><p><a href="#1">1.你了解http吗？</a><br><a href="#2">2.http是无状态的，那么怎么让它变得有状态？</a><br><a href="#3">3.如果后台服务器有多台，如何保存session？</a><br><a href="#4">4.http的报文格式？</a><br><a href="#5">5.http的请求头可以有中文吗？？</a><br><a href="#6">6.编码和乱码的区别？</a></p>
+<a id="more"></a>
+<h4 id="数据库"><a href="#数据库" class="headerlink" title="数据库"></a>数据库</h4><p><a href="#7">7.你知道InnoDB中的索引吗？</a><br><a href="#8">8.你知道最左匹配原则吗？</a></p>
+<h4 id="Java"><a href="#Java" class="headerlink" title="Java"></a>Java</h4><p><a href="#9">9.所说你对Java中的线程的了解</a><br><a href="#10">10.Java中的线程和计算机操作系统的线程是一样的吗？</a><br><a href="#11">11.说说你对Java中的多线程的了解</a><br><a href="#12">12.说说你对线程池的了解，为什么需要线程池？你知道线程池的哪几个参数？</a><br><a href="#13">13.你知道valotile吗？</a><br><a href="#14">14.你知道synchronized吗？</a><br><a href="#15">15.现在有一张订单表有库存表，需要你写一个下单的业务逻辑来保证库存表和订单表的一致性，你会怎么写？</a><br><a href="#16">16.在Java中你一般怎么使用事物？</a><br><a href="#17">17.如果不使用 @Transactional，你将怎么实现事物？</a></p>
+<h4 id="补充"><a href="#补充" class="headerlink" title="补充"></a>补充</h4><p><a href="#18">18.简述一下JAVA用JDBC连接数据库的步骤</a><br><a href="#19">19.preparedStatement与statement的区别</a></p>
+<h3 id="答案整理"><a href="#答案整理" class="headerlink" title="答案整理"></a>答案整理</h3><h4 id="1-你了解http吗？"><a href="#1-你了解http吗？" class="headerlink" title="1.你了解http吗？"></a><span id="1">1.你了解http吗？</span></h4><p>答：了解，http(Hypertext transfer protocol)超文本传输协议，通过浏览器和服务器进行数据交互，进行超文本（文本、图片、视频等）传输的规定。也就是说，http协议规定了超文本传输所要遵守的规则。他有一个重要的特性就是无状态的，无状态就是指协议对于事务处理没有记忆能力，服务器不知道客户端是什么状态。即我们给服务器发送 HTTP 请求之后，服务器根据请求，会给我们发送数据过来，但是，发送完，不会记录任何信息。</p>
+<h4 id="2-http是无状态的，那么怎么让它变得有状态？"><a href="#2-http是无状态的，那么怎么让它变得有状态？" class="headerlink" title="2.http是无状态的，那么怎么让它变得有状态？"></a><span id="2">2.http是无状态的，那么怎么让它变得有状态？</span></h4><p>答：可以采用Cookie或者session来实现http的有状态。</p>
+<ul>
+<li>Cookie 的实现过程</li>
+</ul>
+<blockquote>
+<p>Cookie 会根据从服务器端发送的响应报文内的一个叫做 Set-Cookie 的首部字段信息，通知客户端保存Cookie，当下次客户端再往该服务器发送请求时，客户端会自动在请求报文中加入 Cookie 值后发送出去。</p>
+<p>也就是 <strong>Cookie 是服务器生成的，但是发送给客户端，并且由客户端来保存</strong>。每次请求加上 Cookie就行了。服务器端发现客户端发送过来的 Cookie 后，会去检查究竟是从哪一个客户端发来的连接请求，然后对比服务器上的记录，最后得到之前的状态信息。</p>
+<ul>
+<li>Session的实现过程<br>Session 是另一种记录客户状态的机制，不同的是 Cookie 保存在客户端浏览器中，而 Session 保存在服务器上。</li>
+</ul>
+<p>客户端浏览器访问服务器的时候，服务器把客户端信息以某种形式记录在服务器上，这就是 Session。客户端浏览器再次访问时，只需要从该 Session 中查找该客户的状态就可以了。</p>
+<p>虽然 Session 保存在服务器，对客户端是透明的，它的正常运行仍然需要客户端浏览器的支持。这是因为 Session 需要使用Cookie 作为识别标志。HTTP协议是无状态的，Session 不能依据HTTP连接来判断是否为同一客户，因此服务器向客户端浏览器发送一个名为 JSESSIONID 的 Cookie，它的值为该 Session 的 id（即放在HTTP响应报文头部信息里的Set-Cookie）。Session依据该 Cookie 来识别是否为同一用户。</p>
+</blockquote>
+<h4 id="3-如果后台服务器有多台，如何保存session？"><a href="#3-如果后台服务器有多台，如何保存session？" class="headerlink" title="3.如果后台服务器有多台，如何保存session？"></a><span id="3">3.如果后台服务器有多台，如何保存session？</span></h4><p>答：可以利用cookie共享Session数据，利用Mysql数据库共享Session数据的方式也可以使用内存来共享Session数据。</p>
+<ul>
+<li>利用cookie共享Session数据<blockquote>
+<p>当用户请求后产生的session，我们把他的sessionId和值都存在cookie里面。这样，当你访问a服务器后，产生了session放在客户端的cookie里面，你在访问被分配到b服务器上。这时候，b服务器先判断本身服务器上有没有这个用户的session，如果没有，在去看看客户端的cookie里面有没有这个session，如果有，就获取客户端的这个cookie里面的session。这样就实现了session的同步。</p>
+</blockquote>
+</li>
+<li>利用Mysql数据库共享Session数据的方式<blockquote>
+<p>使用一个mysql服务器做共享服务器，把所有的session的数据保存mysql服务器上，所有的web服务器都来这台mysql服务器来获取session数据。这里有一个关键的地方，用来存放session的数据表不要跟其他数据库表放在一起，要独立开来，专门放在一个低端的服务器上面。不然，数据库本身压力就很大了，再加上session是需要频繁的读取的，这使得数据库很容易达到瓶颈，从而导致过高的响应延迟。</p>
+</blockquote>
+</li>
+<li>使用内存来共享Session数据。<blockquote>
+<p>这里建议可以选择采用开源的缓存系统来完成session的共享，比如resis等。原理跟mysql一样，不管哪个服务器产生的session都放在一个”内存池”里面。要获取session数据的时候都统一到这里获取。我建议用这个方法。</p>
+</blockquote>
+<h4 id="4-http的报文格式？"><a href="#4-http的报文格式？" class="headerlink" title="4.http的报文格式？"></a><span id="4">4.http的报文格式？</span></h4>答：　HTTP请求报文由<strong>请求行</strong>（request line）、<strong>请求头部</strong>（header）、<strong>空行</strong>和<strong>请求数据</strong>4个部分组成。<h4 id="5-http的请求头可以有中文吗？"><a href="#5-http的请求头可以有中文吗？" class="headerlink" title="5.http的请求头可以有中文吗？"></a><span id="5">5.http的请求头可以有中文吗？</span></h4>答：http的请求头中可以有中文，但是必须对中文进行编码，这样在服务端才可以对中文进行译码，才不会使得传输的中文变成乱码。<h4 id="6-编码和乱码的区别？"><a href="#6-编码和乱码的区别？" class="headerlink" title="6.编码和乱码的区别？"></a><span id="6">6.编码和乱码的区别？</span></h4>答：编码就是一个编号**(数字)到字符的一种映射关系，就仅仅是一种一对一的映射而已，可以理解成一个很大的对应表格；乱码的原因就是文本字符编码过程与字节流解码过程使用了不同的编码格式，这个往往归咎于解码格式选择错误，也就是说在解码的过程中出现了问题。如 果我的字符是用utf-8编码，你用GBK解码那肯定出问题。<br>注：这里还可以区分一下<a href="https://www.cnblogs.com/fengweixin/p/3678789.html" target="_blank" rel="noopener">编码和编码格式的区别</a></li>
+</ul>
+<h4 id="7-你知道InnoDB中的索引吗？"><a href="#7-你知道InnoDB中的索引吗？" class="headerlink" title="7.你知道InnoDB中的索引吗？"></a><span id="7">7.你知道InnoDB中的索引吗？</span></h4><p>答：知道，InnoDB引擎中是索引的数据结构采用B+树，然后索引分为两种，一个是主键索引一个是普通索引。</p>
+<ul>
+<li>主键索引<br>主键索引的b+树中，叶子节点里面存储的是该主键所在行的所有信息。</li>
+<li>普通索引<br>普通索引的b+树中，叶子节点里面存储的是该索引所在行的主键信息。</li>
+</ul>
+<p>也就是说，当我们在利用主键索引查询数据的时候，我们通过b+树找到相应的主键索引后，就可以直接将信息查取出来；而利用普通索引查询的时候，通过该普通索引在b+树中找到它存储的相应主键，然后再根据该主键去查询获取到数据。而普通索引根据查询到的主键再去查询相应的信息的这个过程称为<code>回表</code></p>
+<h4 id="8-你知道最左匹配原则吗？"><a href="#8-你知道最左匹配原则吗？" class="headerlink" title="8.你知道最左匹配原则吗？"></a><span id="8">8.你知道最左匹配原则吗？</span></h4><p>答：知道，最左匹配原则就是指在聚集索引中，如果你的sql语句中用到了聚集索引中的最左边的索引，那么这条sql语句就可以利用这个聚集索引去进行定位。例如某表现有索引(a,b,c),现在你有如下语句：<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">select * from t where a=1 and b=1;     #这样可以利用到定义的索引（a,b,c）</span><br><span class="line"></span><br><span class="line">select * from t where a=1;     #这样也可以利用到定义的索引（a,b,c）</span><br><span class="line"></span><br><span class="line">select * from t where b=1 and c=1;     #这样不可以利用到定义的索引（a,b,c）</span><br><span class="line"></span><br><span class="line">select * from t where a=1 and c=1;     #这样不可以利用到定义的索引（a,b,c）</span><br></pre></td></tr></table></figure></p>
+<p>也就是说通过最左匹配原则你可以定义一个聚集索引，但是使得多中查询条件都可以用到该索引。</p>
+<h4 id="9-所说你对Java中的线程的了解"><a href="#9-所说你对Java中的线程的了解" class="headerlink" title="9.所说你对Java中的线程的了解"></a><span id="9">9.所说你对Java中的线程的了解</span></h4><p>答：世间万物都可以同时完成很多工作。例如，人体可以同时进行呼吸、血液循环、思考问题等活动。用户既可以使用计算机听歌，也可以编写文档和发送邮件，而这些活动的完成可以同时进行。这种同时执行多个操作的“思想”在 Java 中被称为并发，而将并发完成的每一件事称为线程。</p>
+<h4 id="10-Java中的线程和计算机操作系统的线程是一样的吗？"><a href="#10-Java中的线程和计算机操作系统的线程是一样的吗？" class="headerlink" title="10.Java中的线程和计算机操作系统的线程是一样的吗？"></a><span id="10">10.Java中的线程和计算机操作系统的线程是一样的吗？</span></h4><p>答：不一样。<br>从实际意义上来讲，操作系统中的线程除去new和terminated状态，一个线程真实存在的状态，只有：</p>
+<ul>
+<li>ready：表示线程已经被创建，正在等待系统调度分配CPU使用权。</li>
+<li>running：表示线程获得了CPU使用权，正在进行运算</li>
+<li>waiting：表示线程等待（或者说挂起），让出CPU资源给其他线程使用<br>  为什么除去new和terminated状态？是因为这两种状态实际上并不存在于线程运行中，所以也没什么实际讨论的意义</li>
+</ul>
+<p><code>对于Java中的线程状态</code>：<br>无论是Timed Waiting ，Waiting还是Blocked，对应的都是操作系统线程的<strong>waiting（等待</strong>）状态。而Runnable状态，则对应了操作系统中的ready和running状态。</p>
+<p>注：<a href="https://www.jianshu.com/p/7c980955627e" target="_blank" rel="noopener">关于操作系统线程和Java线程</a></p>
+<h4 id="11-说说你对Java中的多线程的了解"><a href="#11-说说你对Java中的多线程的了解" class="headerlink" title="11.说说你对Java中的多线程的了解"></a><span id="11">11.说说你对Java中的多线程的了解</span></h4><p>答：在 Java 中，并发机制非常重要，但并不是所有程序语言都支持线程。在以往的程序中，多以一个任务完成以后再进行下一个任务的模式进行，这样下一个任务的开始必须等待前一个任务的结束。Java 语言提供了并发机制，允许开发人员在程序中执行多个线程，每个线程完成一个功能，并与其他线程并发执行。这种机制被称为多线程</p>
+<h4 id="12-说说你对线程池的了解，为什么需要线程池？你知道线程池的哪几个参数？"><a href="#12-说说你对线程池的了解，为什么需要线程池？你知道线程池的哪几个参数？" class="headerlink" title="12.说说你对线程池的了解，为什么需要线程池？你知道线程池的哪几个参数？"></a><span id="12">12.说说你对线程池的了解，为什么需要线程池？你知道线程池的哪几个参数？</span></h4><ul>
+<li>线程池<blockquote>
+<p>线程池是一种多线程处理形式，处理过程中将任务添加到队列，然后在创建线程后自动启动这些任务。<br>一个线程池包括以下四个基本组成部分：  </p>
+<pre><code>1、线程池管理器（ThreadPool）：用于创建并管理线程池，包括 创建线程池，销毁线程池，添加新任务；  
+2、工作线程（PoolWorker）：线程池中线程，在没有任务时处于等待状态，可以循环的执行任务；  
+3、任务接口（Task）：每个任务必须实现的接口，以供工作线程调度任务的执行，它主要规定了任务的入口，任务执行完后的收尾工作，任务的执行状态等；  
+4、任务队列（taskQueue）：用于存放没有处理的任务。提供一种缓冲机制。
+</code></pre></blockquote>
+</li>
+<li>为什么需要线程池<blockquote>
+<p>在Java中，如果每当一个请求到达就创建一个新线程，开销是相当大的。在实际使用中，每个请求创建新线程的服务器在创建和销毁线程上花费的时间和消耗的系统资源，甚至可能要比花在处理实际的用户请求的时间和资源要多得多。</p>
+<p>除了创建和销毁线程的开销之外，活动的线程也需要消耗系统资源。如果在一个JVM里创建太多的线程，可能会导致系统由于过度消耗内存或“切换过度”而导致系统资源不足。为了防止资源不足，服务器应用程序需要一些办法来限制任何给定时刻处理的请求数目，尽可能减少创建和销毁线程的次数，特别是一些资源耗费比较大的线程的创建和销毁，尽量利用已有对象来进行服务，这就是“池化资源”技术产生的原因。 线程池主要用来解决线程生命周期开销问题和资源不足问题。通过对多个任务重用线程，线程创建的开销就被分摊到了多个任务上了，而且由于在请求到达时线程已经存在，所以消除了线程创建所带来的延迟。这样，就可以立即为请求服务，使应用程序响应更快。另外，通过适当地调整线程池中的线程数目可以防止出现资源不足的情况。</p>
+</blockquote>
+</li>
+</ul>
+<h4 id="13-你知道valotile吗？"><a href="#13-你知道valotile吗？" class="headerlink" title="13.你知道valotile吗？"></a><span id="13">13.你知道valotile吗？</span></h4><p>答：</p>
+<blockquote>
+<p>在多线程环境下，线程可以将线程间共享的变量保存在本地内存（如寄存器）中，而不是从内存中读取，这就可能会引发不一致的问题，另一个进程可能在此线程运行期间改变了变量的值，而此线程并没有看到变化。</p>
+<p>而volatile修饰的成员变量在每次被线程访问时，都强迫从共享内存中重读该成员变量的值。而且，当成员变量发生变化时，强迫线程将变化值回写到共享内存。这样在任何时刻，两个不同的线程总是看到某个成员变量的同一个值。</p>
+<p>Java语言规范中指出：为了获得最佳速度，允许线程保存共享成员变量的私有拷贝，而且只当线程进入或者离开同步代码块时才与共享成员变量的原始值对比。</p>
+<p>也就是说，JVM会对线程变量的访问进行优化，这样当多个线程同时与某个对象时交互，就必须要注意到要让线程及时的得到共享成员变量的变化。</p>
+<p>而volatile关键字就是提示VM：对于这个成员变量不能保存它的私有拷贝，而应直接与共享成员变量交互。</p>
+<p>使用建议：</p>
+<p>1.在两个或者更多的线程访问的成员变量上使用volatile</p>
+<p>2.当要访问的变量已在synchronized代码块中，或者为常量时，不必使用</p>
+<p>3.volatile屏蔽掉了VM中必要的代码优化，所以在效率上比较低，因此一定在必要时才使用此关键字</p>
+</blockquote>
+<h4 id="14-你知道synchronized吗？"><a href="#14-你知道synchronized吗？" class="headerlink" title="14.你知道synchronized吗？"></a><span id="14">14.你知道synchronized吗？</span></h4><p>答：<br> synchronized是Java中的关键字，是一种同步锁，它一次只允许一个线程进入特定代码段，从而避免多线程同时修改同一数据。它修饰的对象有以下几种：</p>
+<ul>
+<li>修饰一个代码块，被修饰的代码块称为同步语句块，其作用的范围是大括号{}括起来的代码，作用的对象是调用这个代码块的对象   </li>
+<li>修饰一个方法，被修饰的方法称为同步方法，其作用的范围是整个方法，作用的对象是调用这个方法的对象</li>
+<li>修改一个静态的方法，其作用的范围是整个静态方法，作用的对象是这个类的所有对象</li>
+<li>修改一个类，其作用的范围是synchronized后面括号括起来的部分，作用主的对象是这个类的所有对象</li>
+</ul>
+<h4 id="15-现在有一张订单表有库存表，需要你写一个下单的业务逻辑来保证库存表和订单表的一致性，你会怎么写？"><a href="#15-现在有一张订单表有库存表，需要你写一个下单的业务逻辑来保证库存表和订单表的一致性，你会怎么写？" class="headerlink" title="15.现在有一张订单表有库存表，需要你写一个下单的业务逻辑来保证库存表和订单表的一致性，你会怎么写？"></a><span id="15">15.现在有一张订单表有库存表，需要你写一个下单的业务逻辑来保证库存表和订单表的一致性，你会怎么写？</span></h4><p>答：由于需要保证两件事情要么都成功要么都不成功，所以需要用到事务，这里可以把这两个操作放到同一个事务中。</p>
+<h4 id="16-在Java中你一般怎么使用事物？"><a href="#16-在Java中你一般怎么使用事物？" class="headerlink" title="16.在Java中你一般怎么使用事物？"></a><span id="16">16.在Java中你一般怎么使用事物？</span></h4><p>答：在Java中我一般通过@Transactional来使用事务。。<br>这里后面详细补充！！！！！！</p>
+<h4 id="17-如果不使用-Transactional，你将怎么实现事物？"><a href="#17-如果不使用-Transactional，你将怎么实现事物？" class="headerlink" title="17.如果不使用 @Transactional，你将怎么实现事物？"></a><span id="17">17.如果不使用 @Transactional，你将怎么实现事物？</span></h4><p>这里后面详细补充！！！！！！</p>
+<h4 id="18-简述一下JAVA用JDBC连接数据库的步骤"><a href="#18-简述一下JAVA用JDBC连接数据库的步骤" class="headerlink" title="18.简述一下JAVA用JDBC连接数据库的步骤"></a><span id="18">18.简述一下JAVA用JDBC连接数据库的步骤</span></h4><p>答：</p>
+<ol>
+<li>加载JDBC驱动程序,利用<code>Class.forName</code></li>
+<li>获取到对应数据库连接对象,利用<code>DriverManager</code>类中<code>getConnection</code>方法</li>
+<li>通过连接对象创建*Statement，<code>Statement</code>,<code>PreparedStatement</code>,<code>CallableStatement</code></li>
+<li>执行SQL语句</li>
+<li>处理结果</li>
+<li>关闭资源</li>
+</ol>
+<h4 id="19-preparedStatement与statement的区别"><a href="#19-preparedStatement与statement的区别" class="headerlink" title="19.preparedStatement与statement的区别"></a><span id="19">19.preparedStatement与statement的区别</span></h4><p>答：<br>Statement执行不带参数的简单SQL语句,并返回它所生成结果的对象,每次执行SQL语句时,数据库都要编译该sql语句<br>PreparedStatement用来执行带参数的预编译的SQL语句<br>PreparedStatement的优点:</p>
+<ul>
+<li><p>效率高.<br>使用PreparedStatement执行SQL命令时,命令会被数据库编译和解析,并放到命令缓冲区.以后每当执行同一个PreparedStatement对象时,预编译的命令就可以重复使用</p>
+</li>
+<li><p>代码可读性和可维护性好</p>
+</li>
+<li><p>安全性好.<br>使用PreparedStatement可以防止SQL注入.</p>
+</li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Interview/" rel="tag"><i class="fa fa-tag"></i> Interview</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/02/02/articles/2020/02/02/1580655282159.html/" rel="next" title="回文日 | 绕不开的回文数">
+                <i class="fa fa-chevron-left"></i> 回文日 | 绕不开的回文数
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  <div class="post-spread">
+      
+        
+                                <div class="-mob-share-ui-button -mob-share-open">分享</div>
+                                <div class="-mob-share-ui" style="display: none">
+                                    <ul class="-mob-share-list">
+                                        <li class="-mob-share-weibo"><p>新浪微博</p></li>
+                                        <li class="-mob-share-tencentweibo"><p>腾讯微博</p></li>
+                                        <li class="-mob-share-qzone"><p>QQ空间</p></li>
+                                        <li class="-mob-share-qq"><p>QQ好友</p></li>
+                                        <li class="-mob-share-weixin"><p>微信</p></li>
+                                        <li class="-mob-share-douban"><p>豆瓣</p></li>
+                                    </ul>
+                                    <div class="-mob-share-close">取消</div>
+                                </div>
+                                <div class="-mob-share-ui-bg"></div>
+                                <script id="-mob-share" src="http://f1.webshare.mob.com/code/mob-share.js?appkey=262488aa81530"></script>
+
+								
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.png"
+                alt="HY" />
+            
+              <p class="site-author-name" itemprop="name">HY</p>
+              <p class="site-description motion-element" itemprop="description">A man is only as good as what he loves.</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">35</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">28</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/yqh74110" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:yaoqiuhong@outlook.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=298 height=52 src="//music.163.com/outchain/player?type=2&id=1334259177&auto=0&height=32"></iframe>		
+<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=298 height=52 src="//music.163.com/outchain/player?type=2&id=436147067&auto=0&height=32"></iframe>	  
+<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=298 height=52 src="//music.163.com/outchain/player?type=2&id=32431822&auto=0&height=32"></iframe>
+
+          
+
+        </div>
+		
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#问题"><span class="nav-number">1.</span> <span class="nav-text">问题</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#计算机网络方面"><span class="nav-number">1.1.</span> <span class="nav-text">计算机网络方面</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#数据库"><span class="nav-number">1.2.</span> <span class="nav-text">数据库</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Java"><span class="nav-number">1.3.</span> <span class="nav-text">Java</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#补充"><span class="nav-number">1.4.</span> <span class="nav-text">补充</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#答案整理"><span class="nav-number">2.</span> <span class="nav-text">答案整理</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-你了解http吗？"><span class="nav-number">2.1.</span> <span class="nav-text">1.你了解http吗？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-http是无状态的，那么怎么让它变得有状态？"><span class="nav-number">2.2.</span> <span class="nav-text">2.http是无状态的，那么怎么让它变得有状态？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-如果后台服务器有多台，如何保存session？"><span class="nav-number">2.3.</span> <span class="nav-text">3.如果后台服务器有多台，如何保存session？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-http的报文格式？"><span class="nav-number">2.4.</span> <span class="nav-text">4.http的报文格式？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-http的请求头可以有中文吗？"><span class="nav-number">2.5.</span> <span class="nav-text">5.http的请求头可以有中文吗？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#6-编码和乱码的区别？"><span class="nav-number">2.6.</span> <span class="nav-text">6.编码和乱码的区别？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#7-你知道InnoDB中的索引吗？"><span class="nav-number">2.7.</span> <span class="nav-text">7.你知道InnoDB中的索引吗？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#8-你知道最左匹配原则吗？"><span class="nav-number">2.8.</span> <span class="nav-text">8.你知道最左匹配原则吗？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#9-所说你对Java中的线程的了解"><span class="nav-number">2.9.</span> <span class="nav-text">9.所说你对Java中的线程的了解</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#10-Java中的线程和计算机操作系统的线程是一样的吗？"><span class="nav-number">2.10.</span> <span class="nav-text">10.Java中的线程和计算机操作系统的线程是一样的吗？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#11-说说你对Java中的多线程的了解"><span class="nav-number">2.11.</span> <span class="nav-text">11.说说你对Java中的多线程的了解</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#12-说说你对线程池的了解，为什么需要线程池？你知道线程池的哪几个参数？"><span class="nav-number">2.12.</span> <span class="nav-text">12.说说你对线程池的了解，为什么需要线程池？你知道线程池的哪几个参数？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#13-你知道valotile吗？"><span class="nav-number">2.13.</span> <span class="nav-text">13.你知道valotile吗？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#14-你知道synchronized吗？"><span class="nav-number">2.14.</span> <span class="nav-text">14.你知道synchronized吗？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#15-现在有一张订单表有库存表，需要你写一个下单的业务逻辑来保证库存表和订单表的一致性，你会怎么写？"><span class="nav-number">2.15.</span> <span class="nav-text">15.现在有一张订单表有库存表，需要你写一个下单的业务逻辑来保证库存表和订单表的一致性，你会怎么写？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#16-在Java中你一般怎么使用事物？"><span class="nav-number">2.16.</span> <span class="nav-text">16.在Java中你一般怎么使用事物？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#17-如果不使用-Transactional，你将怎么实现事物？"><span class="nav-number">2.17.</span> <span class="nav-text">17.如果不使用 @Transactional，你将怎么实现事物？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#18-简述一下JAVA用JDBC连接数据库的步骤"><span class="nav-number">2.18.</span> <span class="nav-text">18.简述一下JAVA用JDBC连接数据库的步骤</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#19-preparedStatement与statement的区别"><span class="nav-number">2.19.</span> <span class="nav-text">19.preparedStatement与statement的区别</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">HY</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+      <span class="post-meta-item-text">Site words total count&#58;</span>
+    
+    <span title="Site words total count">75.5k</span>
+  
+</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  <!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/src/love.js"></script>
+</body>
+</html>
